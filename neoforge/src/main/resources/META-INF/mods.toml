@@ -1,4 +1,4 @@
-modLoader = "javafml"
+modLoader = "lowcodefml"
 loaderVersion = "[1,)"
 license = "MIT"
 issueTrackerURL = "https://github.com/terrarium-earth/olympus/issues"
@@ -11,11 +11,6 @@ displayURL = "https://github.com/terrarium-earth/olympus"
 logoFile = "icon.png"
 authors = "ThatGravyBoat"
 description = "Common Components library for Project Odyssey."
-
-[[mixins]]
-config = "olympus.mixins.json"
-[[mixins]]
-config = "olympus-common.mixins.json"
 
 [[dependencies.olympus]]
 modId = "neoforge"

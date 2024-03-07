@@ -1,11 +1,11 @@
- {
+{
     "schemaVersion": 1,
     "id": "olympus",
     "version": "${version}",
     "name": "Olympus",
     "description": "Common Components library for Project Odyssey.",
-    "authors": ["ThatGravyBoat"],
-    "contributors": [""],
+    "authors": [ "ThatGravyBoat" ],
+    "contributors": [ "" ],
     "contact": {
         "website": "https://github.com/terrarium-earth/Olympus",
         "repo": "https://github.com/terrarium-earth/Olympus",
@@ -14,22 +14,10 @@
     "license": "MIT",
     "icon": "icon.png",
     "environment": "*",
-    "entrypoints": {
-        "main": [
-            "earth.terrarium.olympus.fabric.OlympusFabric::init"
-        ],
-        "client": [
-            "earth.terrarium.olympus.client.fabric.OlympusClientFabric::init"
-        ]
-    },
-    "mixins": [
-        "olympus-common.mixins.json",
-        "olympus.mixins.json"
-    ],
     "depends": {
         "fabric-api": "*",
         "minecraft": ">=1.20.4",
         "java": ">=17",
         "resourcefullib": ">=2.4.8"
-  }
+    }
 }
