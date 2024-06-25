@@ -19,8 +19,8 @@ public class ListWidget extends BaseParentWidget {
 
     private static final int SCROLLBAR_WIDTH = 6;
     private static final int SCROLLBAR_PADDING = 2;
-    private static final ResourceLocation SCROLLBAR = new ResourceLocation(UIConstants.MOD_ID, "lists/scroll/bar");
-    private static final ResourceLocation SCROLLBAR_THUMB = new ResourceLocation(UIConstants.MOD_ID, "lists/scroll/thumb");
+    private static final ResourceLocation SCROLLBAR = UIConstants.id("lists/scroll/bar");
+    private static final ResourceLocation SCROLLBAR_THUMB = UIConstants.id("lists/scroll/thumb");
 
     private final List<Item> items = new ArrayList<>();
 

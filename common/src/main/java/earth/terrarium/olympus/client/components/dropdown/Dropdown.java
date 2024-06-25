@@ -15,8 +15,8 @@ import java.util.function.Consumer;
 
 public class Dropdown<T> extends BaseWidget {
 
-    private static final ResourceLocation CHEVRON_DOWN = new ResourceLocation(UIConstants.MOD_ID, "dropdown/chevron_down");
-    private static final ResourceLocation CHEVRON_UP = new ResourceLocation(UIConstants.MOD_ID, "dropdown/chevron_up");
+    private static final ResourceLocation CHEVRON_DOWN = UIConstants.id("dropdown/chevron_down");
+    private static final ResourceLocation CHEVRON_UP = UIConstants.id("dropdown/chevron_up");
 
     public static final int SELECTED = 0x505050;
     public static final int COLOR = 0xFEFEFE;

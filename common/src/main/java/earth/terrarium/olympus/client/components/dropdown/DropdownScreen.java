@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class DropdownScreen<T> extends Overlay {
 
-    private static final ResourceLocation LIST = new ResourceLocation(UIConstants.MOD_ID, "dropdown/list");
+    private static final ResourceLocation LIST = UIConstants.id("dropdown/list");
 
     private final Dropdown<T> dropdown;
 

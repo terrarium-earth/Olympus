@@ -5,7 +5,6 @@ import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import earth.terrarium.olympus.client.components.base.BaseWidget;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import net.minecraft.Optionull;
-import net.minecraft.SharedConstants;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ComponentPath;
@@ -18,6 +17,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.util.StringUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
@@ -26,9 +26,9 @@ import java.util.function.Predicate;
 public class TextBox extends BaseWidget {
 
     private static final WidgetSprites SPRITES = new WidgetSprites(
-        new ResourceLocation(UIConstants.MOD_ID, "textbox/normal"),
-        new ResourceLocation(UIConstants.MOD_ID, "textbox/hovered"),
-        new ResourceLocation(UIConstants.MOD_ID, "textbox/focused")
+        UIConstants.id("textbox/normal"),
+        UIConstants.id("textbox/hovered"),
+        UIConstants.id("textbox/focused")
     );
     protected static final int TEXT_COLOR = 0xe0e0e0;
     protected static final int ERROR_COLOR = 0xFF5555;
@@ -91,7 +91,7 @@ public class TextBox extends BaseWidget {
         int min = Math.min(this.cursorPos, this.highlightPos);
         int max = Math.max(this.cursorPos, this.highlightPos);
         int k = this.maxLength - this.value.length() - (min - max);
-        String string = SharedConstants.filterText(textToWrite);
+        String string = StringUtil.filterText(textToWrite);
         int l = string.length();
         if (k < l) {
             string = string.substring(0, k);
@@ -254,7 +254,7 @@ public class TextBox extends BaseWidget {
     @Override
     public boolean charTyped(char codePoint, int modifiers) {
         if (!this.isVisible() || !this.isFocused()) return false;
-        if (SharedConstants.isAllowedChatCharacter(codePoint)) {
+        if (StringUtil.isAllowedChatCharacter(codePoint)) {
             this.insertText(Character.toString(codePoint));
             return true;
         }

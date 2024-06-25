@@ -10,8 +10,8 @@ import net.minecraft.resources.ResourceLocation;
 
 public class AutocompleteEntry<T> extends BaseWidget implements ListWidget.Item {
 
-    private static final ResourceLocation ENTRY = new ResourceLocation(UIConstants.MOD_ID, "textbox/entry");
-    private static final ResourceLocation ENTRY_HOVERED = new ResourceLocation(UIConstants.MOD_ID, "textbox/entry_hovered");
+    private static final ResourceLocation ENTRY = UIConstants.id("textbox/entry");
+    private static final ResourceLocation ENTRY_HOVERED = UIConstants.id("textbox/entry_hovered");
 
     private final String value;
     private final Runnable action;

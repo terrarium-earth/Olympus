@@ -10,8 +10,8 @@ import net.minecraft.resources.ResourceLocation;
 
 public class DropdownEntry<T> extends BaseWidget implements ListWidget.Item {
 
-    private static final ResourceLocation ENTRY = new ResourceLocation(UIConstants.MOD_ID, "dropdown/entry");
-    private static final ResourceLocation ENTRY_HOVERED = new ResourceLocation(UIConstants.MOD_ID, "dropdown/entry_hovered");
+    private static final ResourceLocation ENTRY = UIConstants.id("dropdown/entry");
+    private static final ResourceLocation ENTRY_HOVERED = UIConstants.id("dropdown/entry_hovered");
 
     private final Dropdown<T> dropdown;
     private final T value;

@@ -15,7 +15,7 @@ import java.util.function.Function;
 
 public class AutocompleteScreen<T> extends Overlay {
 
-    private static final ResourceLocation LIST = new ResourceLocation(UIConstants.MOD_ID, "textbox/list");
+    private static final ResourceLocation LIST = UIConstants.id("textbox/list");
     private static final int ENTRY_HEIGHT = 12;
 
     private final List<T> suggestions = new ArrayList<>();

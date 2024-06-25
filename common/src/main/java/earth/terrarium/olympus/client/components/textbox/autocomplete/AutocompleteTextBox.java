@@ -18,9 +18,9 @@ import java.util.function.Function;
 public class AutocompleteTextBox<T> extends BaseWidget {
 
     private static final WidgetSprites SPRITES = new WidgetSprites(
-        new ResourceLocation(UIConstants.MOD_ID, "textbox/normal"),
-        new ResourceLocation(UIConstants.MOD_ID, "textbox/hovered"),
-        new ResourceLocation(UIConstants.MOD_ID, "textbox/focused")
+        UIConstants.id("textbox/normal"),
+        UIConstants.id("textbox/hovered"),
+        UIConstants.id("textbox/focused")
     );
     private static final int TEXT_COLOR = 0xe0e0e0;
     private static final int PADDING = 4;
