@@ -18,6 +18,7 @@ public class Dropdown<T> extends BaseWidget {
 
     private static final ResourceLocation CHEVRON_DOWN = UIConstants.id("dropdown/chevron_down");
     private static final ResourceLocation CHEVRON_UP = UIConstants.id("dropdown/chevron_up");
+    private static final ResourceLocation LIST = UIConstants.id("dropdown/list");
 
     public static final int SELECTED = 0x505050;
 
@@ -71,6 +72,10 @@ public class Dropdown<T> extends BaseWidget {
         return SELECTED;
     }
 
+    public int getEntryHeight() {
+        return 24;
+    }
+
     @Override
     public void onClick(double mouseX, double mouseY) {
         DropdownScreen<T> screen = new DropdownScreen<>(Minecraft.getInstance().screen, this);
@@ -106,10 +111,14 @@ public class Dropdown<T> extends BaseWidget {
     public void initEntries(ListWidget list, int width, Runnable action) {
         for (var entry : options.entrySet()) {
             T value = entry.getKey();
-            list.add(new DropdownEntry<>(width, 24, this, value, () -> {
+            list.add(new DropdownEntry<>(width, getEntryHeight(), this, value, () -> {
                 select(value);
                 action.run();
             }));
         }
+    }
+
+    public void renderEntriesBackground(GuiGraphics graphics, int x, int y, int width, int height, int mouseX, int mouseY, float partialTick) {
+        graphics.blitSprite(LIST, x, y, width, height);
     }
 }

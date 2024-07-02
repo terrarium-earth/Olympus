@@ -9,8 +9,6 @@ import net.minecraft.resources.ResourceLocation;
 
 public class DropdownScreen<T> extends Overlay {
 
-    private static final ResourceLocation LIST = UIConstants.id("dropdown/list");
-
     protected final Dropdown<T> dropdown;
 
     protected DropdownScreen(Screen background, Dropdown<T> dropdown) {
@@ -35,7 +33,7 @@ public class DropdownScreen<T> extends Overlay {
     }
 
     public int height() {
-        return Math.min(24 * 5, this.dropdown.options().size() * 24) + 3;
+        return Math.min(24 * 5, this.dropdown.options().size() * this.dropdown.getEntryHeight()) + 3;
     }
 
     @Override
@@ -59,7 +57,7 @@ public class DropdownScreen<T> extends Overlay {
     @Override
     public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.renderBackground(graphics, mouseX, mouseY, partialTick);
-        graphics.blitSprite(LIST, this.x(), this.y(), this.width(), this.height());
+        dropdown.renderEntriesBackground(graphics, this.x(), this.y(), this.width(), this.height(), mouseX, mouseY, partialTick);
     }
 
     public boolean isOriginator(Dropdown<?> dropdown) {
