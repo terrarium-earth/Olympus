@@ -33,7 +33,7 @@ public class DropdownScreen<T> extends Overlay {
     }
 
     public int height() {
-        return Math.min(24 * 5, this.dropdown.options().size() * this.dropdown.getEntryHeight()) + 3;
+        return Math.min(this.dropdown.getEntryHeight() * 5, this.dropdown.options().size() * this.dropdown.getEntryHeight()) + 3;
     }
 
     @Override

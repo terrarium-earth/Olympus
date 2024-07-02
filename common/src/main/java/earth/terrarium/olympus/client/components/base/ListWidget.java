@@ -28,7 +28,7 @@ public class ListWidget extends BaseParentWidget {
     protected double scroll = 0;
     protected int lastHeight = 0;
     protected boolean scrolling = false;
-    protected int spacing = 0;
+    protected int gap = 0;
 
     public ListWidget(int width, int height) {
         super(width, height);
@@ -83,8 +83,8 @@ public class ListWidget extends BaseParentWidget {
             item.setY(y);
 
             item.render(graphics, this.isHovered ? mouseX : -1, this.isHovered ? mouseY : -1, partialTicks);
-            y += item.getHeight() + spacing;
-            this.lastHeight += item.getHeight() + spacing;
+            y += item.getHeight() + gap;
+            this.lastHeight += item.getHeight() + gap;
         }
 
         graphics.disableScissor();
@@ -95,11 +95,11 @@ public class ListWidget extends BaseParentWidget {
             int scrollBarX = this.getX() + this.width - getScrollbarThumbWidth() - getScrollbarPadding();
             int scrollBarY = this.getY() + getScrollbarPadding() + Math.round(((float) this.scroll / (float) this.lastHeight) * this.height);
 
-            renderScrollbar(graphics, scrollBarX, scrollBarY, scrollBarHeight);
+            renderScrollbar(graphics, scrollBarX, scrollBarY, scrollBarHeight, mouseX, mouseY, partialTicks);
         }
     }
 
-    public void renderScrollbar(GuiGraphics graphics, int scrollBarX, int scrollBarY, int scrollBarHeight) {
+    public void renderScrollbar(GuiGraphics graphics, int scrollBarX, int scrollBarY, int scrollBarHeight, int mouseX, int mouseY, float partialTicks) {
         graphics.blitSprite(SCROLLBAR,
             scrollBarX + getScrollbarPadding(),
             this.getY() + getScrollbarPadding(),
@@ -151,7 +151,7 @@ public class ListWidget extends BaseParentWidget {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (isMouseOver(mouseX, mouseY)) {
+        if (clicked(mouseX, mouseY)) {
             if (isMouseOverScrollBar(mouseX, mouseY)) {
                 this.scrolling = true;
                 return true;
@@ -162,7 +162,7 @@ public class ListWidget extends BaseParentWidget {
                 if (mouseY >= y && mouseY <= y + height) {
                     return entry.mouseClicked(mouseX, mouseY, button);
                 }
-                y += height + spacing;
+                y += height + gap;
             }
         }
         return false;
@@ -202,6 +202,10 @@ public class ListWidget extends BaseParentWidget {
     protected void updateScrollBar() {
         updateLastHeight();
         this.scroll = Mth.clamp(this.scroll, 0, Math.max(0, this.lastHeight - this.height + getOverscroll()));
+    }
+
+    public boolean isScrolling() {
+        return this.scrolling;
     }
 
     @Override
