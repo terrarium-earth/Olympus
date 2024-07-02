@@ -28,12 +28,18 @@ public class DropdownEntry<T> extends BaseWidget implements ListWidget.Item {
 
     @Override
     protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        ResourceLocation texture = this.isHovered() ? ENTRY_HOVERED : ENTRY;
-        graphics.blitSprite(texture, this.getX(), this.getY(), this.getWidth(), this.getHeight());
-
+        renderBackground(graphics, mouseX, mouseY, partialTick);
         Component text = this.dropdown.getText(this.value);
         int textOffset = (this.height - 8) / 2;
-        graphics.drawString(Minecraft.getInstance().font, text, this.getX() + textOffset, this.getY() + textOffset, COLOR);
+        graphics.drawString(Minecraft.getInstance().font, text, this.getX() + textOffset, this.getY() + textOffset, getFontColor());
+    }
+
+    protected int getFontColor() {
+        return COLOR;
+    }
+
+    protected void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        graphics.blitSprite(this.isHovered() ? ENTRY_HOVERED : ENTRY, this.getX(), this.getY(), this.getWidth(), this.getHeight());
     }
 
     @Override
