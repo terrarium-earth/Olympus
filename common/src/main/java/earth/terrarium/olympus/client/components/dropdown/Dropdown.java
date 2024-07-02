@@ -85,6 +85,11 @@ public class Dropdown<T> extends BaseWidget {
         return this.selected;
     }
 
+    public void select(T selected) {
+        this.selected = selected;
+        this.onSelect.accept(selected);
+    }
+
     @Override
     public CursorScreen.Cursor getCursor() {
         return this.isActive() ? CursorScreen.Cursor.POINTER : CursorScreen.Cursor.DISABLED;
@@ -98,8 +103,7 @@ public class Dropdown<T> extends BaseWidget {
         for (var entry : options.entrySet()) {
             T value = entry.getKey();
             list.add(new DropdownEntry<>(width, 24, this, value, () -> {
-                this.selected = value;
-                this.onSelect.accept(value);
+                select(value);
                 action.run();
             }));
         }

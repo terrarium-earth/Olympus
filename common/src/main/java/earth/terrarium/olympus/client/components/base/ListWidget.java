@@ -204,7 +204,7 @@ public class ListWidget extends BaseParentWidget {
         updateLastHeight();
         this.scroll = Mth.clamp(this.scroll, 0, Math.max(0, this.lastHeight - this.height + getOverscroll()));
     }
-    
+
     @Override
     public CursorScreen.Cursor getCursor() {
         return CursorScreen.Cursor.POINTER;
