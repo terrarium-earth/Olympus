@@ -21,13 +21,13 @@ public class AutocompleteScreen<T> extends Overlay {
     private final List<T> suggestions = new ArrayList<>();
     private final List<ListWidget.Item> filteredSuggestions = new ArrayList<>();
 
-    private final BiPredicate<String, T> filter;
-    private final Function<T, String> mapper;
+    protected final BiPredicate<String, T> filter;
+    protected final Function<T, String> mapper;
 
-    private final AutocompleteTextBox<T> widget;
+    protected final AutocompleteTextBox<T> widget;
 
-    private ListWidget options;
-    private TextBox textBox;
+    protected ListWidget options;
+    protected TextBox textBox;
 
     protected AutocompleteScreen(Screen background, AutocompleteTextBox<T> widget) {
         super(background);

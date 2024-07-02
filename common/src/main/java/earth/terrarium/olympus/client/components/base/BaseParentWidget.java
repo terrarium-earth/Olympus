@@ -18,8 +18,8 @@ public abstract class BaseParentWidget extends BaseWidget implements ContainerEv
     protected final List<GuiEventListener> children = new ArrayList<>();
 
     @Nullable
-    private GuiEventListener focused;
-    private boolean isDragging;
+    protected GuiEventListener focused;
+    protected boolean isDragging;
 
     public BaseParentWidget(int width, int height) {
         super(width, height);

@@ -17,8 +17,8 @@ public class MultilineTextWidget extends AbstractStringWidget implements CursorW
 	protected float alignX = 0.5f;
 	protected boolean shadow;
 
-	private final List<FormattedCharSequence> lines;
-	private final int maxLineWidth;
+	protected final List<FormattedCharSequence> lines;
+	protected final int maxLineWidth;
 
 	public MultilineTextWidget(int width, Component component, Font font) {
 		super(0, 0, width, 0, component, font);

@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 
 public class TriStateButton extends Button implements CursorWidget {
 
-    private final Supplier<TriState> value;
+    protected final Supplier<TriState> value;
 
     public TriStateButton(int width, int height, OnPress onPress, Supplier<TriState> value) {
         super(0, 0, width, height, CommonComponents.EMPTY, onPress, DEFAULT_NARRATION);

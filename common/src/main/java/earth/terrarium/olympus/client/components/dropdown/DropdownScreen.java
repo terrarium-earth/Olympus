@@ -9,9 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class DropdownScreen<T> extends Overlay {
 
-    private static final ResourceLocation LIST = UIConstants.id("dropdown/list");
-
-    private final Dropdown<T> dropdown;
+    protected final Dropdown<T> dropdown;
 
     protected DropdownScreen(Screen background, Dropdown<T> dropdown) {
         super(background);
@@ -35,7 +33,7 @@ public class DropdownScreen<T> extends Overlay {
     }
 
     public int height() {
-        return Math.min(24 * 5, this.dropdown.options().size() * 24) + 3;
+        return Math.min(this.dropdown.getEntryHeight() * 5, this.dropdown.options().size() * this.dropdown.getEntryHeight()) + 3;
     }
 
     @Override
@@ -43,16 +41,7 @@ public class DropdownScreen<T> extends Overlay {
         ListWidget list = new ListWidget(this.width() - 3, this.height() - 3);
         list.setPosition(this.x() + 1, this.y() + 2);
 
-        for (var entry : this.dropdown.options().entrySet()) {
-            T value = entry.getKey();
-            list.add(new DropdownEntry<>(
-                this.width() - 3, 24,
-                this.dropdown, value, () -> {
-                    this.dropdown.select(value);
-                    this.onClose();
-                }
-            ));
-        }
+        this.dropdown.initEntries(list, width() - 3, this::onClose);
 
         addRenderableWidget(list);
     }
@@ -68,7 +57,7 @@ public class DropdownScreen<T> extends Overlay {
     @Override
     public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.renderBackground(graphics, mouseX, mouseY, partialTick);
-        graphics.blitSprite(LIST, this.x(), this.y(), this.width(), this.height());
+        dropdown.renderEntriesBackground(graphics, this.x(), this.y(), this.width(), this.height(), mouseX, mouseY, partialTick);
     }
 
     public boolean isOriginator(Dropdown<?> dropdown) {
