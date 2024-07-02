@@ -51,7 +51,7 @@ public class Dropdown<T> extends BaseWidget {
 
         int textOffset = (this.height - 8) / 2;
 
-        graphics.drawString(font, getText(this.selected), this.getX() + textOffset, this.getY() + textOffset - 1, SELECTED, false);
+        graphics.drawString(font, getText(this.selected), this.getX() + textOffset, this.getY() + textOffset - 1, getFontColor(), false);
 
         int chevronOffset = (this.height - 16) / 2;
 
@@ -65,6 +65,10 @@ public class Dropdown<T> extends BaseWidget {
 
     protected ResourceLocation getChevronTexture() {
         return this.isDropdownOpen() ? CHEVRON_UP : CHEVRON_DOWN;
+    }
+
+    protected int getFontColor() {
+        return SELECTED;
     }
 
     @Override
