@@ -29,6 +29,7 @@ public class ListWidget extends BaseParentWidget {
     protected int lastHeight = 0;
     protected boolean scrolling = false;
     protected int gap = 0;
+    protected int overScroll = 0;
 
     public ListWidget(int width, int height) {
         super(width, height);
@@ -101,9 +102,9 @@ public class ListWidget extends BaseParentWidget {
 
     public void renderScrollbar(GuiGraphics graphics, int scrollBarX, int scrollBarY, int scrollBarHeight, int mouseX, int mouseY, float partialTicks) {
         graphics.blitSprite(SCROLLBAR,
-            scrollBarX + getScrollbarPadding(),
+            scrollBarX + (getScrollbarThumbWidth() - getScrollbarTrackWidth()) / 2,
             this.getY() + getScrollbarPadding(),
-            getScrollbarThumbWidth() - getScrollbarPadding() * 2,
+                getScrollbarTrackWidth(),
             this.height - getScrollbarPadding() * 2
         );
 
@@ -125,8 +126,8 @@ public class ListWidget extends BaseParentWidget {
         return SCROLLBAR_PADDING;
     }
 
-    public int getOverscroll() {
-        return 0;
+    public int getScrollbarTrackWidth() {
+        return SCROLLBAR_WIDTH - SCROLLBAR_PADDING * 2;
     }
 
     @Override
@@ -201,7 +202,7 @@ public class ListWidget extends BaseParentWidget {
 
     protected void updateScrollBar() {
         updateLastHeight();
-        this.scroll = Mth.clamp(this.scroll, 0, Math.max(0, this.lastHeight - this.height + getOverscroll()));
+        this.scroll = Mth.clamp(this.scroll, 0, Math.max(0, this.lastHeight - this.height + this.overScroll));
     }
 
     public boolean isScrolling() {
