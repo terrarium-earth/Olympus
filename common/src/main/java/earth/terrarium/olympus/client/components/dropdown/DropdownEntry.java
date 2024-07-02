@@ -13,9 +13,11 @@ public class DropdownEntry<T> extends BaseWidget implements ListWidget.Item {
     private static final ResourceLocation ENTRY = UIConstants.id("dropdown/entry");
     private static final ResourceLocation ENTRY_HOVERED = UIConstants.id("dropdown/entry_hovered");
 
-    private final Dropdown<T> dropdown;
-    private final T value;
-    private final Runnable action;
+    public static final int COLOR = 0xFEFEFE;
+
+    protected final Dropdown<T> dropdown;
+    protected final T value;
+    protected final Runnable action;
 
     public DropdownEntry(int width, int height, Dropdown<T> dropdown, T value, Runnable action) {
         super(width, height);
@@ -31,7 +33,7 @@ public class DropdownEntry<T> extends BaseWidget implements ListWidget.Item {
 
         Component text = this.dropdown.getText(this.value);
         int textOffset = (this.height - 8) / 2;
-        graphics.drawString(Minecraft.getInstance().font, text, this.getX() + textOffset, this.getY() + textOffset, Dropdown.COLOR);
+        graphics.drawString(Minecraft.getInstance().font, text, this.getX() + textOffset, this.getY() + textOffset, COLOR);
     }
 
     @Override

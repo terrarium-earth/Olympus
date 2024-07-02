@@ -25,12 +25,12 @@ public class AutocompleteTextBox<T> extends BaseWidget {
     private static final int TEXT_COLOR = 0xe0e0e0;
     private static final int PADDING = 4;
 
-    final List<T> suggestions;
-    final BiPredicate<String, T> filter;
-    final Function<T, String> mapper;
+    protected final List<T> suggestions;
+    protected final BiPredicate<String, T> filter;
+    protected final Function<T, String> mapper;
 
-    AutocompleteScreen<T> screen;
-    String value;
+    protected AutocompleteScreen<T> screen;
+    protected String value;
 
     public AutocompleteTextBox(AutocompleteTextBox<T> box, String value, int width, int height, List<T> suggestions, BiPredicate<String, T> filter, Function<T, String> mapper) {
         super(width, height);

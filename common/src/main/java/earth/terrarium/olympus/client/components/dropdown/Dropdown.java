@@ -2,6 +2,7 @@ package earth.terrarium.olympus.client.components.dropdown;
 
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import earth.terrarium.olympus.client.components.base.BaseWidget;
+import earth.terrarium.olympus.client.components.base.ListWidget;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -19,12 +20,11 @@ public class Dropdown<T> extends BaseWidget {
     private static final ResourceLocation CHEVRON_UP = UIConstants.id("dropdown/chevron_up");
 
     public static final int SELECTED = 0x505050;
-    public static final int COLOR = 0xFEFEFE;
 
-    private final Dropdown<?> parent;
-    private final Map<T, Component> options;
-    private final Consumer<T> onSelect;
-    private T selected;
+    protected final Dropdown<?> parent;
+    protected final Map<T, Component> options;
+    protected final Consumer<T> onSelect;
+    protected T selected;
 
     public Dropdown(Dropdown<T> old, int width, int height, Map<T, Component> options, T selected) {
         this(old, width, height, options, selected, value -> {});
@@ -47,8 +47,7 @@ public class Dropdown<T> extends BaseWidget {
     public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         Font font = Minecraft.getInstance().font;
 
-        ResourceLocation sprite = UIConstants.BUTTON.get(this.active, this.isHovered());
-        graphics.blitSprite(sprite, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        renderButton(graphics, mouseX, mouseY, partialTick);
 
         int textOffset = (this.height - 8) / 2;
 
@@ -56,8 +55,16 @@ public class Dropdown<T> extends BaseWidget {
 
         int chevronOffset = (this.height - 16) / 2;
 
-        ResourceLocation chevron = this.isDropdownOpen() ? CHEVRON_UP : CHEVRON_DOWN;
-        graphics.blitSprite(chevron, this.getX() + this.width - chevronOffset - 16, this.getY() + chevronOffset, 16, 16);
+        graphics.blitSprite(getChevronTexture(), this.getX() + this.width - chevronOffset - 16, this.getY() + chevronOffset, 16, 16);
+    }
+
+    protected void renderButton(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        ResourceLocation sprite = UIConstants.BUTTON.get(this.active, this.isHovered());
+        graphics.blitSprite(sprite, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+    }
+
+    protected ResourceLocation getChevronTexture() {
+        return this.isDropdownOpen() ? CHEVRON_UP : CHEVRON_DOWN;
     }
 
     @Override
@@ -78,11 +85,6 @@ public class Dropdown<T> extends BaseWidget {
         return this.selected;
     }
 
-    public void select(T option) {
-        this.selected = option;
-        this.onSelect.accept(option);
-    }
-
     @Override
     public CursorScreen.Cursor getCursor() {
         return this.isActive() ? CursorScreen.Cursor.POINTER : CursorScreen.Cursor.DISABLED;
@@ -90,5 +92,16 @@ public class Dropdown<T> extends BaseWidget {
 
     public boolean is(Dropdown<?> dropdown) {
         return this == dropdown || this.parent != null && this.parent.is(dropdown);
+    }
+
+    public void initEntries(ListWidget list, int width, Runnable action) {
+        for (var entry : options.entrySet()) {
+            T value = entry.getKey();
+            list.add(new DropdownEntry<>(width, 24, this, value, () -> {
+                this.selected = value;
+                this.onSelect.accept(value);
+                action.run();
+            }));
+        }
     }
 }

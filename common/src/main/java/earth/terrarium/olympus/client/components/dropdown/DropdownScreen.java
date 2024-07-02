@@ -11,7 +11,7 @@ public class DropdownScreen<T> extends Overlay {
 
     private static final ResourceLocation LIST = UIConstants.id("dropdown/list");
 
-    private final Dropdown<T> dropdown;
+    protected final Dropdown<T> dropdown;
 
     protected DropdownScreen(Screen background, Dropdown<T> dropdown) {
         super(background);
@@ -43,16 +43,7 @@ public class DropdownScreen<T> extends Overlay {
         ListWidget list = new ListWidget(this.width() - 3, this.height() - 3);
         list.setPosition(this.x() + 1, this.y() + 2);
 
-        for (var entry : this.dropdown.options().entrySet()) {
-            T value = entry.getKey();
-            list.add(new DropdownEntry<>(
-                this.width() - 3, 24,
-                this.dropdown, value, () -> {
-                    this.dropdown.select(value);
-                    this.onClose();
-                }
-            ));
-        }
+        this.dropdown.initEntries(list, width() - 3, this::onClose);
 
         addRenderableWidget(list);
     }

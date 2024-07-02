@@ -13,7 +13,7 @@ import java.util.function.BooleanSupplier;
 
 public class ToggleSwitch extends Button implements CursorWidget {
 
-    private final BooleanSupplier value;
+    protected final BooleanSupplier value;
 
     public ToggleSwitch(int width, int height, OnPress onPress, BooleanSupplier value) {
         super(0, 0, width, height, CommonComponents.EMPTY, onPress, DEFAULT_NARRATION);
