@@ -1,7 +1,6 @@
 package earth.terrarium.olympus.client.components.base;
 
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
-import earth.terrarium.olympus.client.components.lists.ListEntry;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
@@ -161,7 +160,7 @@ public class ListWidget extends BaseParentWidget {
             for (Item entry : this.items) {
                 int height = entry.getHeight();
                 if (mouseY >= y && mouseY <= y + height) {
-                    return entry.mouseClicked(mouseX - getX(), mouseY - y, button);
+                    return entry.mouseClicked(mouseX, mouseY, button);
                 }
                 y += height + spacing;
             }
