@@ -10,6 +10,7 @@ public class UIConstants {
 
     public static final ResourceLocation MODAL = id("modal/modal");
     public static final ResourceLocation MODAL_HEADER = id("modal/modal_header");
+    public static final ResourceLocation MODAL_INSET = id("modal/modal_inset");
 
     public static final ResourceLocation SCROLLBAR = id("lists/scroll/bar");
     public static final ResourceLocation SCROLLBAR_THUMB = id("lists/scroll/thumb");
@@ -83,6 +84,7 @@ public class UIConstants {
     public static final Component BACK = Component.translatable("olympus.ui.back");
     public static final Component CANCEL = Component.translatable("olympus.ui.cancel");
     public static final Component DELETE = Component.translatable("olympus.ui.delete");
+    public static final Component LOADING = Component.translatable("olympus.ui.loading");
 
     public static ResourceLocation id(String path) {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
