@@ -15,17 +15,23 @@ public class DeleteConfirmModal extends BaseModal {
     private static final int WIDGET_HEIGHT = 24;
 
     private final Component description;
+    private final Component confirm;
     private final Runnable action;
 
-    protected DeleteConfirmModal(Component title, Component description, Runnable action, Screen background) {
+    protected DeleteConfirmModal(Component title, Component description, Component confirm, Runnable action, Screen background) {
         super(title, background);
 
         this.description = description;
+        this.confirm = confirm;
         this.action = action;
 
         this.minHeight = HEIGHT;
         this.minWidth = WIDTH;
         this.ratio = 0f;
+    }
+
+    public DeleteConfirmModal(Component title, Component description, Runnable action, Screen background) {
+        this(title, description, UIConstants.DELETE, action, background);
     }
 
     @Override
@@ -60,7 +66,7 @@ public class DeleteConfirmModal extends BaseModal {
             new TextButton(
                 buttonWidth, WIDGET_HEIGHT,
                 0xFFFFFF, UIConstants.DANGER_BUTTON,
-                UIConstants.DELETE,
+                confirm,
                 button -> {
                     this.action.run();
                     this.onClose();
@@ -82,8 +88,12 @@ public class DeleteConfirmModal extends BaseModal {
     }
 
     public static void open(Component title, Component description, Runnable action) {
+        open(title, description, UIConstants.DELETE, action);
+    }
+
+    public static void open(Component title, Component description, Component confirm, Runnable action) {
         Screen background = Minecraft.getInstance().screen;
-        DeleteConfirmModal modal = new DeleteConfirmModal(title, description, action, background);
+        DeleteConfirmModal modal = new DeleteConfirmModal(title, description, confirm, action, background);
         Minecraft.getInstance().setScreen(modal);
     }
 }

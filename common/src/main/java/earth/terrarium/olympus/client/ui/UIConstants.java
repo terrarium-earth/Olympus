@@ -15,6 +15,16 @@ public class UIConstants {
     public static final ResourceLocation SCROLLBAR = id("lists/scroll/bar");
     public static final ResourceLocation SCROLLBAR_THUMB = id("lists/scroll/thumb");
 
+    public static final ResourceLocation CHEVRON_DOWN = UIConstants.id("dropdown/chevron_down");
+    public static final ResourceLocation CHEVRON_UP = UIConstants.id("dropdown/chevron_up");
+    public static final ResourceLocation LIST_BG = UIConstants.id("dropdown/list");
+
+    public static final WidgetSprites LIST_ENTRY = new WidgetSprites(
+        id("lists/entry/normal"),
+        id("lists/entry/normal"),
+        id("lists/entry/hovered")
+    );
+
     public static final WidgetSprites MODAL_CLOSE = new WidgetSprites(
         id("modal/buttons/close/normal"),
         id("modal/buttons/close/normal"),
@@ -25,6 +35,12 @@ public class UIConstants {
         id("modal/buttons/save/normal"),
         id("modal/buttons/save/normal"),
         id("modal/buttons/save/hovered")
+    );
+
+    public static final WidgetSprites MODAL_REFRESH = new WidgetSprites(
+        id("modal/buttons/refresh/normal"),
+        id("modal/buttons/refresh/normal"),
+        id("modal/buttons/refresh/hovered")
     );
 
     public static final WidgetSprites BUTTON = new WidgetSprites(
@@ -84,6 +100,7 @@ public class UIConstants {
     public static final Component BACK = Component.translatable("olympus.ui.back");
     public static final Component CANCEL = Component.translatable("olympus.ui.cancel");
     public static final Component DELETE = Component.translatable("olympus.ui.delete");
+    public static final Component REFRESH = Component.translatable("olympus.ui.refresh");
     public static final Component LOADING = Component.translatable("olympus.ui.loading");
 
     public static ResourceLocation id(String path) {

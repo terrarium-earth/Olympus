@@ -20,7 +20,7 @@ public class ClaimMapTopologyAlgorithm {
 
     public static final int BRIGHTER_COLOR = 0xff030303;
 
-    public static int[][] setColors(int minX, int minZ, int maxX, int maxZ, ClientLevel level, LocalPlayer player) {
+    public static int[][] getColors(int minX, int minZ, int maxX, int maxZ, ClientLevel level, LocalPlayer player) {
         int[][] colors = new int[maxX - minX][maxZ - minZ];
         BlockPos.MutableBlockPos pos1 = new BlockPos.MutableBlockPos();
         BlockPos.MutableBlockPos pos2 = new BlockPos.MutableBlockPos();

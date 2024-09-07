@@ -6,12 +6,7 @@ import earth.terrarium.olympus.client.components.base.BaseWidget;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.Renderable;
-import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.GlobalPos;
-import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.concurrent.CompletableFuture;
@@ -28,7 +23,7 @@ public class MapWidget extends BaseWidget {
 
     public static MapWidget create(int size) {
         int scale = Minecraft.getInstance().options.renderDistance().get() * 8;
-        return new MapWidget(size, (scale - scale % 16 + 16) * 2 + 16);
+        return new MapWidget(size, (scale - scale % 16));
     }
 
     private void renderLoading(GuiGraphics graphics) {
@@ -61,9 +56,14 @@ public class MapWidget extends BaseWidget {
         int maxX = chunkPos.getMaxBlockX() + scale + 1;
         int maxZ = chunkPos.getMaxBlockZ() + scale + 1;
 
-        CompletableFuture
-            .supplyAsync(() -> ClaimMapTopologyAlgorithm.setColors(minX, minZ, maxX, maxZ, player.clientLevel, player))
-            .thenAccept(colors -> this.mapRenderer = new ClaimMapRenderer(colors, scale * 2 + 16));
+        if (scale / 8 > 12) {
+            // If the render distance is greater than 12 chunks, run asynchronously to avoid stuttering.
+            CompletableFuture.supplyAsync(() -> ClaimMapTopologyAlgorithm.getColors(minX, minZ, maxX, maxZ, player.clientLevel, player)).thenAcceptAsync(colors ->
+                    this.mapRenderer = new ClaimMapRenderer(colors, scale * 2 + 16), Minecraft.getInstance());
+        } else {
+            int[][] colors = ClaimMapTopologyAlgorithm.getColors(minX, minZ, maxX, maxZ, player.clientLevel, player);
+            this.mapRenderer = new ClaimMapRenderer(colors, scale * 2 + 16);
+        }
     }
 
     private void renderPlayerAvatar(LocalPlayer player, GuiGraphics graphics) {
