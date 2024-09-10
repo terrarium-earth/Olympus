@@ -46,4 +46,9 @@ public class DropdownEntry<T> extends BaseWidget implements ListWidget.Item {
     public void onClick(double mouseX, double mouseY) {
         this.action.run();
     }
+
+    @Override
+    public void overrideWidth(int width) {
+        setWidth(width);
+    }
 }

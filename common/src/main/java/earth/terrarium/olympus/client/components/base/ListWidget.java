@@ -79,7 +79,7 @@ public class ListWidget extends BaseParentWidget {
         this.lastHeight = 0;
 
         for (Item item : items) {
-            item.setWidth(actualWidth);
+            item.overrideWidth(actualWidth);
             item.setX(getX());
             item.setY(y);
 
@@ -192,7 +192,7 @@ public class ListWidget extends BaseParentWidget {
         this.lastHeight = 0;
         int y = this.getY() - (int) scroll;
         for (Item item : items) {
-            item.setWidth(actualWidth);
+            item.overrideWidth(actualWidth);
             item.setX(getX());
             item.setY(y);
             this.lastHeight += item.getHeight();
@@ -230,6 +230,6 @@ public class ListWidget extends BaseParentWidget {
             return LayoutElement.super.getRectangle();
         }
 
-        void setWidth(int width);
+        void overrideWidth(int width);
     }
 }
