@@ -1,12 +1,12 @@
-package earth.terrarium.olympus.client.components.dropdown;
+package earth.terrarium.olympus.client.ui.context;
 
 import earth.terrarium.olympus.client.components.base.BaseWidget;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import net.minecraft.client.gui.GuiGraphics;
 
-public class SpacerWidget extends BaseWidget {
+public class DividerWidget extends BaseWidget {
 
-    public SpacerWidget() {
+    public DividerWidget() {
         super(0, 2);
     }
 

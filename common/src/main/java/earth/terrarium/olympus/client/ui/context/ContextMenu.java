@@ -2,7 +2,6 @@ package earth.terrarium.olympus.client.ui.context;
 
 import com.mojang.blaze3d.platform.Window;
 import earth.terrarium.olympus.client.components.buttons.TextButton;
-import earth.terrarium.olympus.client.components.dropdown.SpacerWidget;
 import earth.terrarium.olympus.client.ui.ClearableGridLayout;
 import earth.terrarium.olympus.client.ui.Overlay;
 import earth.terrarium.olympus.client.ui.UIConstants;
@@ -89,7 +88,7 @@ public class ContextMenu extends Overlay {
     }
 
     public ContextMenu divider() {
-        return this.add(SpacerWidget::new);
+        return this.add(DividerWidget::new);
     }
 
     @Override
