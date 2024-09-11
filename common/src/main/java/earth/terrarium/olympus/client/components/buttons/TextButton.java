@@ -14,8 +14,8 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.ApiStatus;
 
 public class TextButton extends Button implements CursorWidget {
-    protected WidgetSprites sprites;
-    protected int color;
+    protected final WidgetSprites sprites;
+    protected final int color;
 
     public TextButton(int width, int height, int color, WidgetSprites sprites, Component text, OnPress onPress) {
         super(0, 0, width, height, text, onPress, DEFAULT_NARRATION);
