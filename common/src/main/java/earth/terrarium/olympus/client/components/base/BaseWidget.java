@@ -16,8 +16,28 @@ public abstract class BaseWidget extends AbstractWidget implements CursorWidget 
         super(0, 0, width, height, CommonComponents.EMPTY);
     }
 
+    public BaseWidget() {
+        super(0, 0, 0, 0, CommonComponents.EMPTY);
+    }
+
     public BaseWidget withTooltip(Component tooltip) {
         this.setTooltip(Tooltip.create(tooltip));
+        return this;
+    }
+
+    public BaseWidget withSize(int width, int height) {
+        this.setWidth(width);
+        this.setHeight(height);
+        return this;
+    }
+
+    public BaseWidget withPosition(int x, int y) {
+        this.setPosition(x, y);
+        return this;
+    }
+
+    public BaseWidget asDisabled() {
+        this.active = false;
         return this;
     }
 
