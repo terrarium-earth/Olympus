@@ -3,17 +3,16 @@ package earth.terrarium.olympus.client.ui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.teamresourceful.resourcefullib.client.screens.BaseCursorScreen;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class Overlay extends BaseCursorScreen {
 
     @Nullable
     protected final Screen background;
+    private boolean isInitialized = false;
 
     protected Overlay(@Nullable Screen background) {
         super(CommonComponents.EMPTY);
@@ -24,15 +23,26 @@ public abstract class Overlay extends BaseCursorScreen {
     public void added() {
         super.added();
         if (this.background == null) return;
-        ComponentPath path = this.background.getCurrentFocusPath();
-        if (path == null) return;
-        path.applyFocus(false);
+        this.background.clearFocus();
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        if (!this.isInitialized) {
+            this.isInitialized = true;
+        }
     }
 
     @Override
     protected void repositionElements() {
         if (this.background != null) this.background.resize(Minecraft.getInstance(), this.width, this.height);
-        super.repositionElements();
+        if (this.background instanceof Overlay overlay) overlay.isInitialized = false;
+        if (this.isInitialized) {
+            Minecraft.getInstance().setScreen(this.background);
+        } else {
+            rebuildWidgets();
+        }
     }
 
     public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
@@ -43,21 +53,20 @@ public abstract class Overlay extends BaseCursorScreen {
     }
 
     @Override
-    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        super.render(graphics, mouseX, mouseY, partialTick);
-    }
-
-    @Override
     public void onClose() {
         Minecraft.getInstance().setScreen(this.background);
     }
 
+    /**
+     * @deprecated This seems really useless
+     */
+    @Deprecated(forRemoval = true)
     public void renderWidgets(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.render(graphics, mouseX, mouseY, partialTick);
     }
 
     @Override
     public boolean isPauseScreen() {
-        return false;
+        return this.background != null && this.background.isPauseScreen();
     }
 }

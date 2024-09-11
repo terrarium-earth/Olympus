@@ -8,6 +8,13 @@ val common: Configuration by configurations.creating {
     configurations["developmentFabric"].extendsFrom(this)
 }
 
+sourceSets {
+    create("example") {
+        runtimeClasspath += sourceSets["main"].runtimeClasspath
+        compileClasspath += sourceSets["main"].compileClasspath
+    }
+}
+
 dependencies {
     common(project(":common", configuration = "namedElements")) {
         isTransitive = false
@@ -25,4 +32,15 @@ dependencies {
     modApi(group = "net.fabricmc.fabric-api", name = "fabric-api", version = "$fabricApiVersion+$minecraftVersion")
 
     modApi(group = "com.terraformersmc", name = "modmenu", version = modMenuVersion)
+}
+
+loom {
+    runs {
+        register("example") {
+            client()
+            ideConfigGenerated(true)
+            name = "Run Example"
+            source(sourceSets.getByName("example"))
+        }
+    }
 }
