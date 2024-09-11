@@ -14,7 +14,7 @@ public class ButtonExample extends ExampleScreen {
     @Override
     protected void init() {
         LinearLayout horizontal = LinearLayout.horizontal().spacing(20);
-        horizontal.addChild(TextButton.normal(
+        horizontal.addChild(TextButton.create(
                 100,
                 20,
                 Component.literal("Enabled"),
