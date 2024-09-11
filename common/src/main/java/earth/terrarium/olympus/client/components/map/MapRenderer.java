@@ -9,10 +9,10 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.ResourceLocation;
 
-public class ClaimMapRenderer {
+public class MapRenderer {
     private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("olympus","claimmaptextures");
 
-    public ClaimMapRenderer(int[][] colors, int scale) {
+    public MapRenderer(int[][] colors, int scale) {
         var textureManager = Minecraft.getInstance().getTextureManager();
         var dynamicTexture = new DynamicTexture(scale, scale, true);
         textureManager.register(TEXTURE, dynamicTexture);

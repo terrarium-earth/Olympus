@@ -12,8 +12,10 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.concurrent.CompletableFuture;
 
 public class MapWidget extends BaseWidget {
+    private static final ResourceLocation MAP_ICONS = ResourceLocation.withDefaultNamespace("textures/map/decorations/player.png");
+
     private final int scale;
-    private ClaimMapRenderer mapRenderer;
+    private MapRenderer mapRenderer;
 
     public MapWidget(int size, int scale) {
         super(size, size);
@@ -58,11 +60,11 @@ public class MapWidget extends BaseWidget {
 
         if (scale / 8 > 12) {
             // If the render distance is greater than 12 chunks, run asynchronously to avoid stuttering.
-            CompletableFuture.supplyAsync(() -> ClaimMapTopologyAlgorithm.getColors(minX, minZ, maxX, maxZ, player.clientLevel, player)).thenAcceptAsync(colors ->
-                    this.mapRenderer = new ClaimMapRenderer(colors, scale * 2 + 16), Minecraft.getInstance());
+            CompletableFuture.supplyAsync(() -> MapTopologyAlgorithm.getColors(minX, minZ, maxX, maxZ, player.clientLevel, player)).thenAcceptAsync(colors ->
+                    this.mapRenderer = new MapRenderer(colors, scale * 2 + 16), Minecraft.getInstance());
         } else {
-            int[][] colors = ClaimMapTopologyAlgorithm.getColors(minX, minZ, maxX, maxZ, player.clientLevel, player);
-            this.mapRenderer = new ClaimMapRenderer(colors, scale * 2 + 16);
+            int[][] colors = MapTopologyAlgorithm.getColors(minX, minZ, maxX, maxZ, player.clientLevel, player);
+            this.mapRenderer = new MapRenderer(colors, scale * 2 + 16);
         }
     }
 
@@ -85,6 +87,4 @@ public class MapWidget extends BaseWidget {
             graphics.blit(MAP_ICONS, 0, 0, 0f, 0f, 8, 8, 8, 8);
         }
     }
-
-    private static final ResourceLocation MAP_ICONS = ResourceLocation.withDefaultNamespace("textures/map/decorations/player.png");
 }

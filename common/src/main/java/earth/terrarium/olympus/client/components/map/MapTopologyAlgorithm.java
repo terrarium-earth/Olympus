@@ -16,7 +16,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 
-public class ClaimMapTopologyAlgorithm {
+public class MapTopologyAlgorithm {
 
     public static final int BRIGHTER_COLOR = 0xff030303;
 
@@ -126,7 +126,7 @@ public class ClaimMapTopologyAlgorithm {
         } else if (state != null) {
             int tintColor = Minecraft.getInstance().getBlockColors().getColor(state, level, pos, 0);
             if (tintColor == -1) {
-                return ClaimMapPalette.getColor(color.id, brightness);
+                return MapPalette.getColor(color.id, brightness);
             }
             int intColor = rgb2abgr(Minecraft.getInstance().getBlockColors().getColor(state, level, pos));
             return switch (brightness) {

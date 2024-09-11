@@ -2,7 +2,7 @@ package earth.terrarium.olympus.client.components.map;
 
 import net.minecraft.world.level.material.MapColor;
 
-public class ClaimMapPalette {
+public class MapPalette {
 
     public static final int[][] COLORS = new int[][]{
         {0, 0, 0, 0}, // None
@@ -69,19 +69,6 @@ public class ClaimMapPalette {
         {0x789D88, 0x6D8F7E, 0x5B7469, 0x495B56}, // Glow Lichen
     };
 
-    public static int getColor(int index, MapColor.Brightness brightness) {
-        if (index >= COLORS.length) {
-            return MapColor.getColorFromPackedId(MapColor.byId(index).getPackedId(brightness));
-        }
-
-        return COLORS[index][switch (brightness) {
-            case LOWEST -> 0;
-            case LOW -> 1;
-            case NORMAL -> 2;
-            case HIGH -> 3;
-        }];
-    }
-
     // Add alpha to all the colors after since they are RGB and need to be converted to ABGR
     static {
         for (int i = 0; i < COLORS.length; i++) {
@@ -93,5 +80,18 @@ public class ClaimMapPalette {
                 COLORS[i][j] = (0xFF << 24) | (b << 16) | (g << 8) | r;
             }
         }
+    }
+
+    public static int getColor(int index, MapColor.Brightness brightness) {
+        if (index >= COLORS.length) {
+            return MapColor.getColorFromPackedId(MapColor.byId(index).getPackedId(brightness));
+        }
+
+        return COLORS[index][switch (brightness) {
+            case LOWEST -> 0;
+            case LOW -> 1;
+            case NORMAL -> 2;
+            case HIGH -> 3;
+        }];
     }
 }
