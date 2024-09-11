@@ -1,17 +1,17 @@
-package earth.terrarium.olympus.client.components.context;
+package earth.terrarium.olympus.client.ui.context;
 
 import com.mojang.blaze3d.platform.Window;
-import earth.terrarium.heracles.Heracles;
-import earth.terrarium.heracles.client.components.ClearableGridLayout;
-import earth.terrarium.heracles.client.ui.Overlay;
-import earth.terrarium.heracles.client.utils.UIUtils;
+import earth.terrarium.olympus.client.components.buttons.TextButton;
+import earth.terrarium.olympus.client.ui.ClearableGridLayout;
+import earth.terrarium.olympus.client.ui.Overlay;
+import earth.terrarium.olympus.client.ui.UIConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +20,7 @@ import java.util.function.Supplier;
 
 public class ContextMenu extends Overlay {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Heracles.MOD_ID, "textures/gui/sprites/context/background.png");
-    private static final int PADDING = 5;
+    private static final int PADDING = 4;
 
     private final List<Supplier<AbstractWidget>> actions = new ArrayList<>();
     private final int initialX;
@@ -73,12 +72,16 @@ public class ContextMenu extends Overlay {
         return this;
     }
 
-    public ContextMenu button(Component text, Runnable action) {
-        return this.add(() -> new ContextButtonWidget(text, action, false));
+    public ContextMenu button(Component text, Button.OnPress action) {
+        return this.add(() -> new TextButton(Minecraft.getInstance().font.width(text) + PADDING * 2, 16, 0xFFFFFF, UIConstants.CONTEXT_BUTTON, text, action));
     }
 
-    public ContextMenu dangerButton(Component text, Runnable action) {
-        return this.add(() -> new ContextButtonWidget(text, action, true));
+    public ContextMenu dangerButton(Component text, Button.OnPress action) {
+        return this.add(() -> new TextButton(Minecraft.getInstance().font.width(text) + PADDING * 2, 16, 0xca3636, 0xFFFFFF, UIConstants.DANGER_CONTEXT_BUTTON, text, action));
+    }
+
+    public ContextMenu primaryButton(Component text, Button.OnPress action) {
+        return this.add(() -> new TextButton(Minecraft.getInstance().font.width(text) + PADDING * 2, 16, 0x3c8527, 0xFFFFFF, UIConstants.PRIMARY_CONTEXT_BUTTON, text, action));
     }
 
     public ContextMenu divider() {
@@ -86,15 +89,16 @@ public class ContextMenu extends Overlay {
     }
 
     @Override
-    public void renderBackground(GuiGraphics graphics) {
-        UIUtils.blitWithEdge(graphics, TEXTURE, this.x, this.y, this.contextWidth, this.contextHeight, 4);
-    }
-
-    @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         this.onClose();
         super.mouseClicked(mouseX, mouseY, button);
         return true;
+    }
+
+    @Override
+    public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        super.renderBackground(graphics, mouseX, mouseY, partialTick);
+        graphics.blitSprite(UIConstants.MODAL, this.x, this.y, this.contextWidth, this.contextHeight);
     }
 
     public static void open(Consumer<ContextMenu> consumer) {
@@ -116,5 +120,9 @@ public class ContextMenu extends Overlay {
         ContextMenu menu = new ContextMenu(background, x, y);
         consumer.accept(menu);
         mc.setScreen(menu);
+    }
+
+    public static void open(AbstractWidget widget, Consumer<ContextMenu> consumer) {
+        open(widget.getX(), widget.getY() + widget.getHeight(), consumer);
     }
 }

@@ -14,25 +14,29 @@ public class ButtonExample extends ExampleScreen {
     @Override
     protected void init() {
         LinearLayout horizontal = LinearLayout.horizontal().spacing(20);
-        horizontal.addChild(TextButton.create(
+        horizontal.addChild(TextButton.normal(
                 100,
                 20,
                 Component.literal("Enabled"),
                 button -> System.out.println("Enabled button clicked!")
         ));
-        horizontal.addChild(TextButton.create(
+        horizontal.addChild(TextButton.normal(
                 100,
                 20,
                 Component.literal("Disabled"),
                 button -> System.out.println("Disabled button clicked!")
         )).active = false;
-        horizontal.addChild(new TextButton(
+        horizontal.addChild(TextButton.danger(
                 100,
                 20,
-                0xFFFFFF,
-                UIConstants.DANGER_BUTTON,
                 Component.literal("Danager"),
                 button -> System.out.println("Danger button clicked!")
+        ));
+        horizontal.addChild(TextButton.primary(
+                100,
+                20,
+                Component.literal("Primary"),
+                button -> System.out.println("Primary button clicked!")
         ));
 
         horizontal.arrangeElements();

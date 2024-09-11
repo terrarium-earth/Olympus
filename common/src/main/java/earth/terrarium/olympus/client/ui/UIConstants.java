@@ -15,9 +15,11 @@ public class UIConstants {
     public static final ResourceLocation SCROLLBAR = id("lists/scroll/bar");
     public static final ResourceLocation SCROLLBAR_THUMB = id("lists/scroll/thumb");
 
-    public static final ResourceLocation CHEVRON_DOWN = UIConstants.id("dropdown/chevron_down");
-    public static final ResourceLocation CHEVRON_UP = UIConstants.id("dropdown/chevron_up");
-    public static final ResourceLocation LIST_BG = UIConstants.id("dropdown/list");
+    public static final ResourceLocation CHEVRON_DOWN = id("dropdown/chevron_down");
+    public static final ResourceLocation CHEVRON_UP = id("dropdown/chevron_up");
+    public static final ResourceLocation LIST_BG = id("dropdown/list");
+
+    public static final ResourceLocation CONTEXT_DIVIDER = id("context/divider");
 
     public static final WidgetSprites LIST_ENTRY = new WidgetSprites(
         id("lists/entry/normal"),
@@ -61,11 +63,28 @@ public class UIConstants {
         id("buttons/primary/hovered")
     );
 
+    public static final WidgetSprites CONTEXT_BUTTON = new WidgetSprites(
+        id("context/blank"),
+        id("context/blank"),
+        id("context/button")
+    );
+
+    public static final WidgetSprites DANGER_CONTEXT_BUTTON = new WidgetSprites(
+            id("context/blank"),
+            id("context/blank"),
+            id("context/danger_button")
+    );
+
+    public static final WidgetSprites PRIMARY_CONTEXT_BUTTON = new WidgetSprites(
+            id("context/blank"),
+            id("context/blank"),
+            id("context/primary_button")
+    );
+
     public static final WidgetSprites SWITCH = new WidgetSprites(
             id("buttons/switch/off/normal"),
             id("buttons/switch/off/disabled"),
-            id("buttons/switch/off/hovered")
-    );
+            id("buttons/switch/off/hovered"));
 
     public static final WidgetSprites SWITCH_ON = new WidgetSprites(
             id("buttons/switch/on/normal"),
