@@ -20,24 +20,6 @@ public class ButtonExample extends ExampleScreen {
                 Component.literal("Enabled"),
                 button -> System.out.println("Enabled button clicked!")
         ));
-        horizontal.addChild(TextButton.normal(
-                100,
-                20,
-                Component.literal("Disabled"),
-                button -> System.out.println("Disabled button clicked!")
-        )).active = false;
-        horizontal.addChild(TextButton.danger(
-                100,
-                20,
-                Component.literal("Danager"),
-                button -> System.out.println("Danger button clicked!")
-        ));
-        horizontal.addChild(TextButton.primary(
-                100,
-                20,
-                Component.literal("Primary"),
-                button -> System.out.println("Primary button clicked!")
-        ));
 
         horizontal.arrangeElements();
         FrameLayout.centerInRectangle(horizontal, 0, 0, this.width, this.height);

@@ -24,23 +24,11 @@ public class TextButton extends Button implements CursorWidget {
     }
 
     public static TextButton create(int width, int height, Component text, OnPress onPress) {
-        return normal(width, height, text, onPress);
-    }
-
-    public static TextButton create(int width, int height, Component text, Runnable onPress) {
-        return normal(width, height, text, button -> onPress.run());
-    }
-
-    public static TextButton normal(int width, int height, Component text, OnPress onPress) {
         return new TextButton(width, height, 0x555555, UIConstants.BUTTON, text, onPress);
     }
 
-    public static TextButton primary(int width, int height, Component text, OnPress onPress) {
-        return new TextButton(width, height, 0xFFFFFF, UIConstants.PRIMARY_BUTTON, text, onPress);
-    }
-
-    public static TextButton danger(int width, int height, Component text, OnPress onPress) {
-        return new TextButton(width, height, 0xFFFFFF, UIConstants.DANGER_BUTTON, text, onPress);
+    public static TextButton create(int width, int height, Component text, Runnable onPress) {
+        return new TextButton(width, height, 0x555555, UIConstants.BUTTON, text, (button) -> onPress.run());
     }
 
     public TextButton withTooltip(Component component) {
