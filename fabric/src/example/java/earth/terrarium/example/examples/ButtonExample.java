@@ -20,20 +20,6 @@ public class ButtonExample extends ExampleScreen {
                 Component.literal("Enabled"),
                 button -> System.out.println("Enabled button clicked!")
         ));
-        horizontal.addChild(TextButton.create(
-                100,
-                20,
-                Component.literal("Disabled"),
-                button -> System.out.println("Disabled button clicked!")
-        )).active = false;
-        horizontal.addChild(new TextButton(
-                100,
-                20,
-                0xFFFFFF,
-                UIConstants.DANGER_BUTTON,
-                Component.literal("Danager"),
-                button -> System.out.println("Danger button clicked!")
-        ));
 
         horizontal.arrangeElements();
         FrameLayout.centerInRectangle(horizontal, 0, 0, this.width, this.height);

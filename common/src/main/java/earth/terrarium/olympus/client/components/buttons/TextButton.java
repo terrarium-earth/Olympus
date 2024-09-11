@@ -13,7 +13,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 public class TextButton extends Button implements CursorWidget {
-
     protected final WidgetSprites sprites;
     protected final int color;
 

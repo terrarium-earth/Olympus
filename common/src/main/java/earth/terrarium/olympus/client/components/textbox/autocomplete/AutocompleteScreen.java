@@ -5,6 +5,7 @@ import earth.terrarium.olympus.client.components.textbox.TextBox;
 import earth.terrarium.olympus.client.ui.Overlay;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.resources.ResourceLocation;
 
@@ -19,7 +20,7 @@ public class AutocompleteScreen<T> extends Overlay {
     private static final int ENTRY_HEIGHT = 12;
 
     private final List<T> suggestions = new ArrayList<>();
-    private final List<ListWidget.Item> filteredSuggestions = new ArrayList<>();
+    private final List<AbstractWidget> filteredSuggestions = new ArrayList<>();
 
     protected final BiPredicate<String, T> filter;
     protected final Function<T, String> mapper;
