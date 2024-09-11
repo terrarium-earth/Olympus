@@ -8,7 +8,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-public class AutocompleteEntry<T> extends BaseWidget implements ListWidget.Item {
+public class AutocompleteEntry<T> extends BaseWidget {
 
     private static final ResourceLocation ENTRY = UIConstants.id("textbox/entry");
     private static final ResourceLocation ENTRY_HOVERED = UIConstants.id("textbox/entry_hovered");
@@ -35,10 +35,5 @@ public class AutocompleteEntry<T> extends BaseWidget implements ListWidget.Item 
     @Override
     public void onClick(double mouseX, double mouseY) {
         this.action.run();
-    }
-
-    @Override
-    public void overrideWidth(int width) {
-        setWidth(width);
     }
 }

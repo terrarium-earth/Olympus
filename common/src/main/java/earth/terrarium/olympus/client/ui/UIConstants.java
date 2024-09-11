@@ -15,9 +15,10 @@ public class UIConstants {
     public static final ResourceLocation SCROLLBAR = id("lists/scroll/bar");
     public static final ResourceLocation SCROLLBAR_THUMB = id("lists/scroll/thumb");
 
-    public static final ResourceLocation CHEVRON_DOWN = id("dropdown/chevron_down");
-    public static final ResourceLocation CHEVRON_UP = id("dropdown/chevron_up");
-    public static final ResourceLocation LIST_BG = id("dropdown/list");
+    public static final ResourceLocation CHEVRON_DOWN = id("chevron/down");
+    public static final ResourceLocation CHEVRON_UP = id("chevron/up");
+
+    public static final ResourceLocation LIST_BG = id("lists/background");
 
     public static final ResourceLocation CONTEXT_DIVIDER = id("context/divider");
 
@@ -61,24 +62,6 @@ public class UIConstants {
         id("buttons/primary/normal"),
         id("buttons/disabled"),
         id("buttons/primary/hovered")
-    );
-
-    public static final WidgetSprites CONTEXT_BUTTON = new WidgetSprites(
-        id("context/blank"),
-        id("context/blank"),
-        id("context/button")
-    );
-
-    public static final WidgetSprites DANGER_CONTEXT_BUTTON = new WidgetSprites(
-            id("context/blank"),
-            id("context/blank"),
-            id("context/danger_button")
-    );
-
-    public static final WidgetSprites PRIMARY_CONTEXT_BUTTON = new WidgetSprites(
-            id("context/blank"),
-            id("context/blank"),
-            id("context/primary_button")
     );
 
     public static final WidgetSprites SWITCH = new WidgetSprites(

@@ -15,11 +15,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class Dropdown<T> extends BaseWidget {
-
-    private static final ResourceLocation CHEVRON_DOWN = UIConstants.id("dropdown/chevron_down");
-    private static final ResourceLocation CHEVRON_UP = UIConstants.id("dropdown/chevron_up");
-    private static final ResourceLocation LIST = UIConstants.id("dropdown/list");
-
     public static final int SELECTED = 0x505050;
 
     protected final Dropdown<?> parent;
@@ -65,7 +60,7 @@ public class Dropdown<T> extends BaseWidget {
     }
 
     protected ResourceLocation getChevronTexture() {
-        return this.isDropdownOpen() ? CHEVRON_UP : CHEVRON_DOWN;
+        return this.isDropdownOpen() ? UIConstants.CHEVRON_UP : UIConstants.CHEVRON_DOWN;
     }
 
     protected int getFontColor() {
@@ -119,6 +114,6 @@ public class Dropdown<T> extends BaseWidget {
     }
 
     public void renderEntriesBackground(GuiGraphics graphics, int x, int y, int width, int height, int mouseX, int mouseY, float partialTick) {
-        graphics.blitSprite(LIST, x, y, width, height);
+        graphics.blitSprite(UIConstants.LIST_BG, x, y, width, height);
     }
 }

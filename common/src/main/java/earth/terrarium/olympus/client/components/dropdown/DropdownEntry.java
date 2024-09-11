@@ -8,11 +8,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-public class DropdownEntry<T> extends BaseWidget implements ListWidget.Item {
-
-    private static final ResourceLocation ENTRY = UIConstants.id("dropdown/entry");
-    private static final ResourceLocation ENTRY_HOVERED = UIConstants.id("dropdown/entry_hovered");
-
+public class DropdownEntry<T> extends BaseWidget {
     public static final int COLOR = 0xFEFEFE;
 
     protected final Dropdown<T> dropdown;
@@ -39,16 +35,11 @@ public class DropdownEntry<T> extends BaseWidget implements ListWidget.Item {
     }
 
     protected void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        graphics.blitSprite(this.isHovered() ? ENTRY_HOVERED : ENTRY, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        graphics.blitSprite(UIConstants.LIST_ENTRY.get(true, isHovered()), this.getX(), this.getY(), this.getWidth(), this.getHeight());
     }
 
     @Override
     public void onClick(double mouseX, double mouseY) {
         this.action.run();
-    }
-
-    @Override
-    public void overrideWidth(int width) {
-        setWidth(width);
     }
 }

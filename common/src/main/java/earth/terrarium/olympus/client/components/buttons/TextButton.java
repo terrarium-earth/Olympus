@@ -16,21 +16,19 @@ import org.jetbrains.annotations.ApiStatus;
 public class TextButton extends Button implements CursorWidget {
     protected WidgetSprites sprites;
     protected int color;
-    protected int hoverColor;
 
-    public TextButton(int width, int height, int color, int hoverColor, WidgetSprites sprites, Component text, OnPress onPress) {
+    public TextButton(int width, int height, int color, WidgetSprites sprites, Component text, OnPress onPress) {
         super(0, 0, width, height, text, onPress, DEFAULT_NARRATION);
         this.color = color;
         this.sprites = sprites;
-        this.hoverColor = hoverColor;
     }
 
-    public TextButton(int width, int height, int color, WidgetSprites sprites, Component text, OnPress onPress) {
-        this(width, height, color, color, sprites, text, onPress);
+    public static TextButton create(int width, int height, Component text, OnPress onPress) {
+        return normal(width, height, text, onPress);
     }
 
-    public static TextButton create(OnPress onPress) {
-        return normal(0, 0, UIConstants.LOADING, onPress);
+    public static TextButton create(int width, int height, Component text, Runnable onPress) {
+        return normal(width, height, text, button -> onPress.run());
     }
 
     public static TextButton normal(int width, int height, Component text, OnPress onPress) {
@@ -50,51 +48,6 @@ public class TextButton extends Button implements CursorWidget {
         return this;
     }
 
-    public TextButton withColor(int color) {
-        this.color = color;
-        return this;
-    }
-
-    public TextButton withHoverColor(int hoverColor) {
-        this.hoverColor = hoverColor;
-        return this;
-    }
-
-    public TextButton withSprites(WidgetSprites sprites) {
-        this.sprites = sprites;
-        return this;
-    }
-
-    public TextButton danger() {
-        this.color = 0xFFFFFF;
-        this.hoverColor = 0xFFFFFF;
-        this.sprites = UIConstants.DANGER_BUTTON;
-        return this;
-    }
-
-    public TextButton primary() {
-        this.color = 0xFFFFFF;
-        this.hoverColor = 0xFFFFFF;
-        this.sprites = UIConstants.PRIMARY_BUTTON;
-        return this;
-    }
-
-    public TextButton withText(Component text) {
-        this.setMessage(text);
-        return this;
-    }
-
-    public TextButton withSize(int width, int height) {
-        this.width = width;
-        this.height = height;
-        return this;
-    }
-
-    public TextButton withPosition(int x, int y) {
-        this.setPosition(x, y);
-        return this;
-    }
-
     @Override
     public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         ResourceLocation sprite = this.sprites.get(this.isActive(), this.isHoveredOrFocused());
@@ -105,7 +58,7 @@ public class TextButton extends Button implements CursorWidget {
         int textX = getX() + (this.width - font.width(this.getMessage())) / 2;
         int textY = getY() + 1 + (this.height - font.lineHeight) / 2;
 
-        graphics.drawString(font, this.getMessage(), textX, textY, this.isHovered() ? this.hoverColor : this.color, false);
+        graphics.drawString(font, this.getMessage(), textX, textY, this.color, false);
     }
 
     @Override

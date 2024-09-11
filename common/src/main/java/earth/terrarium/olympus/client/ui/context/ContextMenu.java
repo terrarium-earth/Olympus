@@ -2,6 +2,7 @@ package earth.terrarium.olympus.client.ui.context;
 
 import com.mojang.blaze3d.platform.Window;
 import earth.terrarium.olympus.client.components.buttons.TextButton;
+import earth.terrarium.olympus.client.components.dropdown.SpacerWidget;
 import earth.terrarium.olympus.client.ui.ClearableGridLayout;
 import earth.terrarium.olympus.client.ui.Overlay;
 import earth.terrarium.olympus.client.ui.UIConstants;
@@ -20,7 +21,7 @@ import java.util.function.Supplier;
 
 public class ContextMenu extends Overlay {
 
-    private static final int PADDING = 4;
+    private static final int PADDING = 3;
 
     private final List<Supplier<AbstractWidget>> actions = new ArrayList<>();
     private final int initialX;
@@ -54,8 +55,8 @@ public class ContextMenu extends Overlay {
 
         this.layout.arrangeElements();
         this.layout.visitWidgets(widget -> widget.setWidth(this.layout.getWidth()));
-        this.contextHeight = this.layout.getHeight() + PADDING * 2;
-        this.contextWidth = this.layout.getWidth() + PADDING * 2;
+        this.contextHeight = this.layout.getHeight() + 3;
+        this.contextWidth = this.layout.getWidth() + 4;
 
         if (this.contextHeight + this.y > this.height) {
             this.y = this.height - this.contextHeight;
@@ -63,7 +64,7 @@ public class ContextMenu extends Overlay {
         if (this.contextWidth + this.x > this.width) {
             this.x = Math.max(this.initialX - this.contextWidth, 0);
         }
-        this.layout.setPosition(this.x + PADDING, this.y + PADDING);
+        this.layout.setPosition(this.x + 2, this.y + 2);
         this.layout.visitWidgets(this::addRenderableWidget);
     }
 
@@ -73,19 +74,22 @@ public class ContextMenu extends Overlay {
     }
 
     public ContextMenu button(Component text, Button.OnPress action) {
-        return this.add(() -> new TextButton(Minecraft.getInstance().font.width(text) + PADDING * 2, 16, 0xFFFFFF, UIConstants.CONTEXT_BUTTON, text, action));
+        var font = Minecraft.getInstance().font;
+        return this.add(() -> new TextButton(font.width(text) + PADDING * 2, font.lineHeight + 1 + PADDING * 2, 0xFFFFFF, UIConstants.LIST_ENTRY, text, action));
     }
 
     public ContextMenu dangerButton(Component text, Button.OnPress action) {
-        return this.add(() -> new TextButton(Minecraft.getInstance().font.width(text) + PADDING * 2, 16, 0xca3636, 0xFFFFFF, UIConstants.DANGER_CONTEXT_BUTTON, text, action));
+        var font = Minecraft.getInstance().font;
+        return this.add(() -> new TextButton(font.width(text) + PADDING * 2, font.lineHeight + 1 + PADDING * 2, 0xFF5555, UIConstants.LIST_ENTRY, text, action));
     }
 
     public ContextMenu primaryButton(Component text, Button.OnPress action) {
-        return this.add(() -> new TextButton(Minecraft.getInstance().font.width(text) + PADDING * 2, 16, 0x3c8527, 0xFFFFFF, UIConstants.PRIMARY_CONTEXT_BUTTON, text, action));
+        var font = Minecraft.getInstance().font;
+        return this.add(() -> new TextButton(font.width(text) + PADDING * 2, font.lineHeight + 1 + PADDING * 2, 0x55FF55, UIConstants.LIST_ENTRY, text, action));
     }
 
     public ContextMenu divider() {
-        return this.add(DividerWidget::new);
+        return this.add(SpacerWidget::new);
     }
 
     @Override
@@ -98,7 +102,7 @@ public class ContextMenu extends Overlay {
     @Override
     public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.renderBackground(graphics, mouseX, mouseY, partialTick);
-        graphics.blitSprite(UIConstants.MODAL, this.x, this.y, this.contextWidth, this.contextHeight);
+        graphics.blitSprite(UIConstants.LIST_BG, this.x, this.y, this.contextWidth, this.contextHeight);
     }
 
     public static void open(Consumer<ContextMenu> consumer) {
