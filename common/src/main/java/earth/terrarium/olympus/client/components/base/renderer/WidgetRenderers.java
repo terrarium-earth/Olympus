@@ -16,12 +16,16 @@ public class WidgetRenderers {
     }
 
     public static <T extends AbstractWidget> WidgetRenderer<T> padded(int padding, WidgetRenderer<T> renderer) {
+        return padded(padding, padding, padding, padding, renderer);
+    }
+
+    public static <T extends AbstractWidget> WidgetRenderer<T> padded(int left, int top, int right, int bottom, WidgetRenderer<T> renderer) {
         return (graphics, context, partialTick) -> {
             WidgetRendererContext<T> paddedContext = context.copy()
-                    .setWidth(context.getWidth() - padding * 2)
-                    .setHeight(context.getHeight() - padding * 2)
-                    .setX(context.getX() + padding)
-                    .setY(context.getY() + padding);
+                    .setWidth(context.getWidth() - left - right)
+                    .setHeight(context.getHeight() - top - bottom)
+                    .setX(context.getX() + left)
+                    .setY(context.getY() + top);
             renderer.render(graphics, paddedContext, partialTick);
         };
     }

@@ -27,7 +27,7 @@ public class ButtonExample extends ExampleScreen {
 
         horizontal.addChild(Button.create()
                 .withCallback(() -> System.out.println("Button 2 clicked"))
-                .withRenderer(WidgetRenderers.icon(UIIcons.MODRINTH).withPadding(4))
+                .withRenderer(WidgetRenderers.icon(UIIcons.MODRINTH).withPadding(4, 3, 4, 5))
                 .withTexture(UIConstants.PRIMARY_BUTTON)
                 .withTooltip(Component.literal("This is a button tooltip"))
                 .withSize(20, 20)
@@ -42,7 +42,7 @@ public class ButtonExample extends ExampleScreen {
 
         horizontal.addChild(Button.create()
                 .withCallback(() -> System.out.println("Button 4 clicked"))
-                .withRenderer(WidgetRenderers.icon(UIIcons.MODRINTH, 0xFF559955).withPadding(4))
+                .withRenderer(WidgetRenderers.icon(UIIcons.MODRINTH, 0xFF559955).withPadding(4, 3, 4, 5))
                 .withTooltip(Component.literal("This is a button tooltip"))
                 .withSize(21, 21)
         );
