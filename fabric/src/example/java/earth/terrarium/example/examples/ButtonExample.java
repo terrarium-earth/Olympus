@@ -1,5 +1,6 @@
 package earth.terrarium.example.examples;
 
+import com.teamresourceful.resourcefullib.common.color.Color;
 import earth.terrarium.example.base.ExampleScreen;
 import earth.terrarium.example.base.OlympusExample;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderers;
@@ -17,9 +18,11 @@ public class ButtonExample extends ExampleScreen {
     protected void init() {
         LinearLayout horizontal = LinearLayout.horizontal().spacing(20);
 
+        Color green = new Color(0xFF559955);
+
         horizontal.addChild(Button.create()
                 .withCallback(() -> System.out.println("Button 1 clicked"))
-                .withRenderer(WidgetRenderers.text(Component.literal("Button 1"), 0xFFFFFFFF))
+                .withRenderer(WidgetRenderers.text(Component.literal("Button 1")))
                 .withTexture(UIConstants.DANGER_BUTTON)
                 .withTooltip(Component.literal("This is a button tooltip"))
                 .withSize(100, 20)
@@ -35,14 +38,14 @@ public class ButtonExample extends ExampleScreen {
 
         horizontal.addChild(Button.create()
                 .withCallback(() -> System.out.println("Button 3 clicked"))
-                .withRenderer(WidgetRenderers.text(Component.literal("Button 1"), 0xFF559955))
+                .withRenderer(WidgetRenderers.text(Component.literal("Button 1"), green))
                 .withTooltip(Component.literal("This is a button tooltip"))
                 .withSize(100, 20)
         );
 
         horizontal.addChild(Button.create()
                 .withCallback(() -> System.out.println("Button 4 clicked"))
-                .withRenderer(WidgetRenderers.icon(UIIcons.MODRINTH, 0xFF559955).withPadding(4, 3, 4, 5))
+                .withRenderer(WidgetRenderers.icon(UIIcons.MODRINTH, green).withPadding(4, 3, 4, 5))
                 .withTooltip(Component.literal("This is a button tooltip"))
                 .withSize(21, 21)
         );

@@ -1,6 +1,8 @@
 package earth.terrarium.olympus.client.components.base.renderer;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.teamresourceful.resourcefullib.common.color.Color;
+import earth.terrarium.olympus.client.utils.UIHelper;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -39,15 +41,17 @@ public class WidgetRenderers {
     }
 
     public static <T extends AbstractWidget> WidgetRenderer<T> icon(WidgetSprites sprites) {
-        return icon(sprites, 0xFFFFFFFF);
+        return icon(sprites, Color.DEFAULT);
     }
 
-    public static <T extends AbstractWidget> WidgetRenderer<T> icon(WidgetSprites sprites, int color) {
-        var red = (color >> 16 & 255) / 255.0F;
-        var green = (color >> 8 & 255) / 255.0F;
-        var blue = (color & 255) / 255.0F;
-        var alpha = (color >> 24 & 255) / 255.0F;
+    public static <T extends AbstractWidget> WidgetRenderer<T> icon(WidgetSprites sprites, Color color) {
         return (graphics, context, partialTick) -> {
+            float red = color.getFloatRed();
+            float green = color.getFloatGreen();
+            float blue = color.getFloatBlue();
+            float alpha = color.getFloatAlpha();
+            if (alpha == 0f) alpha = 1f;
+
             RenderSystem.setShaderColor(red / 3f, green / 3f, blue / 3f, alpha);
             graphics.blitSprite(
                     sprites.get(context.getWidget().isActive(), context.getWidget().isHoveredOrFocused()),
@@ -64,11 +68,15 @@ public class WidgetRenderers {
         };
     }
 
-    public static <T extends AbstractWidget> WidgetRenderer<T> text(Component text, int color) {
+    public static <T extends AbstractWidget> WidgetRenderer<T> text(Component text) {
+        return text(text, Minecraft.getInstance().font, Color.DEFAULT);
+    }
+
+    public static <T extends AbstractWidget> WidgetRenderer<T> text(Component text, Color color) {
         return text(text, Minecraft.getInstance().font, color);
     }
 
-    public static <T extends AbstractWidget> WidgetRenderer<T> text(Component text, Font font, int color) {
+    public static <T extends AbstractWidget> WidgetRenderer<T> text(Component text, Font font, Color color) {
         return (graphics, context, partialTick) -> {
             int textWidth = font.width(text);
             int centerX = context.getX() + context.getWidth() / 2;
@@ -76,13 +84,13 @@ public class WidgetRenderers {
             if (textWidth > context.getWidth()) {
                 int overhang = textWidth - context.getWidth();
                 double e = Math.max((double) overhang * 0.5, 3.0);
-                double f = Math.sin(1.5707963267948966 * Math.cos(6.283185307179586 * getSeconds() / e)) / 2.0 + 0.5;
+                double f = Math.sin(Mth.HALF_PI * Math.cos(Mth.TWO_PI * getSeconds() / e)) / 2.0 + 0.5;
                 double g = Mth.lerp(f, 0.0, overhang);
                 graphics.enableScissor(context.getLeft(), context.getTop(), context.getRight(), context.getBottom());
-                graphics.drawString(font, text, context.getX() - (int) g, centerY, color);
+                graphics.drawString(font, text, context.getX() - (int) g, centerY, UIHelper.getEnsureAlpha(color));
                 graphics.disableScissor();
             } else {
-                graphics.drawCenteredString(font, text, centerX, centerY, color);
+                graphics.drawCenteredString(font, text, centerX, centerY, UIHelper.getEnsureAlpha(color));
             }
         };
     }
