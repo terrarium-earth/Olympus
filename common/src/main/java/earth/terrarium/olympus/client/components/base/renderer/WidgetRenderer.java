@@ -11,10 +11,14 @@ public interface WidgetRenderer<T extends AbstractWidget> {
     void render(GuiGraphics graphics, WidgetRendererContext<T> widget, float partialTick);
 
     default WidgetRenderer<T> withPadding(int padding) {
-        return WidgetRenderers.padded(padding, this);
+        return WidgetRenderers.padded(padding, padding, padding, padding, this);
     }
 
-    default WidgetRenderer<T> withPadding(int left, int top, int right, int bottom) {
+    default WidgetRenderer<T> withPadding(int horizontal, int vertical) {
+        return WidgetRenderers.padded(horizontal, vertical, horizontal, vertical, this);
+    }
+
+    default WidgetRenderer<T> withPadding(int top, int right, int bottom, int left) {
         return WidgetRenderers.padded(left, top, right, bottom, this);
     }
 
