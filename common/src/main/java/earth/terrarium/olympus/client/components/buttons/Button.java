@@ -9,8 +9,7 @@ import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererCon
 import earth.terrarium.olympus.client.ui.UIConstants;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.WidgetSprites;
-
-import java.util.function.Consumer;
+import org.jetbrains.annotations.Nullable;
 
 public class Button extends BaseWidget implements CursorWidget {
 
@@ -18,18 +17,8 @@ public class Button extends BaseWidget implements CursorWidget {
     private Runnable onPress = () -> {};
     private WidgetSprites sprites = UIConstants.BUTTON;
 
-    private Button() {
+    public Button() {
         super();
-    }
-
-    public static Button create(Consumer<Button> factory) {
-        Button button = new Button();
-        factory.accept(button);
-        return button;
-    }
-
-    public static Button create() {
-        return create(button -> {});
     }
 
     @Override
@@ -37,7 +26,9 @@ public class Button extends BaseWidget implements CursorWidget {
         graphics.setColor(1.0F, 1.0F, 1.0F, this.alpha);
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
-        graphics.blitSprite(sprites.get(this.active, this.isHoveredOrFocused()), this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        if (this.sprites != null) {
+            graphics.blitSprite(this.sprites.get(this.active, this.isHoveredOrFocused()), this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        }
         this.renderer.render(graphics, new WidgetRendererContext<>(this, mouseX, mouseY), partialTick);
     }
 
@@ -61,7 +52,7 @@ public class Button extends BaseWidget implements CursorWidget {
         return this;
     }
 
-    public Button withTexture(WidgetSprites sprites) {
+    public Button withTexture(@Nullable WidgetSprites sprites) {
         this.sprites = sprites;
         return this;
     }

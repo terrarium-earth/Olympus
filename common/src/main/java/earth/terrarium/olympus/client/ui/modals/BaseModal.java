@@ -69,7 +69,7 @@ public abstract class BaseModal extends Overlay {
     public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.renderBackground(graphics, mouseX, mouseY, partialTick);
         graphics.blitSprite(UIConstants.MODAL, this.left, this.top, this.modalWidth, this.modalHeight);
-        graphics.blitSprite(UIConstants.MODAL_HEADER, this.left, this.top, this.modalWidth, TITLE_BAR_HEIGHT);
+        graphics.blitSprite(UIConstants.MODAL_HEADER, this.left + 1, this.top + 1, this.modalWidth - 2, TITLE_BAR_HEIGHT);
     }
 
     @Override

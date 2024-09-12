@@ -1,7 +1,9 @@
 package earth.terrarium.olympus.client.ui.context;
 
 import com.mojang.blaze3d.platform.Window;
-import earth.terrarium.olympus.client.components.buttons.TextButton;
+import earth.terrarium.olympus.client.components.Widgets;
+import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
+import earth.terrarium.olympus.client.constants.MinecraftColors;
 import earth.terrarium.olympus.client.ui.ClearableGridLayout;
 import earth.terrarium.olympus.client.ui.Overlay;
 import earth.terrarium.olympus.client.ui.UIConstants;
@@ -9,7 +11,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
@@ -72,19 +73,31 @@ public class ContextMenu extends Overlay {
         return this;
     }
 
-    public ContextMenu button(Component text, Button.OnPress action) {
-        var font = Minecraft.getInstance().font;
-        return this.add(() -> new TextButton(font.width(text) + PADDING * 2, font.lineHeight + 1 + PADDING * 2, 0xFFFFFF, UIConstants.LIST_ENTRY, text, action));
+    public ContextMenu button(Component text, Runnable action) {
+        return this.add(() -> Widgets.button()
+                .withCallback(action)
+                .withTexture(UIConstants.LIST_ENTRY)
+                .withRenderer(WidgetRenderers.text(text, MinecraftColors.WHITE))
+                .withSize(font.width(text) + PADDING * 2, font.lineHeight + 1 + PADDING * 2)
+        );
     }
 
-    public ContextMenu dangerButton(Component text, Button.OnPress action) {
-        var font = Minecraft.getInstance().font;
-        return this.add(() -> new TextButton(font.width(text) + PADDING * 2, font.lineHeight + 1 + PADDING * 2, 0xFF5555, UIConstants.LIST_ENTRY, text, action));
+    public ContextMenu dangerButton(Component text, Runnable action) {
+        return this.add(() -> Widgets.button()
+                .withCallback(action)
+                .withTexture(UIConstants.LIST_ENTRY)
+                .withRenderer(WidgetRenderers.text(text, MinecraftColors.RED))
+                .withSize(font.width(text) + PADDING * 2, font.lineHeight + 1 + PADDING * 2)
+        );
     }
 
-    public ContextMenu primaryButton(Component text, Button.OnPress action) {
-        var font = Minecraft.getInstance().font;
-        return this.add(() -> new TextButton(font.width(text) + PADDING * 2, font.lineHeight + 1 + PADDING * 2, 0x55FF55, UIConstants.LIST_ENTRY, text, action));
+    public ContextMenu primaryButton(Component text, Runnable action) {
+        return this.add(() -> Widgets.button()
+                .withCallback(action)
+                .withTexture(UIConstants.LIST_ENTRY)
+                .withRenderer(WidgetRenderers.text(text, MinecraftColors.GREEN))
+                .withSize(font.width(text) + PADDING * 2, font.lineHeight + 1 + PADDING * 2)
+        );
     }
 
     public ContextMenu divider() {
