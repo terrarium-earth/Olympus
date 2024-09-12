@@ -9,6 +9,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class WidgetRenderers {
@@ -40,11 +41,11 @@ public class WidgetRenderers {
         );
     }
 
-    public static <T extends AbstractWidget> WidgetRenderer<T> icon(WidgetSprites sprites) {
-        return icon(sprites, Color.DEFAULT);
+    public static <T extends AbstractWidget> WidgetRenderer<T> icon(ResourceLocation icon) {
+        return icon(icon, Color.DEFAULT);
     }
 
-    public static <T extends AbstractWidget> WidgetRenderer<T> icon(WidgetSprites sprites, Color color) {
+    public static <T extends AbstractWidget> WidgetRenderer<T> icon(ResourceLocation icon, Color color) {
         return (graphics, context, partialTick) -> {
             float red = color.getFloatRed();
             float green = color.getFloatGreen();
@@ -54,14 +55,14 @@ public class WidgetRenderers {
 
             RenderSystem.setShaderColor(red / 3f, green / 3f, blue / 3f, alpha);
             graphics.blitSprite(
-                    sprites.get(context.getWidget().isActive(), context.getWidget().isHoveredOrFocused()),
+                    icon,
                     context.getX() + 1, context.getY() + 1,
                     context.getWidth(), context.getHeight()
             );
 
             RenderSystem.setShaderColor(red, green, blue, alpha);
             graphics.blitSprite(
-                    sprites.get(context.getWidget().isActive(), context.getWidget().isHoveredOrFocused()),
+                    icon,
                     context.getX(), context.getY(),
                     context.getWidth(), context.getHeight()
             );
