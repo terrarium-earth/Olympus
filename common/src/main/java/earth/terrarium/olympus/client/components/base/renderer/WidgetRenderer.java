@@ -19,7 +19,7 @@ public interface WidgetRenderer<T extends AbstractWidget> {
     }
 
     default WidgetRenderer<T> withPadding(int top, int right, int bottom, int left) {
-        return WidgetRenderers.padded(top, right, bottom, left,this);
+        return WidgetRenderers.padded(top, right, bottom, left, this);
     }
 
     static <T extends AbstractWidget> WidgetRenderer<T> empty() {
