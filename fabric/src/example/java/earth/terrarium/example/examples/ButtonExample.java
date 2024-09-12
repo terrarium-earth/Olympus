@@ -5,6 +5,7 @@ import earth.terrarium.example.base.ExampleScreen;
 import earth.terrarium.example.base.OlympusExample;
 import earth.terrarium.olympus.client.components.Widgets;
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
+import earth.terrarium.olympus.client.constants.MinecraftColors;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import earth.terrarium.olympus.client.ui.UIIcons;
 import net.minecraft.client.gui.layouts.FrameLayout;
@@ -23,6 +24,7 @@ public class ButtonExample extends ExampleScreen {
         horizontal.addChild(Widgets.button()
                 .withCallback(() -> System.out.println("Button 1 clicked"))
                 .withRenderer(WidgetRenderers.text(Component.literal("Button 1"))
+                        .withColor(MinecraftColors.RED)
                         .withShadow()
                 )
                 .withTexture(UIConstants.DANGER_BUTTON)
@@ -43,7 +45,8 @@ public class ButtonExample extends ExampleScreen {
 
         horizontal.addChild(Widgets.button()
                 .withCallback(() -> System.out.println("Button 3 clicked"))
-                .withRenderer(WidgetRenderers.text(Component.literal("Button 1"), green)
+                .withRenderer(WidgetRenderers.text(Component.literal("Button 1"))
+                        .withColor(green)
                         .withShadow()
                 )
                 .withTooltip(Component.literal("This is a button tooltip"))
@@ -52,7 +55,8 @@ public class ButtonExample extends ExampleScreen {
 
         horizontal.addChild(Widgets.button()
                 .withCallback(() -> System.out.println("Button 4 clicked"))
-                .withRenderer(WidgetRenderers.icon(UIIcons.MODRINTH, green)
+                .withRenderer(WidgetRenderers.icon(UIIcons.MODRINTH)
+                        .withColor(green)
                         .withShadow()
                         .withPadding(3, 4, 5, 4)
                 )

@@ -24,6 +24,11 @@ public class MinecraftColors {
     public static final Color YELLOW = create(ChatFormatting.YELLOW);
     public static final Color WHITE = create(ChatFormatting.WHITE);
 
+    public static final Color[] COLORS = new Color[] {
+            BLACK, DARK_BLUE, DARK_GREEN, DARK_AQUA, DARK_RED, DARK_PURPLE, GOLD, GRAY,
+            DARK_GRAY, BLUE, GREEN, AQUA, RED, LIGHT_PURPLE, YELLOW, WHITE
+    };
+
     private static Color create(ChatFormatting formatting) {
         return new Color(Objects.requireNonNull(formatting.getColor(), "Formatting must be a color."));
     }

@@ -77,7 +77,9 @@ public class ContextMenu extends Overlay {
         return this.add(() -> Widgets.button()
                 .withCallback(action)
                 .withTexture(UIConstants.LIST_ENTRY)
-                .withRenderer(WidgetRenderers.text(text, MinecraftColors.WHITE))
+                .withRenderer(WidgetRenderers.text(text)
+                        .withColor(MinecraftColors.WHITE)
+                )
                 .withSize(font.width(text) + PADDING * 2, font.lineHeight + 1 + PADDING * 2)
         );
     }
@@ -86,7 +88,9 @@ public class ContextMenu extends Overlay {
         return this.add(() -> Widgets.button()
                 .withCallback(action)
                 .withTexture(UIConstants.LIST_ENTRY)
-                .withRenderer(WidgetRenderers.text(text, MinecraftColors.RED))
+                .withRenderer(WidgetRenderers.text(text)
+                        .withColor(MinecraftColors.RED)
+                )
                 .withSize(font.width(text) + PADDING * 2, font.lineHeight + 1 + PADDING * 2)
         );
     }
@@ -95,7 +99,9 @@ public class ContextMenu extends Overlay {
         return this.add(() -> Widgets.button()
                 .withCallback(action)
                 .withTexture(UIConstants.LIST_ENTRY)
-                .withRenderer(WidgetRenderers.text(text, MinecraftColors.GREEN))
+                .withRenderer(WidgetRenderers.text(text)
+                        .withColor(MinecraftColors.GREEN)
+                )
                 .withSize(font.width(text) + PADDING * 2, font.lineHeight + 1 + PADDING * 2)
         );
     }

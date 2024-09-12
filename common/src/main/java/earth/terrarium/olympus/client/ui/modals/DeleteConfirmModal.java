@@ -60,7 +60,7 @@ public class DeleteConfirmModal extends BaseModal {
 
         buttons.addChild(Widgets.button()
                 .withCallback(this::onClose)
-                .withRenderer(WidgetRenderers.text(UIConstants.CANCEL, MinecraftColors.DARK_GRAY))
+                .withRenderer(WidgetRenderers.text(UIConstants.CANCEL))
                 .withSize(buttonWidth, WIDGET_HEIGHT)
         );
 
@@ -70,7 +70,9 @@ public class DeleteConfirmModal extends BaseModal {
                     this.onClose();
                 })
                 .withTexture(UIConstants.DANGER_BUTTON)
-                .withRenderer(WidgetRenderers.text(this.confirm, MinecraftColors.WHITE))
+                .withRenderer(WidgetRenderers.text(this.confirm)
+                        .withColor(MinecraftColors.WHITE)
+                )
                 .withSize(buttonWidth, WIDGET_HEIGHT)
         );
 

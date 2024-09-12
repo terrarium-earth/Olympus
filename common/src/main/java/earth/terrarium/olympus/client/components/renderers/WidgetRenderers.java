@@ -1,11 +1,7 @@
 package earth.terrarium.olympus.client.components.renderers;
 
-import com.teamresourceful.resourcefullib.common.color.Color;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;
-import earth.terrarium.olympus.client.constants.MinecraftColors;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.Component;
@@ -33,22 +29,10 @@ public class WidgetRenderers {
     }
 
     public static <T extends AbstractWidget> IconWidgetRenderer<T> icon(ResourceLocation icon) {
-        return icon(icon, Color.DEFAULT);
-    }
-
-    public static <T extends AbstractWidget> IconWidgetRenderer<T> icon(ResourceLocation icon, Color color) {
-        return new IconWidgetRenderer<>(icon, color);
+        return new IconWidgetRenderer<>(icon);
     }
 
     public static <T extends AbstractWidget> TextWidgetRenderer<T> text(Component text) {
-        return text(text, Minecraft.getInstance().font, MinecraftColors.DARK_GRAY);
-    }
-
-    public static <T extends AbstractWidget> TextWidgetRenderer<T> text(Component text, Color color) {
-        return text(text, Minecraft.getInstance().font, color);
-    }
-
-    public static <T extends AbstractWidget> TextWidgetRenderer<T> text(Component text, Font font, Color color) {
-        return new TextWidgetRenderer<>(text, font, color);
+        return new TextWidgetRenderer<>(text);
     }
 }

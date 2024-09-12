@@ -11,12 +11,11 @@ import net.minecraft.resources.ResourceLocation;
 public class IconWidgetRenderer<T extends AbstractWidget> implements WidgetRenderer<T> {
 
     private final ResourceLocation icon;
-    private final Color color;
+    private Color color = Color.DEFAULT;
     private boolean drawShadow = false;
 
-    IconWidgetRenderer(ResourceLocation icon, Color color) {
+    IconWidgetRenderer(ResourceLocation icon) {
         this.icon = icon;
-        this.color = color;
     }
 
     @Override
@@ -46,6 +45,11 @@ public class IconWidgetRenderer<T extends AbstractWidget> implements WidgetRende
 
     public IconWidgetRenderer<T> withShadow() {
         this.drawShadow = true;
+        return this;
+    }
+
+    public IconWidgetRenderer<T> withColor(Color color) {
+        this.color = color;
         return this;
     }
 }

@@ -3,8 +3,10 @@ package earth.terrarium.olympus.client.components.renderers;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;
+import earth.terrarium.olympus.client.constants.MinecraftColors;
 import earth.terrarium.olympus.client.utils.UIHelper;
 import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -14,14 +16,12 @@ import net.minecraft.util.Mth;
 public class TextWidgetRenderer<T extends AbstractWidget> implements WidgetRenderer<T> {
 
     private final Component text;
-    private final Font font;
-    private final Color color;
+    private Font font = Minecraft.getInstance().font;
+    private Color color = MinecraftColors.DARK_GRAY;
     private boolean drawShadow = false;
 
-    TextWidgetRenderer(Component text, Font font, Color color) {
+    TextWidgetRenderer(Component text) {
         this.text = text;
-        this.font = font;
-        this.color = color;
     }
 
     @Override
@@ -45,6 +45,16 @@ public class TextWidgetRenderer<T extends AbstractWidget> implements WidgetRende
 
     public TextWidgetRenderer<T> withShadow() {
         this.drawShadow = true;
+        return this;
+    }
+
+    public TextWidgetRenderer<T> withColor(Color color) {
+        this.color = color;
+        return this;
+    }
+
+    public TextWidgetRenderer<T> withFont(Font font) {
+        this.font = font;
         return this;
     }
 }
