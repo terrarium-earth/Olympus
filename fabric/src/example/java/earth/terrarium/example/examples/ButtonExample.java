@@ -27,14 +27,28 @@ public class ButtonExample extends ExampleScreen {
 
         horizontal.addChild(Button.create()
                 .withCallback(() -> System.out.println("Button 2 clicked"))
-                .withRenderer(WidgetRenderers.sprite(UIIcons.MODRINTH).withPadding(4))
+                .withRenderer(WidgetRenderers.icon(UIIcons.MODRINTH).withPadding(4))
                 .withTexture(UIConstants.PRIMARY_BUTTON)
                 .withTooltip(Component.literal("This is a button tooltip"))
                 .withSize(20, 20)
         );
 
         horizontal.addChild(Button.create()
+                .withCallback(() -> System.out.println("Button 1 clicked"))
+                .withRenderer(WidgetRenderers.text(Component.literal("Button 1"), 0xFF559955))
+                .withTooltip(Component.literal("This is a button tooltip"))
+                .withSize(100, 20)
+        );
+
+        horizontal.addChild(Button.create()
                 .withCallback(() -> System.out.println("Button 3 clicked"))
+                .withRenderer(WidgetRenderers.icon(UIIcons.MODRINTH, 0xFF559955).withPadding(4))
+                .withTooltip(Component.literal("This is a button tooltip"))
+                .withSize(21, 21)
+        );
+
+        horizontal.addChild(Button.create()
+                .withCallback(() -> System.out.println("Button 4 clicked"))
                 .withRenderer((graphics, context, partialTicks) -> graphics.fill(
                         context.getLeft(), context.getTop(),
                         context.getRight(), context.getBottom(),

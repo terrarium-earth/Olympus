@@ -1,5 +1,6 @@
 package earth.terrarium.olympus.client.components.base.renderer;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -31,6 +32,32 @@ public class WidgetRenderers {
                 context.getX(), context.getY(),
                 context.getWidth(), context.getHeight()
         );
+    }
+
+    public static <T extends AbstractWidget> WidgetRenderer<T> icon(WidgetSprites sprites) {
+        return icon(sprites, 0xFFFFFFFF);
+    }
+
+    public static <T extends AbstractWidget> WidgetRenderer<T> icon(WidgetSprites sprites, int color) {
+        var red = (color >> 16 & 255) / 255.0F;
+        var green = (color >> 8 & 255) / 255.0F;
+        var blue = (color & 255) / 255.0F;
+        var alpha = (color >> 24 & 255) / 255.0F;
+        return (graphics, context, partialTick) -> {
+            RenderSystem.setShaderColor(red / 3f, green / 3f, blue / 3f, alpha);
+            graphics.blitSprite(
+                    sprites.get(context.getWidget().isActive(), context.getWidget().isHoveredOrFocused()),
+                    context.getX() + 1, context.getY() + 1,
+                    context.getWidth(), context.getHeight()
+            );
+
+            RenderSystem.setShaderColor(red, green, blue, alpha);
+            graphics.blitSprite(
+                    sprites.get(context.getWidget().isActive(), context.getWidget().isHoveredOrFocused()),
+                    context.getX(), context.getY(),
+                    context.getWidth(), context.getHeight()
+            );
+        };
     }
 
     public static <T extends AbstractWidget> WidgetRenderer<T> text(Component text, int color) {
