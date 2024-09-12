@@ -16,6 +16,7 @@ public class ButtonExample extends ExampleScreen {
     @Override
     protected void init() {
         LinearLayout horizontal = LinearLayout.horizontal().spacing(20);
+
         horizontal.addChild(Button.create()
                 .withCallback(() -> System.out.println("Button 1 clicked"))
                 .withRenderer(WidgetRenderers.text(Component.literal("Button 1"), 0xFFFFFFFF))

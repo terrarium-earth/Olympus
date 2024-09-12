@@ -3,6 +3,7 @@ package earth.terrarium.olympus.client.components.base;
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.layouts.LayoutElement;
@@ -23,7 +24,7 @@ public class ListWidget extends BaseParentWidget {
     private static final ResourceLocation SCROLLBAR = UIConstants.id("lists/scroll/bar");
     private static final ResourceLocation SCROLLBAR_THUMB = UIConstants.id("lists/scroll/thumb");
 
-    protected final List<Item> items = new ArrayList<>();
+    protected final List<AbstractWidget> items = new ArrayList<>();
 
     protected double scroll = 0;
     protected int lastHeight = 0;
@@ -52,13 +53,13 @@ public class ListWidget extends BaseParentWidget {
         this.items.clear();
     }
 
-    public void set(List<? extends Item> items) {
+    public void set(List<? extends AbstractWidget> items) {
         this.items.clear();
         this.items.addAll(items);
         updateScrollBar();
     }
 
-    public void add(Item item) {
+    public void add(AbstractWidget item) {
         items.add(item);
         updateScrollBar();
     }
@@ -78,7 +79,7 @@ public class ListWidget extends BaseParentWidget {
         int y = this.getY() - (int) scroll;
         this.lastHeight = 0;
 
-        for (Item item : items) {
+        for (AbstractWidget item : items) {
             item.setWidth(actualWidth);
             item.setX(getX());
             item.setY(y);
@@ -158,7 +159,7 @@ public class ListWidget extends BaseParentWidget {
                 return true;
             }
             int y = getY() - Mth.floor(this.scroll);
-            for (Item entry : this.items) {
+            for (AbstractWidget entry : this.items) {
                 int height = entry.getHeight();
                 if (mouseY >= y && mouseY <= y + height) {
                     return entry.mouseClicked(mouseX, mouseY, button);
@@ -191,7 +192,7 @@ public class ListWidget extends BaseParentWidget {
 
         this.lastHeight = 0;
         int y = this.getY() - (int) scroll;
-        for (Item item : items) {
+        for (AbstractWidget item : items) {
             item.setWidth(actualWidth);
             item.setX(getX());
             item.setY(y);
@@ -221,15 +222,5 @@ public class ListWidget extends BaseParentWidget {
 
     public void setHeight(int height) {
         this.height = height;
-    }
-
-    public interface Item extends GuiEventListener, Renderable, NarratableEntry, LayoutElement {
-
-        @Override
-        default @NotNull ScreenRectangle getRectangle() {
-            return LayoutElement.super.getRectangle();
-        }
-
-        void setWidth(int width);
     }
 }

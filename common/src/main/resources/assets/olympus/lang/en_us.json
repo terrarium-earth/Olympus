@@ -1,5 +1,7 @@
 {
     "olympus.ui.back": "Back",
     "olympus.ui.delete": "Delete",
-    "olympus.ui.cancel": "Cancel"
+    "olympus.ui.cancel": "Cancel",
+    "olympus.ui.refresh": "Refresh",
+    "olympus.ui.loading": "Loading..."
 }
