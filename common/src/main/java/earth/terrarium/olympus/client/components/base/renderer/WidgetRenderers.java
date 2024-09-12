@@ -18,7 +18,7 @@ public class WidgetRenderers {
         return (double) Util.getMillis() / 1000.0;
     }
 
-    public static <T extends AbstractWidget> WidgetRenderer<T> padded(int left, int top, int right, int bottom, WidgetRenderer<T> renderer) {
+    public static <T extends AbstractWidget> WidgetRenderer<T> padded(int top, int right, int bottom, int left, WidgetRenderer<T> renderer) {
         return (graphics, context, partialTick) -> {
             WidgetRendererContext<T> paddedContext = context.copy()
                     .setWidth(context.getWidth() - left - right)

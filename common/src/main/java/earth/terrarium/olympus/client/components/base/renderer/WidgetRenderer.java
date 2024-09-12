@@ -14,12 +14,12 @@ public interface WidgetRenderer<T extends AbstractWidget> {
         return WidgetRenderers.padded(padding, padding, padding, padding, this);
     }
 
-    default WidgetRenderer<T> withPadding(int horizontal, int vertical) {
-        return WidgetRenderers.padded(horizontal, vertical, horizontal, vertical, this);
+    default WidgetRenderer<T> withPadding(int vertical, int horizontal) {
+        return WidgetRenderers.padded(vertical, horizontal, vertical, vertical, this);
     }
 
     default WidgetRenderer<T> withPadding(int top, int right, int bottom, int left) {
-        return WidgetRenderers.padded(left, top, right, bottom, this);
+        return WidgetRenderers.padded(top, right, bottom, left,this);
     }
 
     static <T extends AbstractWidget> WidgetRenderer<T> empty() {
