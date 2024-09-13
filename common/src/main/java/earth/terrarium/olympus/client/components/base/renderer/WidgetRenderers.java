@@ -1,7 +1,11 @@
 package earth.terrarium.olympus.client.components.base.renderer;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.teamresourceful.resourcefullib.client.scissor.GuiCloseableScissor;
+import com.teamresourceful.resourcefullib.client.scissor.ScissorBox;
 import com.teamresourceful.resourcefullib.common.color.Color;
+import earth.terrarium.olympus.client.ui.UIConstants;
+import earth.terrarium.olympus.client.utils.State;
 import earth.terrarium.olympus.client.utils.UIHelper;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -11,6 +15,10 @@ import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Function;
 
 public class WidgetRenderers {
 
@@ -88,6 +96,20 @@ public class WidgetRenderers {
                 graphics.disableScissor();
             } else {
                 graphics.drawCenteredString(font, text, centerX, centerY, UIHelper.getEnsureAlpha(color));
+            }
+        };
+    }
+
+    public static <T extends AbstractWidget, V> WidgetRenderer<T> dropdown(State<Boolean> isOpen, State<@Nullable V> value, Font font, Color color, Function<@Nullable V, @NotNull Component> text) {
+        return (graphics, context, partialTick) -> {
+            try (var ignored = new GuiCloseableScissor(graphics, context.getX(), context.getY(), context.getWidth(), context.getHeight())) {
+                int textY = context.getY() + context.getHeight() / 2 - font.lineHeight / 2;
+                graphics.drawString(font, text.apply(value.get()), context.getX(), textY, UIHelper.getEnsureAlpha(color));
+
+                graphics.setColor(color.getFloatRed(), color.getFloatBlue(), color.getFloatGreen(), color.getFloatAlpha() == 0 ? 1 : color.getFloatAlpha());
+                var size = Math.min(16, context.getHeight());
+                int chevY = context.getY() + context.getHeight() / 2 - size / 2;
+                graphics.blitSprite(isOpen.get() ? UIConstants.CHEVRON_DOWN : UIConstants.CHEVRON_UP, context.getX() + context.getWidth() - size, chevY, size, size);
             }
         };
     }

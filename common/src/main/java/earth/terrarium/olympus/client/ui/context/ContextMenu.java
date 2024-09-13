@@ -1,8 +1,8 @@
 package earth.terrarium.olympus.client.ui.context;
 
 import com.mojang.blaze3d.platform.Window;
+import earth.terrarium.olympus.client.components.base.ListWidget;
 import earth.terrarium.olympus.client.components.buttons.TextButton;
-import earth.terrarium.olympus.client.ui.ClearableGridLayout;
 import earth.terrarium.olympus.client.ui.Overlay;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import net.minecraft.client.Minecraft;
@@ -31,7 +31,13 @@ public class ContextMenu extends Overlay {
     private int contextHeight;
     private int contextWidth;
 
-    private final ClearableGridLayout layout = new ClearableGridLayout();
+    private int maxWidth;
+    private int maxHeight;
+
+    private Side side = Side.AUTO;
+    private OpeningDirection direction = OpeningDirection.AUTO;
+
+    private final ListWidget layout = new ListWidget(0,0);
 
     protected ContextMenu(Screen background, int x, int y) {
         super(background);
@@ -45,17 +51,16 @@ public class ContextMenu extends Overlay {
     @Override
     protected void init() {
         this.layout.clear();
-        int i = 0;
         for (Supplier<AbstractWidget> action : this.actions) {
             AbstractWidget widget = action.get();
-            this.layout.addChild(widget, i, 0);
-            i++;
+            this.layout.add(widget);
         }
 
-        this.layout.arrangeElements();
-        this.layout.visitWidgets(widget -> widget.setWidth(this.layout.getWidth()));
-        this.contextHeight = this.layout.getHeight() + 3;
-        this.contextWidth = this.layout.getWidth() + 4;
+        var contentWidth = layout.children().stream().mapToInt(AbstractWidget::getWidth).max().orElse(0);
+        var contentHeight = layout.children().stream().mapToInt(AbstractWidget::getHeight).sum();
+
+        this.contextWidth = maxWidth > 0 ? Math.min(maxWidth, contentWidth + 4) : contentWidth + 4;
+        this.contextHeight = maxHeight > 0 ? Math.min(maxHeight, contentHeight + 4) : contentHeight + 4;
 
         if (this.contextHeight + this.y > this.height) {
             this.y = this.height - this.contextHeight;
@@ -63,8 +68,10 @@ public class ContextMenu extends Overlay {
         if (this.contextWidth + this.x > this.width) {
             this.x = Math.max(this.initialX - this.contextWidth, 0);
         }
+
         this.layout.setPosition(this.x + 2, this.y + 2);
-        this.layout.visitWidgets(this::addRenderableWidget);
+        this.layout.setSize(this.contextWidth - 4, this.contextHeight - 4);
+        this.addRenderableWidget(layout);
     }
 
     public ContextMenu add(Supplier<AbstractWidget> action) {
@@ -85,6 +92,12 @@ public class ContextMenu extends Overlay {
     public ContextMenu primaryButton(Component text, Button.OnPress action) {
         var font = Minecraft.getInstance().font;
         return this.add(() -> new TextButton(font.width(text) + PADDING * 2, font.lineHeight + 1 + PADDING * 2, 0x55FF55, UIConstants.LIST_ENTRY, text, action));
+    }
+
+    public ContextMenu withBounds(int x, int y) {
+        this.maxWidth = x;
+        this.maxHeight = y;
+        return this;
     }
 
     public ContextMenu divider() {
