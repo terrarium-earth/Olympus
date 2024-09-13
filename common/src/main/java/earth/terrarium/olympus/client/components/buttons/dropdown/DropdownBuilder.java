@@ -3,11 +3,13 @@ package earth.terrarium.olympus.client.components.buttons.dropdown;
 import earth.terrarium.olympus.client.components.Widgets;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.buttons.Button;
+import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import earth.terrarium.olympus.client.ui.context.ContextAlignment;
 import earth.terrarium.olympus.client.ui.context.ContextMenu;
 import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
@@ -24,8 +26,8 @@ public class DropdownBuilder<T> {
     private ContextAlignment alignment = ContextAlignment.BOTTOM_LEFT;
     private ResourceLocation background = UIConstants.LIST_BG;
     private WidgetSprites entrySprites = UIConstants.LIST_ENTRY;
-    private Function<T, WidgetRenderer<? super Button>> entryRenderer;
-    private Consumer<T> action;
+    private Function<T, WidgetRenderer<? super Button>> entryRenderer = t -> WidgetRenderers.text(CommonComponents.ELLIPSIS);
+    private Consumer<T> action = t -> {};
 
     private int width;
     private int height = 150;
@@ -85,23 +87,26 @@ public class DropdownBuilder<T> {
 
     // TODO reimplement passing in the parent or force a state to be passed in to preserve proper positioning
     public Button build() {
-        return button.get().withCallback(() -> ContextMenu.open(ctx -> {
-            ctx.withBounds(width, height)
-                .withAlignment(alignment, button)
-                .withTexture(background)
-                .onClose(() -> openState.set(false));
+        return button.get().withCallback(() -> {
+            openState.set(true);
+            ContextMenu.open(ctx -> {
+                ctx.withBounds(width, height)
+                        .withAlignment(alignment, button)
+                        .withTexture(background)
+                        .onClose(() -> openState.set(false));
 
-            for (T option : options) {
-                ctx.add(() -> Widgets.button()
-                        .withTexture(entrySprites)
-                        .withRenderer(entryRenderer.apply(option))
-                        .withSize(width, entryHeight)
-                        .withCallback(() -> {
-                            state.set(option);
-                            action.accept(option);
-                        })
-                );
-            }
-        }));
+                for (T option : options) {
+                    ctx.add(() -> Widgets.button()
+                            .withTexture(entrySprites)
+                            .withRenderer(entryRenderer.apply(option))
+                            .withSize(width, entryHeight)
+                            .withCallback(() -> {
+                                state.set(option);
+                                action.accept(option);
+                            })
+                    );
+                }
+            });
+        });
     }
 }

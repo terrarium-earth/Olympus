@@ -63,7 +63,7 @@ public class ContextMenu extends Overlay {
         this.contextWidth = maxWidth > 0 ? Math.min(maxWidth, contentWidth + 4) : contentWidth + 4;
         this.contextHeight = maxHeight > 0 ? Math.min(maxHeight, contentHeight + 3) : contentHeight + 3;
 
-        var layout = new ListWidget(contextWidth - 3, contextHeight - 3);
+        var layout = new ListWidget(contextWidth - 3, contextHeight - 4);
         layout.set(currentActions);
 
         if (this.side != null && this.parent != null) {

@@ -28,12 +28,14 @@ public class DropdownExample extends ExampleScreen {
         LinearLayout horizontal = LinearLayout.horizontal().spacing(20);
 
         horizontal.addChild(Widgets.button()
-                .withRenderer(WidgetRenderers.dropdown(openState, colorState, font, MinecraftColors.WHITE, (color) -> color == null ? CommonComponents.ELLIPSIS : Component.literal(color.toString()))))
+                .withRenderer(WidgetRenderers.dropdown(openState, colorState, font, MinecraftColors.DARK_GRAY, (color) -> {
+                    return color == null ? CommonComponents.ELLIPSIS : Component.literal(color.toString());
+                }).withPadding(4))
                 .withSize(100, 20)
                 .withDropdown(buttonState, colorState, openState)
                         .withOptions(Arrays.asList(MinecraftColors.COLORS))
                         .withEntryRenderer((color) -> WidgetRenderers.text(Component.literal("Color")).withColor(color))
-                .build();
+                .build());
 
         horizontal.arrangeElements();
         FrameLayout.centerInRectangle(horizontal, 0, 0, this.width, this.height);
