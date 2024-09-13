@@ -11,20 +11,20 @@ import java.util.function.Consumer;
 public class ViewLayout extends BaseLayout<LinearLayout> {
 
     private final List<LinearLayout> rows = new ArrayList<>();
-    private int spacing;
+    private int gap;
 
     ViewLayout() {
         super(LinearLayout.vertical());
     }
 
-    public ViewLayout withSpacing(int spacing) {
-        this.spacing = spacing;
-        this.layout.spacing(spacing);
+    public ViewLayout withGap(int gap) {
+        this.gap = gap;
+        this.layout.spacing(gap);
         return this;
     }
 
     public ViewLayout withRow(LayoutElement... elements) {
-        LinearLayout row = LinearLayout.horizontal().spacing(this.spacing);
+        LinearLayout row = LinearLayout.horizontal().spacing(this.gap);
         for (LayoutElement element : elements) {
             row.addChild(element);
         }

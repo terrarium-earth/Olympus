@@ -12,8 +12,8 @@ public class LinearViewLayout extends BaseLayout<LinearLayout> {
         super(orientation == LinearLayout.Orientation.HORIZONTAL ? LinearLayout.horizontal() : LinearLayout.vertical());
     }
 
-    public LinearViewLayout withSpacing(int spacing) {
-        this.layout.spacing(spacing);
+    public LinearViewLayout withGap(int gap) {
+        this.layout.spacing(gap);
         return this;
     }
 

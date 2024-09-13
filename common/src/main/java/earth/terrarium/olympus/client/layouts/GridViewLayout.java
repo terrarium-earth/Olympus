@@ -18,8 +18,8 @@ public class GridViewLayout extends BaseLayout<ViewLayout> {
         this.amount = amount;
     }
 
-    public GridViewLayout withSpacing(int spacing) {
-        this.layout.withSpacing(spacing);
+    public GridViewLayout withGap(int gap) {
+        this.layout.withGap(gap);
         return this;
     }
 

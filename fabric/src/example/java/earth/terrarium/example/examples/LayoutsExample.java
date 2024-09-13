@@ -21,21 +21,21 @@ public class LayoutsExample extends ExampleScreen {
     @Override
     protected void init() {
         Layouts.rows(5)
-                .withSpacing(5)
+                .withGap(5)
                 .withChildren(createButtons())
                 .withChild(Widgets.button().withTexture(UIConstants.PRIMARY_BUTTON).withSize(20, 20))
                 .withPosition(0, 0)
                 .build(this::addRenderableWidget);
 
         Layouts.columns(5)
-                .withSpacing(5)
+                .withGap(5)
                 .withChildren(createButtons())
                 .withChild(Widgets.button().withTexture(UIConstants.PRIMARY_BUTTON).withSize(20, 20))
                 .withPosition(200, 0)
                 .build(this::addRenderableWidget);
 
         Layouts.layout()
-                .withSpacing(5)
+                .withGap(5)
                 .withRow(createButtons())
                 .withRow(createButtons())
                 .withRow(Widgets.button().withTexture(UIConstants.PRIMARY_BUTTON).withSize(20, 20))
