@@ -12,11 +12,11 @@ public class ContextExample extends ExampleScreen {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 1) {
             ContextMenu.open(menu -> menu
-                    .button(Component.literal("Action 1"), (btn) -> System.out.println("Action 1 clicked!"))
-                    .dangerButton(Component.literal("Action 2"), (btn) -> System.out.println("Action 2 clicked!"))
-                    .primaryButton(Component.literal("Action 3"), (btn) -> System.out.println("Action 3 clicked!"))
+                    .button(Component.literal("Action 1"), () -> System.out.println("Action 1 clicked!"))
+                    .dangerButton(Component.literal("Action 2"), () -> System.out.println("Action 2 clicked!"))
+                    .primaryButton(Component.literal("Action 3"), () -> System.out.println("Action 3 clicked!"))
                     .divider()
-                    .button(Component.literal("Action 4"), (btn) -> System.out.println("Action 4 clicked!"))
+                    .button(Component.literal("Action 4"), () -> System.out.println("Action 4 clicked!"))
             );
         }
         return super.mouseClicked(mouseX, mouseY, button);
