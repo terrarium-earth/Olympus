@@ -1,5 +1,6 @@
 package earth.terrarium.olympus.client.components.base.renderer;
 
+import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 

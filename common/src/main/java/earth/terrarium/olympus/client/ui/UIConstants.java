@@ -10,6 +10,7 @@ public class UIConstants {
 
     public static final ResourceLocation MODAL = id("modal/modal");
     public static final ResourceLocation MODAL_HEADER = id("modal/modal_header");
+    public static final ResourceLocation MODAL_FOOTER = id("modal/modal_footer");
     public static final ResourceLocation MODAL_INSET = id("modal/modal_inset");
 
     public static final ResourceLocation SCROLLBAR = id("lists/scroll/bar");
