@@ -64,7 +64,8 @@ public class Button extends BaseWidget implements CursorWidget {
         return (Button) super.withSize(width, height);
     }
 
-    public <T> DropdownBuilder<T> withDropdown(State<T> state, State<Boolean> isOpen) {
-        return new DropdownBuilder<>(this, state, isOpen);
+    public <T> DropdownBuilder<T> withDropdown(State<Button> button, State<T> state, State<Boolean> isOpen) {
+        button.accept(this);
+        return new DropdownBuilder<>(button, state, isOpen);
     }
 }

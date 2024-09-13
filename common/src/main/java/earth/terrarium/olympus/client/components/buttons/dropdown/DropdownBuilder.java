@@ -8,7 +8,6 @@ import earth.terrarium.olympus.client.ui.context.ContextAlignment;
 import earth.terrarium.olympus.client.ui.context.ContextMenu;
 import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.gui.components.WidgetSprites;
-import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class DropdownBuilder<T> {
-    private final Button button;
+    private final State<Button> button;
     private final State<T> state;
     private final State<Boolean> openState;
     private final List<T> options = new ArrayList<>();
@@ -32,11 +31,11 @@ public class DropdownBuilder<T> {
     private int height = 150;
     private int entryHeight = 20;
 
-    public DropdownBuilder(Button button, State<T> state, State<Boolean> openState) {
+    public DropdownBuilder(State<Button> button, State<T> state, State<Boolean> openState) {
         this.button = button;
         this.state = state;
         this.openState = openState;
-        this.width = button.getWidth();
+        this.width = button.get().getWidth();
     }
 
     public DropdownBuilder<T> withOptions(List<T> options) {
@@ -86,7 +85,7 @@ public class DropdownBuilder<T> {
 
     // TODO reimplement passing in the parent or force a state to be passed in to preserve proper positioning
     public Button build() {
-        return button.withCallback(() -> ContextMenu.open(ctx -> {
+        return button.get().withCallback(() -> ContextMenu.open(ctx -> {
             ctx.withBounds(width, height)
                 .withAlignment(alignment, button)
                 .withTexture(background)

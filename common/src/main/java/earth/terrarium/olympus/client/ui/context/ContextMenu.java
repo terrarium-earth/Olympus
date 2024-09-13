@@ -3,10 +3,12 @@ package earth.terrarium.olympus.client.ui.context;
 import com.mojang.blaze3d.platform.Window;
 import earth.terrarium.olympus.client.components.base.ListWidget;
 import earth.terrarium.olympus.client.components.Widgets;
+import earth.terrarium.olympus.client.components.buttons.Button;
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import earth.terrarium.olympus.client.constants.MinecraftColors;
 import earth.terrarium.olympus.client.ui.Overlay;
 import earth.terrarium.olympus.client.ui.UIConstants;
+import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.client.gui.GuiGraphics;
@@ -39,7 +41,7 @@ public class ContextMenu extends Overlay {
     private int maxHeight;
 
     private ContextAlignment side = null;
-    private AbstractWidget parent = null;
+    private State<Button> parent = null;
     private Runnable onClose = () -> {};
 
     protected ContextMenu(Screen background, int x, int y) {
@@ -65,7 +67,7 @@ public class ContextMenu extends Overlay {
         layout.set(currentActions);
 
         if (this.side != null && this.parent != null) {
-            var pos = this.side.getPos(parent, this.contextWidth, this.contextHeight);
+            var pos = this.side.getPos(parent.get(), this.contextWidth, this.contextHeight);
             this.x = pos.x;
             this.y = pos.y;
         } else {
@@ -119,7 +121,7 @@ public class ContextMenu extends Overlay {
         return this;
     }
 
-    public ContextMenu withAlignment(ContextAlignment side, AbstractWidget parent) {
+    public ContextMenu withAlignment(ContextAlignment side, State<Button> parent) {
         this.side = side;
         this.parent = parent;
         return this;

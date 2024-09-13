@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefullib.common.color.Color;
 import earth.terrarium.example.base.ExampleScreen;
 import earth.terrarium.example.base.OlympusExample;
 import earth.terrarium.olympus.client.components.Widgets;
+import earth.terrarium.olympus.client.components.buttons.Button;
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import earth.terrarium.olympus.client.constants.MinecraftColors;
 import earth.terrarium.olympus.client.utils.State;
@@ -16,6 +17,7 @@ import java.util.Arrays;
 
 @OlympusExample(id = "dropdown", description = "A simple dropdown example")
 public class DropdownExample extends ExampleScreen {
+    public final State<Button> buttonState = State.of(null);
     public final State<Color> colorState = State.of(MinecraftColors.RED);
     public final State<Boolean> openState = State.of(false);
 
@@ -28,7 +30,7 @@ public class DropdownExample extends ExampleScreen {
         horizontal.addChild(Widgets.button()
                 .withRenderer(WidgetRenderers.dropdown(openState, colorState, font, MinecraftColors.WHITE, (color) -> color == null ? CommonComponents.ELLIPSIS : Component.literal(color.toString()))))
                 .withSize(100, 20)
-                .withDropdown(colorState, openState)
+                .withDropdown(buttonState, colorState, openState)
                         .withOptions(Arrays.asList(MinecraftColors.COLORS))
                         .withEntryRenderer((color) -> WidgetRenderers.text(Component.literal("Color")).withColor(color))
                 .build();
