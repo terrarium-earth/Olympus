@@ -11,8 +11,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,7 @@ public class ContextMenu extends Overlay {
     private final int initialX;
     private final int initialY;
 
+    private ResourceLocation texture = UIConstants.LIST_BG;
     private int x;
     private int y;
     private int contextHeight;
@@ -35,10 +38,9 @@ public class ContextMenu extends Overlay {
     private int maxWidth;
     private int maxHeight;
 
-    private Side side = Side.AUTO;
-    private OpeningDirection direction = OpeningDirection.AUTO;
-
-    private final ListWidget layout = new ListWidget(0,0);
+    private ContextAlignment side = null;
+    private AbstractWidget parent = null;
+    private Runnable onClose = () -> {};
 
     protected ContextMenu(Screen background, int x, int y) {
         super(background);
@@ -51,27 +53,31 @@ public class ContextMenu extends Overlay {
 
     @Override
     protected void init() {
-        this.layout.clear();
-        for (Supplier<AbstractWidget> action : this.actions) {
-            AbstractWidget widget = action.get();
-            this.layout.add(widget);
-        }
+        var currentActions = this.actions.stream().map(Supplier::get).toList();
 
-        var contentWidth = layout.children().stream().mapToInt(AbstractWidget::getWidth).max().orElse(0);
-        var contentHeight = layout.children().stream().mapToInt(AbstractWidget::getHeight).sum();
+        var contentWidth = currentActions.stream().mapToInt(AbstractWidget::getWidth).max().orElse(0);
+        var contentHeight = currentActions.stream().mapToInt(AbstractWidget::getHeight).sum();
 
         this.contextWidth = maxWidth > 0 ? Math.min(maxWidth, contentWidth + 4) : contentWidth + 4;
-        this.contextHeight = maxHeight > 0 ? Math.min(maxHeight, contentHeight + 4) : contentHeight + 4;
+        this.contextHeight = maxHeight > 0 ? Math.min(maxHeight, contentHeight + 3) : contentHeight + 3;
 
-        if (this.contextHeight + this.y > this.height) {
-            this.y = this.height - this.contextHeight;
-        }
-        if (this.contextWidth + this.x > this.width) {
-            this.x = Math.max(this.initialX - this.contextWidth, 0);
+        var layout = new ListWidget(contextWidth - 3, contextHeight - 3);
+        layout.set(currentActions);
+
+        if (this.side != null && this.parent != null) {
+            var pos = this.side.getPos(parent, this.contextWidth, this.contextHeight);
+            this.x = pos.x;
+            this.y = pos.y;
+        } else {
+            if (this.contextHeight + this.y > this.height) {
+                this.y = this.height - this.contextHeight;
+            }
+            if (this.contextWidth + this.x > this.width) {
+                this.x = Math.max(this.initialX - this.contextWidth, 0);
+            }
         }
 
-        this.layout.setPosition(this.x + 2, this.y + 2);
-        this.layout.setSize(this.contextWidth - 4, this.contextHeight - 4);
+        layout.setPosition(this.x + 1, this.y + 2);
         this.addRenderableWidget(layout);
     }
 
@@ -84,9 +90,7 @@ public class ContextMenu extends Overlay {
         return this.add(() -> Widgets.button()
                 .withCallback(action)
                 .withTexture(UIConstants.LIST_ENTRY)
-                .withRenderer(WidgetRenderers.text(text)
-                        .withColor(MinecraftColors.WHITE)
-                )
+                .withRenderer(WidgetRenderers.text(text).withColor(MinecraftColors.WHITE))
                 .withSize(font.width(text) + PADDING * 2, font.lineHeight + 1 + PADDING * 2)
         );
     }
@@ -95,9 +99,7 @@ public class ContextMenu extends Overlay {
         return this.add(() -> Widgets.button()
                 .withCallback(action)
                 .withTexture(UIConstants.LIST_ENTRY)
-                .withRenderer(WidgetRenderers.text(text)
-                        .withColor(MinecraftColors.RED)
-                )
+                .withRenderer(WidgetRenderers.text(text).withColor(MinecraftColors.RED))
                 .withSize(font.width(text) + PADDING * 2, font.lineHeight + 1 + PADDING * 2)
         );
     }
@@ -106,9 +108,7 @@ public class ContextMenu extends Overlay {
         return this.add(() -> Widgets.button()
                 .withCallback(action)
                 .withTexture(UIConstants.LIST_ENTRY)
-                .withRenderer(WidgetRenderers.text(text)
-                        .withColor(MinecraftColors.GREEN)
-                )
+                .withRenderer(WidgetRenderers.text(text).withColor(MinecraftColors.GREEN))
                 .withSize(font.width(text) + PADDING * 2, font.lineHeight + 1 + PADDING * 2)
         );
     }
@@ -119,8 +119,30 @@ public class ContextMenu extends Overlay {
         return this;
     }
 
+    public ContextMenu withAlignment(ContextAlignment side, AbstractWidget parent) {
+        this.side = side;
+        this.parent = parent;
+        return this;
+    }
+
+    public ContextMenu withTexture(ResourceLocation texture) {
+        this.texture = texture;
+        return this;
+    }
+
+    public ContextMenu onClose(Runnable onClose) {
+        this.onClose = onClose;
+        return this;
+    }
+
     public ContextMenu divider() {
         return this.add(DividerWidget::new);
+    }
+
+    @Override
+    public void onClose() {
+        this.onClose.run();
+        super.onClose();
     }
 
     @Override
@@ -133,7 +155,7 @@ public class ContextMenu extends Overlay {
     @Override
     public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.renderBackground(graphics, mouseX, mouseY, partialTick);
-        graphics.blitSprite(UIConstants.LIST_BG, this.x, this.y, this.contextWidth, this.contextHeight);
+        graphics.blitSprite(this.texture, this.x, this.y, this.contextWidth, this.contextHeight);
     }
 
     public static void open(Consumer<ContextMenu> consumer) {
@@ -155,9 +177,5 @@ public class ContextMenu extends Overlay {
         ContextMenu menu = new ContextMenu(background, x, y);
         consumer.accept(menu);
         mc.setScreen(menu);
-    }
-
-    public static void open(AbstractWidget widget, Consumer<ContextMenu> consumer) {
-        open(widget.getX(), widget.getY() + widget.getHeight(), consumer);
     }
 }

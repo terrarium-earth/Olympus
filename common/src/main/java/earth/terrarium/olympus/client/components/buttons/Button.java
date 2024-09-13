@@ -59,6 +59,11 @@ public class Button extends BaseWidget implements CursorWidget {
         return this;
     }
 
+    @Override
+    public Button withSize(int width, int height) {
+        return (Button) super.withSize(width, height);
+    }
+
     public <T> DropdownBuilder<T> withDropdown(State<T> state, State<Boolean> isOpen) {
         return new DropdownBuilder<>(this, state, isOpen);
     }
