@@ -66,7 +66,6 @@ public class WidgetRenderers {
     }
 
     public static <T extends AbstractWidget> TextWithIconWidgetRenderer<T> ellpsisWithChevron(boolean open) {
-        TextWithIconWidgetRenderer<T> renderer = new TextWithIconWidgetRenderer<>(text(CommonComponents.ELLIPSIS), icon(open ? UIIcons.CHEVRON_UP : UIIcons.CHEVRON_DOWN));
-        return renderer.withTextLeftIconRight();
+        return textWithChevron(CommonComponents.ELLIPSIS, open);
     }
 }
