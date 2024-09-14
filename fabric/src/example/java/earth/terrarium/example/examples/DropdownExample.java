@@ -44,7 +44,7 @@ public class DropdownExample extends ExampleScreen {
         LinearLayout secondary = LinearLayout.horizontal().spacing(20);
 
         horizontal.addChild(Widgets.button()
-                .withRenderer(state1.createRenderer((color, bool) -> color == null ? WidgetRenderers.ellpsisWithChevron(bool) : WidgetRenderers.textWithChevron(Component.literal("Color"), bool).withColor(color).withShadow()).withPadding(4, 6))
+                .withRenderer(state1.withRenderer((color, bool) -> color == null ? WidgetRenderers.ellpsisWithChevron(bool) : WidgetRenderers.textWithChevron(Component.literal("Color"), bool).withColor(color).withShadow()).withPadding(4, 6))
                 .withSize(100, 24)
                 .withDropdown(state1)
                         .withOptions(Arrays.asList(MinecraftColors.COLORS))
@@ -52,7 +52,7 @@ public class DropdownExample extends ExampleScreen {
                 .build());
 
         horizontal.addChild(Widgets.button()
-                .withRenderer(state2.createRenderer((color, bool) -> color == null ? WidgetRenderers.ellpsisWithChevron(bool) : WidgetRenderers.textWithChevron(Component.literal("Color"), bool).withColor(color)).withPadding(4, 6))
+                .withRenderer(state2.withRenderer((color, bool) -> color == null ? WidgetRenderers.ellpsisWithChevron(bool) : WidgetRenderers.textWithChevron(Component.literal("Color"), bool).withColor(color)).withPadding(4, 6))
                 .withSize(100, 24)
                 .withDropdown(state2)
                 .withAlignment(DropdownAlignment.TOP_LEFT)
@@ -71,7 +71,7 @@ public class DropdownExample extends ExampleScreen {
         for (DropdownAlignment align : DropdownAlignment.values()) {
             var state = states.get(align);
             secondary.addChild(Widgets.button()
-                    .withRenderer(state.createRenderer((color, bool) -> {
+                    .withRenderer(state.withRenderer((color, bool) -> {
                         var renderer = WidgetRenderers.icon(bool ? UIIcons.CHEVRON_UP : UIIcons.CHEVRON_DOWN);
                         if (color != null) renderer.withColor(color).withShadow();
                         return renderer;

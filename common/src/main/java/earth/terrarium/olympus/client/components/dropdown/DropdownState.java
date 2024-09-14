@@ -32,7 +32,7 @@ public class DropdownState<T> implements State<T> {
         return new DropdownState<>(null);
     }
 
-    public <W extends AbstractWidget> WidgetRenderer<W> createRenderer(BiFunction<@Nullable T, Boolean, @NotNull WidgetRenderer<W>> text) {
+    public <W extends AbstractWidget> WidgetRenderer<W> withRenderer(BiFunction<@Nullable T, Boolean, @NotNull WidgetRenderer<W>> text) {
         return (graphics, context, partialTick) -> text.apply(this.state, this.openState).render(graphics, context, partialTick);
     }
 

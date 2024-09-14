@@ -19,7 +19,7 @@ public interface State<T> extends Consumer<T>, Supplier<T> {
     @Override
     T get();
 
-    default <W extends AbstractWidget> WidgetRenderer<W> createRenderer(Function<T, WidgetRenderer<W>> factory) {
+    default <W extends AbstractWidget> WidgetRenderer<W> withRenderer(Function<T, WidgetRenderer<W>> factory) {
         return (graphics, context, partialTick) -> factory.apply(get()).render(graphics, context, partialTick);
     }
 
