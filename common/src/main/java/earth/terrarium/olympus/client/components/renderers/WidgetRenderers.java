@@ -56,6 +56,10 @@ public class WidgetRenderers {
         return new TextWidgetRenderer<>(text);
     }
 
+    public static <T extends AbstractWidget> TextWithIconWidgetRenderer<T> textWithIcon(Component text, ResourceLocation icon) {
+        return new TextWithIconWidgetRenderer<>(text(text), icon(icon));
+    }
+
     public static <T extends AbstractWidget, V> WidgetRenderer<T> dropdown(DropdownState<V> state, BiFunction<@Nullable V, Boolean, @NotNull WidgetRenderer<T>> text) {
         return (graphics, context, partialTick) -> {
             WidgetRenderer<T> textRenderer = text.apply(state.get(), state.isOpened());
