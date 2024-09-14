@@ -29,12 +29,14 @@ public class DropdownExample extends ExampleScreen {
     public final HashMap<ContextAlignment, DropdownState<Color>> states = new HashMap<>();
 
     public DropdownExample() {
-        states.put(ContextAlignment.RIGHT, new DropdownState<>(MinecraftColors.RED));
         states.put(ContextAlignment.BOTTOM_RIGHT, new DropdownState<>(MinecraftColors.RED));
         states.put(ContextAlignment.TOP_RIGHT, new DropdownState<>(MinecraftColors.RED));
         states.put(ContextAlignment.TOP_LEFT, new DropdownState<>(MinecraftColors.RED));
         states.put(ContextAlignment.BOTTOM_LEFT, new DropdownState<>(MinecraftColors.RED));
-        states.put(ContextAlignment.LEFT, new DropdownState<>(MinecraftColors.RED));
+        states.put(ContextAlignment.RIGHT_TOP, new DropdownState<>(MinecraftColors.RED));
+        states.put(ContextAlignment.RIGHT_BOTTOM, new DropdownState<>(MinecraftColors.RED));
+        states.put(ContextAlignment.LEFT_TOP, new DropdownState<>(MinecraftColors.RED));
+        states.put(ContextAlignment.LEFT_BOTTOM, new DropdownState<>(MinecraftColors.RED));
     }
 
     @Override
