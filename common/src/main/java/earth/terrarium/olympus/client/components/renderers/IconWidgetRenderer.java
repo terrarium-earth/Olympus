@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;
+import earth.terrarium.olympus.client.constants.MinecraftColors;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.resources.ResourceLocation;
@@ -11,8 +12,10 @@ import net.minecraft.resources.ResourceLocation;
 public class IconWidgetRenderer<T extends AbstractWidget> implements WidgetRenderer<T> {
 
     private final ResourceLocation icon;
-    private Color color = Color.DEFAULT;
+    private Color color = MinecraftColors.DARK_GRAY;
     private boolean drawShadow = false;
+
+    private int width = 10, height = 10;
 
     IconWidgetRenderer(ResourceLocation icon) {
         this.icon = icon;
@@ -26,21 +29,28 @@ public class IconWidgetRenderer<T extends AbstractWidget> implements WidgetRende
         float alpha = color.getFloatAlpha();
         if (alpha == 0f) alpha = 1f;
 
+        int x = context.getX();
+        int y = context.getY();
+        int width = this.width;
+        int height = this.height;
+
+        if (this.width == 0 || this.height == 0) {
+            width = context.getWidth();
+            height = context.getHeight();
+        } else {
+            x += (context.getWidth() - this.width) / 2;
+            y += (context.getHeight() - this.height) / 2;
+        }
+
         if (drawShadow) {
             RenderSystem.setShaderColor(red / 3f, green / 3f, blue / 3f, alpha);
-            graphics.blitSprite(
-                    icon,
-                    context.getX() + 1, context.getY() + 1,
-                    context.getWidth(), context.getHeight()
-            );
+            graphics.blitSprite(icon, x + 1, y + 1, width, height);
         }
 
         RenderSystem.setShaderColor(red, green, blue, alpha);
-        graphics.blitSprite(
-                icon,
-                context.getX(), context.getY(),
-                context.getWidth(), context.getHeight()
-        );
+        graphics.blitSprite(icon, x, y, width, height);
+
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
     }
 
     public IconWidgetRenderer<T> withShadow() {
@@ -51,5 +61,29 @@ public class IconWidgetRenderer<T extends AbstractWidget> implements WidgetRende
     public IconWidgetRenderer<T> withColor(Color color) {
         this.color = color;
         return this;
+    }
+
+    public IconWidgetRenderer<T> withSize(int width, int height) {
+        this.width = width;
+        this.height = height;
+        return this;
+    }
+
+    public IconWidgetRenderer<T> withSize(int size) {
+        return withSize(size, size);
+    }
+
+    public IconWidgetRenderer<T> withStretch() {
+        this.width = 0;
+        this.height = 0;
+        return this;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
     }
 }

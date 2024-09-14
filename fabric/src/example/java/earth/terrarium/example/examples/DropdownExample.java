@@ -5,8 +5,12 @@ import earth.terrarium.example.base.ExampleScreen;
 import earth.terrarium.example.base.OlympusExample;
 import earth.terrarium.olympus.client.components.Widgets;
 import earth.terrarium.olympus.client.components.buttons.Button;
+import earth.terrarium.olympus.client.components.dropdown.DropdownState;
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import earth.terrarium.olympus.client.constants.MinecraftColors;
+import earth.terrarium.olympus.client.ui.UIConstants;
+import earth.terrarium.olympus.client.ui.UIIcons;
+import earth.terrarium.olympus.client.ui.context.ContextAlignment;
 import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.gui.layouts.FrameLayout;
 import net.minecraft.client.gui.layouts.LinearLayout;
@@ -14,12 +18,24 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 @OlympusExample(id = "dropdown", description = "A simple dropdown example")
 public class DropdownExample extends ExampleScreen {
-    public final State<Button> buttonState = State.of(null);
-    public final State<Color> colorState = State.of(MinecraftColors.RED);
-    public final State<Boolean> openState = State.of(false);
+    public final DropdownState<Color> state1 = new DropdownState<>(MinecraftColors.RED);
+    public final DropdownState<Color> state2 = new DropdownState<>(null);
+    public final DropdownState<Color> state3 = new DropdownState<>(null);
+
+    public final HashMap<ContextAlignment, DropdownState<Color>> states = new HashMap<>();
+
+    public DropdownExample() {
+        states.put(ContextAlignment.RIGHT, new DropdownState<>(MinecraftColors.RED));
+        states.put(ContextAlignment.BOTTOM_RIGHT, new DropdownState<>(MinecraftColors.RED));
+        states.put(ContextAlignment.TOP_RIGHT, new DropdownState<>(MinecraftColors.RED));
+        states.put(ContextAlignment.TOP_LEFT, new DropdownState<>(MinecraftColors.RED));
+        states.put(ContextAlignment.BOTTOM_LEFT, new DropdownState<>(MinecraftColors.RED));
+        states.put(ContextAlignment.LEFT, new DropdownState<>(MinecraftColors.RED));
+    }
 
     @Override
     protected void init() {
@@ -27,18 +43,57 @@ public class DropdownExample extends ExampleScreen {
 
         LinearLayout horizontal = LinearLayout.horizontal().spacing(20);
 
+        LinearLayout secondary = LinearLayout.horizontal().spacing(20);
+
         horizontal.addChild(Widgets.button()
-                .withRenderer(WidgetRenderers.dropdown(openState, colorState, font, MinecraftColors.DARK_GRAY, (color) -> {
-                    return color == null ? CommonComponents.ELLIPSIS : Component.literal(color.toString());
-                }).withPadding(4))
-                .withSize(100, 20)
-                .withDropdown(buttonState, colorState, openState)
+                .withRenderer(WidgetRenderers.dropdown(state1, (color, bool) -> color == null ? WidgetRenderers.emptyDropdown(bool) : WidgetRenderers.dropdownText(Component.literal("Color"), bool).withColor(color).withShadow()).withPadding(4, 6))
+                .withSize(100, 24)
+                .withDropdown(state1)
                         .withOptions(Arrays.asList(MinecraftColors.COLORS))
                         .withEntryRenderer((color) -> WidgetRenderers.text(Component.literal("Color")).withColor(color))
                 .build());
 
+        horizontal.addChild(Widgets.button()
+                .withRenderer(WidgetRenderers.dropdown(state2, (color, bool) -> color == null ? WidgetRenderers.emptyDropdown(bool) : WidgetRenderers.dropdownText(Component.literal("Color"), bool).withColor(color)).withPadding(4, 6))
+                .withSize(100, 24)
+                .withDropdown(state2)
+                .withAlignment(ContextAlignment.TOP_LEFT)
+                .withOptions(Arrays.asList(MinecraftColors.COLORS))
+                .withEntryRenderer((color) -> WidgetRenderers.text(Component.literal("Color")).withColor(color).withAlignment(0).withPadding(0, 4))
+                .build());
+
+        horizontal.addChild(Widgets.dropdown(
+                state3,
+                Arrays.asList(MinecraftColors.COLORS),
+                color -> Component.literal(color.toString()),
+                button -> button.withSize(100, 24),
+                (ignored) -> {}
+        ));
+
+        for (ContextAlignment align : ContextAlignment.values()) {
+            var state = states.get(align);
+            secondary.addChild(Widgets.button()
+                    .withRenderer(WidgetRenderers.dropdown(state, (color, bool) -> {
+                        var renderer = WidgetRenderers.icon(bool ? UIIcons.CHEVRON_UP : UIIcons.CHEVRON_DOWN);
+                        if (color != null) renderer.withColor(color).withShadow();
+                        return renderer;
+                    }).withPadding(4))
+                    .withSize(20, 20)
+                    .withDropdown(state)
+                    .withSize(100, 150)
+                    .withAlignment(align)
+                    .withOptions(Arrays.asList(MinecraftColors.COLORS))
+                    .withEntryRenderer((color) -> WidgetRenderers.text(Component.literal("Color")).withColor(color))
+                    .build()
+            );
+        }
+
         horizontal.arrangeElements();
+        secondary.arrangeElements();
         FrameLayout.centerInRectangle(horizontal, 0, 0, this.width, this.height);
+        FrameLayout.centerInRectangle(secondary, 0, 0, this.width, this.height);
+        secondary.setY(secondary.getY() + 50);
         horizontal.visitWidgets(this::addRenderableWidget);
+        secondary.visitWidgets(this::addRenderableWidget);
     }
 }

@@ -1,4 +1,4 @@
-package earth.terrarium.olympus.client.components.buttons.dropdown;
+package earth.terrarium.olympus.client.components.dropdown;
 
 import earth.terrarium.olympus.client.components.Widgets;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
@@ -18,9 +18,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class DropdownBuilder<T> {
-    private final State<Button> button;
-    private final State<T> state;
-    private final State<Boolean> openState;
+    private final DropdownState<T> state;
     private final List<T> options = new ArrayList<>();
 
     private ContextAlignment alignment = ContextAlignment.BOTTOM_LEFT;
@@ -33,11 +31,9 @@ public class DropdownBuilder<T> {
     private int height = 150;
     private int entryHeight = 20;
 
-    public DropdownBuilder(State<Button> button, State<T> state, State<Boolean> openState) {
-        this.button = button;
+    public DropdownBuilder(DropdownState<T> state) {
         this.state = state;
-        this.openState = openState;
-        this.width = button.get().getWidth();
+        this.width = state.getButton().getWidth();
     }
 
     public DropdownBuilder<T> withOptions(List<T> options) {
@@ -56,6 +52,7 @@ public class DropdownBuilder<T> {
     }
 
     public DropdownBuilder<T> withAlignment(ContextAlignment alignment) {
+        this.alignment = alignment;
         return this;
     }
 
@@ -85,15 +82,14 @@ public class DropdownBuilder<T> {
         return this;
     }
 
-    // TODO reimplement passing in the parent or force a state to be passed in to preserve proper positioning
     public Button build() {
-        return button.get().withCallback(() -> {
-            openState.set(true);
+        return state.getButton().withCallback(() -> {
+            state.setOpenState(true);
             ContextMenu.open(ctx -> {
                 ctx.withBounds(width, height)
-                        .withAlignment(alignment, button)
+                        .withAlignment(alignment, state)
                         .withTexture(background)
-                        .onClose(() -> openState.set(false));
+                        .onClose(() -> state.setOpenState(false));
 
                 for (T option : options) {
                     ctx.add(() -> Widgets.button()

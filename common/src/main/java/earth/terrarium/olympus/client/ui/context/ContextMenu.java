@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.Window;
 import earth.terrarium.olympus.client.components.base.ListWidget;
 import earth.terrarium.olympus.client.components.Widgets;
 import earth.terrarium.olympus.client.components.buttons.Button;
+import earth.terrarium.olympus.client.components.dropdown.DropdownState;
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import earth.terrarium.olympus.client.constants.MinecraftColors;
 import earth.terrarium.olympus.client.ui.Overlay;
@@ -28,8 +29,6 @@ public class ContextMenu extends Overlay {
     private static final int PADDING = 3;
 
     private final List<Supplier<AbstractWidget>> actions = new ArrayList<>();
-    private final int initialX;
-    private final int initialY;
 
     private ResourceLocation texture = UIConstants.LIST_BG;
     private int x;
@@ -41,14 +40,11 @@ public class ContextMenu extends Overlay {
     private int maxHeight;
 
     private ContextAlignment side = null;
-    private State<Button> parent = null;
+    private DropdownState<?> parent = null;
     private Runnable onClose = () -> {};
 
     protected ContextMenu(Screen background, int x, int y) {
         super(background);
-
-        this.initialX = x;
-        this.initialY = y;
         this.x = x;
         this.y = y;
     }
@@ -63,11 +59,11 @@ public class ContextMenu extends Overlay {
         this.contextWidth = maxWidth > 0 ? Math.min(maxWidth, contentWidth + 4) : contentWidth + 4;
         this.contextHeight = maxHeight > 0 ? Math.min(maxHeight, contentHeight + 3) : contentHeight + 3;
 
-        var layout = new ListWidget(contextWidth - 3, contextHeight - 4);
+        var layout = new ListWidget(contextWidth - 3, contextHeight - 3 - (maxHeight > 0 ? 1 : 0));
         layout.set(currentActions);
 
         if (this.side != null && this.parent != null) {
-            var pos = this.side.getPos(parent.get(), this.contextWidth, this.contextHeight);
+            var pos = this.side.getPos(parent.getButton(), this.contextWidth, this.contextHeight);
             this.x = pos.x;
             this.y = pos.y;
         } else {
@@ -75,7 +71,7 @@ public class ContextMenu extends Overlay {
                 this.y = this.height - this.contextHeight;
             }
             if (this.contextWidth + this.x > this.width) {
-                this.x = Math.max(this.initialX - this.contextWidth, 0);
+                this.x = this.width - this.contextWidth;
             }
         }
 
@@ -121,7 +117,7 @@ public class ContextMenu extends Overlay {
         return this;
     }
 
-    public ContextMenu withAlignment(ContextAlignment side, State<Button> parent) {
+    public ContextMenu withAlignment(ContextAlignment side, DropdownState<?> parent) {
         this.side = side;
         this.parent = parent;
         return this;

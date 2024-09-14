@@ -16,9 +16,6 @@ public class UIConstants {
     public static final ResourceLocation SCROLLBAR = id("lists/scroll/bar");
     public static final ResourceLocation SCROLLBAR_THUMB = id("lists/scroll/thumb");
 
-    public static final ResourceLocation CHEVRON_DOWN = id("chevron/down");
-    public static final ResourceLocation CHEVRON_UP = id("chevron/up");
-
     public static final ResourceLocation LIST_BG = id("lists/background");
 
     public static final ResourceLocation CONTEXT_DIVIDER = id("context/divider");

@@ -1,22 +1,18 @@
 package earth.terrarium.olympus.client.components.renderers;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.teamresourceful.resourcefullib.client.scissor.GuiCloseableScissor;
-import com.teamresourceful.resourcefullib.common.color.Color;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;
-import earth.terrarium.olympus.client.ui.UIConstants;
-import earth.terrarium.olympus.client.utils.State;
-import earth.terrarium.olympus.client.utils.UIHelper;
-import net.minecraft.client.gui.Font;
+import earth.terrarium.olympus.client.components.dropdown.DropdownState;
+import earth.terrarium.olympus.client.ui.UIIcons;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 public class WidgetRenderers {
 
@@ -47,16 +43,20 @@ public class WidgetRenderers {
         return new TextWidgetRenderer<>(text);
     }
 
-    public static <T extends AbstractWidget, V> WidgetRenderer<T> dropdown(State<Boolean> isOpen, State<@Nullable V> value, Font font, Color color, Function<@Nullable V, @NotNull Component> text) {
+    public static <T extends AbstractWidget, V> WidgetRenderer<T> dropdown(DropdownState<V> state, BiFunction<@Nullable V, Boolean, @NotNull WidgetRenderer<T>> text) {
         return (graphics, context, partialTick) -> {
-            int textY = context.getY() + context.getHeight() / 2 - font.lineHeight / 2;
-            graphics.drawString(font, text.apply(value.get()), context.getX(), textY, UIHelper.getEnsureAlpha(color));
-
-            graphics.setColor(color.getFloatRed(), color.getFloatBlue(), color.getFloatGreen(), color.getFloatAlpha() == 0 ? 1 : color.getFloatAlpha());
-            var size = Math.min(16, context.getHeight());
-            int chevY = context.getY() + context.getHeight() / 2 - size / 2;
-            graphics.blitSprite(isOpen.get() ? UIConstants.CHEVRON_DOWN : UIConstants.CHEVRON_UP, context.getX() + context.getWidth() - size, chevY, size, size);
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            WidgetRenderer<T> textRenderer = text.apply(state.get(), state.getOpenState());
+            textRenderer.render(graphics, context, partialTick);
         };
+    }
+
+    public static <T extends AbstractWidget> TextWithIconWidgetRenderer<T> dropdownText(Component text, boolean open) {
+        TextWithIconWidgetRenderer<T> renderer = new TextWithIconWidgetRenderer<>(text(text), icon(open ? UIIcons.CHEVRON_UP : UIIcons.CHEVRON_DOWN));
+        return renderer.withTextLeftIconRight();
+    }
+
+    public static <T extends AbstractWidget> TextWithIconWidgetRenderer<T> emptyDropdown(boolean open) {
+        TextWithIconWidgetRenderer<T> renderer = new TextWithIconWidgetRenderer<>(text(CommonComponents.ELLIPSIS), icon(open ? UIIcons.CHEVRON_UP : UIIcons.CHEVRON_DOWN));
+        return renderer.withTextLeftIconRight();
     }
 }
