@@ -1,10 +1,9 @@
-package earth.terrarium.olympus.client.ui.context;
+package earth.terrarium.olympus.client.components.dropdown;
 
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.navigation.ScreenRectangle;
 import org.joml.Vector2i;
 
-public enum ContextAlignment {
+public enum DropdownAlignment {
     TOP_LEFT,
     TOP_RIGHT,
     BOTTOM_LEFT,

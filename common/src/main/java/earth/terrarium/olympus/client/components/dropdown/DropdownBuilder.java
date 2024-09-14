@@ -5,9 +5,7 @@ import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.buttons.Button;
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import earth.terrarium.olympus.client.ui.UIConstants;
-import earth.terrarium.olympus.client.ui.context.ContextAlignment;
 import earth.terrarium.olympus.client.ui.context.ContextMenu;
-import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
@@ -21,7 +19,7 @@ public class DropdownBuilder<T> {
     private final DropdownState<T> state;
     private final List<T> options = new ArrayList<>();
 
-    private ContextAlignment alignment = ContextAlignment.BOTTOM_LEFT;
+    private DropdownAlignment alignment = DropdownAlignment.BOTTOM_LEFT;
     private ResourceLocation background = UIConstants.LIST_BG;
     private WidgetSprites entrySprites = UIConstants.LIST_ENTRY;
     private Function<T, WidgetRenderer<? super Button>> entryRenderer = t -> WidgetRenderers.text(CommonComponents.ELLIPSIS);
@@ -51,7 +49,7 @@ public class DropdownBuilder<T> {
         return this;
     }
 
-    public DropdownBuilder<T> withAlignment(ContextAlignment alignment) {
+    public DropdownBuilder<T> withAlignment(DropdownAlignment alignment) {
         this.alignment = alignment;
         return this;
     }

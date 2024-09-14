@@ -3,18 +3,16 @@ package earth.terrarium.olympus.client.ui.context;
 import com.mojang.blaze3d.platform.Window;
 import earth.terrarium.olympus.client.components.base.ListWidget;
 import earth.terrarium.olympus.client.components.Widgets;
-import earth.terrarium.olympus.client.components.buttons.Button;
 import earth.terrarium.olympus.client.components.dropdown.DropdownState;
+import earth.terrarium.olympus.client.components.dropdown.DropdownAlignment;
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import earth.terrarium.olympus.client.constants.MinecraftColors;
 import earth.terrarium.olympus.client.ui.Overlay;
 import earth.terrarium.olympus.client.ui.UIConstants;
-import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -39,7 +37,7 @@ public class ContextMenu extends Overlay {
     private int maxWidth;
     private int maxHeight;
 
-    private ContextAlignment side = null;
+    private DropdownAlignment alignment = null;
     private DropdownState<?> parent = null;
     private Runnable onClose = () -> {};
 
@@ -62,8 +60,8 @@ public class ContextMenu extends Overlay {
         var layout = new ListWidget(contextWidth - 3, contextHeight - 3 - (maxHeight > 0 ? 1 : 0));
         layout.set(currentActions);
 
-        if (this.side != null && this.parent != null) {
-            var pos = this.side.getPos(parent.getButton(), this.contextWidth, this.contextHeight);
+        if (this.alignment != null && this.parent != null) {
+            var pos = this.alignment.getPos(parent.getButton(), this.contextWidth, this.contextHeight);
             this.x = pos.x;
             this.y = pos.y;
         } else {
@@ -117,8 +115,8 @@ public class ContextMenu extends Overlay {
         return this;
     }
 
-    public ContextMenu withAlignment(ContextAlignment side, DropdownState<?> parent) {
-        this.side = side;
+    public ContextMenu withAlignment(DropdownAlignment side, DropdownState<?> parent) {
+        this.alignment = side;
         this.parent = parent;
         return this;
     }

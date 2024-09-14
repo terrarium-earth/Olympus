@@ -4,17 +4,13 @@ import com.teamresourceful.resourcefullib.common.color.Color;
 import earth.terrarium.example.base.ExampleScreen;
 import earth.terrarium.example.base.OlympusExample;
 import earth.terrarium.olympus.client.components.Widgets;
-import earth.terrarium.olympus.client.components.buttons.Button;
 import earth.terrarium.olympus.client.components.dropdown.DropdownState;
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import earth.terrarium.olympus.client.constants.MinecraftColors;
-import earth.terrarium.olympus.client.ui.UIConstants;
 import earth.terrarium.olympus.client.ui.UIIcons;
-import earth.terrarium.olympus.client.ui.context.ContextAlignment;
-import earth.terrarium.olympus.client.utils.State;
+import earth.terrarium.olympus.client.components.dropdown.DropdownAlignment;
 import net.minecraft.client.gui.layouts.FrameLayout;
 import net.minecraft.client.gui.layouts.LinearLayout;
-import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 
 import java.util.Arrays;
@@ -26,17 +22,17 @@ public class DropdownExample extends ExampleScreen {
     public final DropdownState<Color> state2 = new DropdownState<>(null);
     public final DropdownState<Color> state3 = new DropdownState<>(null);
 
-    public final HashMap<ContextAlignment, DropdownState<Color>> states = new HashMap<>();
+    public final HashMap<DropdownAlignment, DropdownState<Color>> states = new HashMap<>();
 
     public DropdownExample() {
-        states.put(ContextAlignment.BOTTOM_RIGHT, new DropdownState<>(MinecraftColors.RED));
-        states.put(ContextAlignment.TOP_RIGHT, new DropdownState<>(MinecraftColors.RED));
-        states.put(ContextAlignment.TOP_LEFT, new DropdownState<>(MinecraftColors.RED));
-        states.put(ContextAlignment.BOTTOM_LEFT, new DropdownState<>(MinecraftColors.RED));
-        states.put(ContextAlignment.RIGHT_TOP, new DropdownState<>(MinecraftColors.RED));
-        states.put(ContextAlignment.RIGHT_BOTTOM, new DropdownState<>(MinecraftColors.RED));
-        states.put(ContextAlignment.LEFT_TOP, new DropdownState<>(MinecraftColors.RED));
-        states.put(ContextAlignment.LEFT_BOTTOM, new DropdownState<>(MinecraftColors.RED));
+        states.put(DropdownAlignment.BOTTOM_RIGHT, new DropdownState<>(MinecraftColors.RED));
+        states.put(DropdownAlignment.TOP_RIGHT, new DropdownState<>(MinecraftColors.RED));
+        states.put(DropdownAlignment.TOP_LEFT, new DropdownState<>(MinecraftColors.RED));
+        states.put(DropdownAlignment.BOTTOM_LEFT, new DropdownState<>(MinecraftColors.RED));
+        states.put(DropdownAlignment.RIGHT_TOP, new DropdownState<>(MinecraftColors.RED));
+        states.put(DropdownAlignment.RIGHT_BOTTOM, new DropdownState<>(MinecraftColors.RED));
+        states.put(DropdownAlignment.LEFT_TOP, new DropdownState<>(MinecraftColors.RED));
+        states.put(DropdownAlignment.LEFT_BOTTOM, new DropdownState<>(MinecraftColors.RED));
     }
 
     @Override
@@ -59,7 +55,7 @@ public class DropdownExample extends ExampleScreen {
                 .withRenderer(WidgetRenderers.dropdown(state2, (color, bool) -> color == null ? WidgetRenderers.emptyDropdown(bool) : WidgetRenderers.dropdownText(Component.literal("Color"), bool).withColor(color)).withPadding(4, 6))
                 .withSize(100, 24)
                 .withDropdown(state2)
-                .withAlignment(ContextAlignment.TOP_LEFT)
+                .withAlignment(DropdownAlignment.TOP_LEFT)
                 .withOptions(Arrays.asList(MinecraftColors.COLORS))
                 .withEntryRenderer((color) -> WidgetRenderers.text(Component.literal("Color")).withColor(color).withAlignment(0).withPadding(0, 4))
                 .build());
@@ -72,7 +68,7 @@ public class DropdownExample extends ExampleScreen {
                 (ignored) -> {}
         ));
 
-        for (ContextAlignment align : ContextAlignment.values()) {
+        for (DropdownAlignment align : DropdownAlignment.values()) {
             var state = states.get(align);
             secondary.addChild(Widgets.button()
                     .withRenderer(WidgetRenderers.dropdown(state, (color, bool) -> {
