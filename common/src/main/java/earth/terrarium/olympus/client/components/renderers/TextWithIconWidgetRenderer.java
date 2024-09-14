@@ -26,7 +26,7 @@ public class TextWithIconWidgetRenderer<T extends AbstractWidget> implements Wid
         var iconSpace = iconSize + gap;
         textRenderer.withPadding(0, iconAlign * iconSpace, 0, (1 - iconAlign) * iconSpace).render(graphics, widget, partialTick);
         var textSpace = widget.getWidth() - iconSpace;
-        iconRenderer.withPadding(0, (1 - iconAlign) * textSpace, 0, iconAlign * textSpace).withCentered(iconSize, iconSize).render(graphics, widget, partialTick);
+        iconRenderer.withCentered(iconSize, iconSize).withPadding(0, (1 - iconAlign) * textSpace, 0, iconAlign * textSpace).render(graphics, widget, partialTick);
     }
 
     public TextWithIconWidgetRenderer<T> withGap(int gap) {
