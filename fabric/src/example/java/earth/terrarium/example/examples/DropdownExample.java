@@ -44,7 +44,7 @@ public class DropdownExample extends ExampleScreen {
         LinearLayout secondary = LinearLayout.horizontal().spacing(20);
 
         horizontal.addChild(Widgets.button()
-                .withRenderer(WidgetRenderers.dropdown(state1, (color, bool) -> color == null ? WidgetRenderers.emptyDropdown(bool) : WidgetRenderers.dropdownText(Component.literal("Color"), bool).withColor(color).withShadow()).withPadding(4, 6))
+                .withRenderer(WidgetRenderers.dropdown(state1, (color, bool) -> color == null ? WidgetRenderers.ellpsisWithChevron(bool) : WidgetRenderers.textWithChevron(Component.literal("Color"), bool).withColor(color).withShadow()).withPadding(4, 6))
                 .withSize(100, 24)
                 .withDropdown(state1)
                         .withOptions(Arrays.asList(MinecraftColors.COLORS))
@@ -52,7 +52,7 @@ public class DropdownExample extends ExampleScreen {
                 .build());
 
         horizontal.addChild(Widgets.button()
-                .withRenderer(WidgetRenderers.dropdown(state2, (color, bool) -> color == null ? WidgetRenderers.emptyDropdown(bool) : WidgetRenderers.dropdownText(Component.literal("Color"), bool).withColor(color)).withPadding(4, 6))
+                .withRenderer(WidgetRenderers.dropdown(state2, (color, bool) -> color == null ? WidgetRenderers.ellpsisWithChevron(bool) : WidgetRenderers.textWithChevron(Component.literal("Color"), bool).withColor(color)).withPadding(4, 6))
                 .withSize(100, 24)
                 .withDropdown(state2)
                 .withAlignment(DropdownAlignment.TOP_LEFT)
