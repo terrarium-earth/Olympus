@@ -23,7 +23,7 @@ public class DropdownState<T> implements State<T> {
     }
 
 
-    public boolean getOpenState() {
+    public boolean isOpened() {
         return openState;
     }
 
@@ -31,7 +31,7 @@ public class DropdownState<T> implements State<T> {
         this.button = button;
     }
 
-    public void setOpenState(boolean openState) {
+    public void setOpened(boolean openState) {
         this.openState = openState;
     }
 

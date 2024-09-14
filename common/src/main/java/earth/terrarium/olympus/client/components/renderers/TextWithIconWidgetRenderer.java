@@ -13,8 +13,9 @@ public class TextWithIconWidgetRenderer<T extends AbstractWidget> implements Wid
     private final IconWidgetRenderer<T> iconRenderer;
 
     private int iconAlign = 1;
+    private int iconSize = 10;
 
-    public TextWithIconWidgetRenderer(TextWidgetRenderer<T> text, IconWidgetRenderer<T> icon) {
+    TextWithIconWidgetRenderer(TextWidgetRenderer<T> text, IconWidgetRenderer<T> icon) {
         this.textRenderer = text;
         text.withAlignment(0);
         this.iconRenderer = icon;
@@ -22,10 +23,10 @@ public class TextWithIconWidgetRenderer<T extends AbstractWidget> implements Wid
 
     @Override
     public void render(GuiGraphics graphics, WidgetRendererContext<T> widget, float partialTick) {
-        var iconSpace = iconRenderer.getWidth() + gap;
+        var iconSpace = iconSize + gap;
         textRenderer.withPadding(0, iconAlign * iconSpace, 0, (1 - iconAlign) * iconSpace).render(graphics, widget, partialTick);
         var textSpace = widget.getWidth() - iconSpace;
-        iconRenderer.withPadding(0, (1 - iconAlign) * textSpace, 0, iconAlign * textSpace).render(graphics, widget, partialTick);
+        iconRenderer.withPadding(0, (1 - iconAlign) * textSpace, 0, iconAlign * textSpace).withCentered(iconSize, iconSize).render(graphics, widget, partialTick);
     }
 
     public TextWithIconWidgetRenderer<T> withGap(int gap) {
@@ -45,8 +46,8 @@ public class TextWithIconWidgetRenderer<T extends AbstractWidget> implements Wid
         return this;
     }
 
-    public TextWithIconWidgetRenderer<T> withIconSize(int width, int height) {
-        iconRenderer.withSize(width, height);
+    public TextWithIconWidgetRenderer<T> withIconSize(int size) {
+        iconSize = size;
         return this;
     }
 

@@ -23,6 +23,10 @@ public interface WidgetRenderer<T extends AbstractWidget> {
         return WidgetRenderers.padded(top, right, bottom, left, this);
     }
 
+    default WidgetRenderer<T> withCentered(int width, int height) {
+        return WidgetRenderers.center(width, height, this);
+    }
+
     static <T extends AbstractWidget> WidgetRenderer<T> empty() {
         return (graphics, context, partialTick) -> {};
     }

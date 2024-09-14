@@ -15,8 +15,6 @@ public class IconWidgetRenderer<T extends AbstractWidget> implements WidgetRende
     private Color color = MinecraftColors.DARK_GRAY;
     private boolean drawShadow = false;
 
-    private int width = 10, height = 10;
-
     IconWidgetRenderer(ResourceLocation icon) {
         this.icon = icon;
     }
@@ -29,26 +27,13 @@ public class IconWidgetRenderer<T extends AbstractWidget> implements WidgetRende
         float alpha = color.getFloatAlpha();
         if (alpha == 0f) alpha = 1f;
 
-        int x = context.getX();
-        int y = context.getY();
-        int width = this.width;
-        int height = this.height;
-
-        if (this.width == 0 || this.height == 0) {
-            width = context.getWidth();
-            height = context.getHeight();
-        } else {
-            x += (context.getWidth() - this.width) / 2;
-            y += (context.getHeight() - this.height) / 2;
-        }
-
         if (drawShadow) {
             RenderSystem.setShaderColor(red / 3f, green / 3f, blue / 3f, alpha);
-            graphics.blitSprite(icon, x + 1, y + 1, width, height);
+            graphics.blitSprite(icon, context.getX() + 1, context.getY() + 1, context.getWidth(), context.getHeight());
         }
 
         RenderSystem.setShaderColor(red, green, blue, alpha);
-        graphics.blitSprite(icon, x, y, width, height);
+        graphics.blitSprite(icon, context.getX(), context.getY(), context.getWidth(), context.getHeight());
 
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
     }
@@ -61,29 +46,5 @@ public class IconWidgetRenderer<T extends AbstractWidget> implements WidgetRende
     public IconWidgetRenderer<T> withColor(Color color) {
         this.color = color;
         return this;
-    }
-
-    public IconWidgetRenderer<T> withSize(int width, int height) {
-        this.width = width;
-        this.height = height;
-        return this;
-    }
-
-    public IconWidgetRenderer<T> withSize(int size) {
-        return withSize(size, size);
-    }
-
-    public IconWidgetRenderer<T> withStretch() {
-        this.width = 0;
-        this.height = 0;
-        return this;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public int getWidth() {
-        return width;
     }
 }

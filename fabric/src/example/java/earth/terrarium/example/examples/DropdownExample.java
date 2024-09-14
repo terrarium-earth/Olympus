@@ -75,7 +75,7 @@ public class DropdownExample extends ExampleScreen {
                         var renderer = WidgetRenderers.icon(bool ? UIIcons.CHEVRON_UP : UIIcons.CHEVRON_DOWN);
                         if (color != null) renderer.withColor(color).withShadow();
                         return renderer;
-                    }).withPadding(4))
+                    }).withCentered(10, 10))
                     .withSize(20, 20)
                     .withDropdown(state)
                     .withSize(100, 150)

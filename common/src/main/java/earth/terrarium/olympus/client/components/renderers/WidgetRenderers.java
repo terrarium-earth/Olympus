@@ -58,7 +58,7 @@ public class WidgetRenderers {
 
     public static <T extends AbstractWidget, V> WidgetRenderer<T> dropdown(DropdownState<V> state, BiFunction<@Nullable V, Boolean, @NotNull WidgetRenderer<T>> text) {
         return (graphics, context, partialTick) -> {
-            WidgetRenderer<T> textRenderer = text.apply(state.get(), state.getOpenState());
+            WidgetRenderer<T> textRenderer = text.apply(state.get(), state.isOpened());
             textRenderer.render(graphics, context, partialTick);
         };
     }

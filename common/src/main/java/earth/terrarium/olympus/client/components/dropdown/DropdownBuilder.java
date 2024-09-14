@@ -82,12 +82,12 @@ public class DropdownBuilder<T> {
 
     public Button build() {
         return state.getButton().withCallback(() -> {
-            state.setOpenState(true);
+            state.setOpened(true);
             ContextMenu.open(ctx -> {
                 ctx.withBounds(width, height)
                         .withAlignment(alignment, state)
                         .withTexture(background)
-                        .onClose(() -> state.setOpenState(false));
+                        .onClose(() -> state.setOpened(false));
 
                 for (T option : options) {
                     ctx.add(() -> Widgets.button()
