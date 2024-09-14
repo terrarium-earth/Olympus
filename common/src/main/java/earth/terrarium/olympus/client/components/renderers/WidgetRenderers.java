@@ -60,13 +60,6 @@ public class WidgetRenderers {
         return new TextWithIconWidgetRenderer<>(text(text), icon(icon));
     }
 
-    public static <T extends AbstractWidget, V> WidgetRenderer<T> dropdown(DropdownState<V> state, BiFunction<@Nullable V, Boolean, @NotNull WidgetRenderer<T>> text) {
-        return (graphics, context, partialTick) -> {
-            WidgetRenderer<T> textRenderer = text.apply(state.get(), state.isOpened());
-            textRenderer.render(graphics, context, partialTick);
-        };
-    }
-
     public static <T extends AbstractWidget> TextWithIconWidgetRenderer<T> textWithChevron(Component text, boolean open) {
         TextWithIconWidgetRenderer<T> renderer = new TextWithIconWidgetRenderer<>(text(text), icon(open ? UIIcons.CHEVRON_UP : UIIcons.CHEVRON_DOWN));
         return renderer.withTextLeftIconRight();
