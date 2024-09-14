@@ -9,6 +9,19 @@ import net.minecraft.resources.ResourceLocation;
 
 public class WidgetRenderers {
 
+    public static <T extends AbstractWidget> WidgetRenderer<T> center(int width, int height, WidgetRenderer<T> renderer) {
+        return (graphics, context, partialTick) -> {
+            int x = context.getX() + (context.getWidth() - width) / 2;
+            int y = context.getY() + (context.getHeight() - height) / 2;
+            WidgetRendererContext<T> centeredContext = context.copy()
+                    .setWidth(width)
+                    .setHeight(height)
+                    .setX(x)
+                    .setY(y);
+            renderer.render(graphics, centeredContext, partialTick);
+        };
+    }
+
     public static <T extends AbstractWidget> WidgetRenderer<T> padded(int top, int right, int bottom, int left, WidgetRenderer<T> renderer) {
         return (graphics, context, partialTick) -> {
             WidgetRendererContext<T> paddedContext = context.copy()
