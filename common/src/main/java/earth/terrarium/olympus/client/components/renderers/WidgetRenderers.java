@@ -61,8 +61,9 @@ public class WidgetRenderers {
     }
 
     public static <T extends AbstractWidget> TextWithIconWidgetRenderer<T> textWithChevron(Component text, boolean open) {
-        TextWithIconWidgetRenderer<T> renderer = new TextWithIconWidgetRenderer<>(text(text), icon(open ? UIIcons.CHEVRON_UP : UIIcons.CHEVRON_DOWN));
-        return renderer.withTextLeftIconRight();
+        TextWithIconWidgetRenderer<T> renderer = textWithIcon(text, open ? UIIcons.CHEVRON_DOWN : UIIcons.CHEVRON_UP);
+        renderer.withTextLeftIconLeft();
+        return renderer;
     }
 
     public static <T extends AbstractWidget> TextWithIconWidgetRenderer<T> ellpsisWithChevron(boolean open) {
