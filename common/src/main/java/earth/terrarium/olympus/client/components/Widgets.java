@@ -10,6 +10,8 @@ import earth.terrarium.olympus.client.constants.MinecraftColors;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import earth.terrarium.olympus.client.utils.State;
 import earth.terrarium.olympus.client.utils.StateUtils;
+import earth.terrarium.olympus.client.utils.Translatable;
+import earth.terrarium.olympus.client.utils.UIHelper;
 import net.minecraft.network.chat.Component;
 
 import java.util.List;
@@ -25,8 +27,7 @@ public final class Widgets {
     }
 
     public static Button button() {
-        return button(button -> {
-        });
+        return button(UIHelper.emptyConsumer());
     }
 
     public static Button toggle(State<Boolean> state, Consumer<Button> factory) {
@@ -42,8 +43,7 @@ public final class Widgets {
     }
 
     public static Button toggle(State<Boolean> state) {
-        return toggle(state, button -> {
-        });
+        return toggle(state, UIHelper.emptyConsumer());
     }
 
     public static <T> Button dropdown(DropdownState<T> state, List<T> options, Function<T, Component> optionText, Consumer<Button> factory, Consumer<DropdownBuilder<T>> builder) {
@@ -57,18 +57,37 @@ public final class Widgets {
         return dropdown.build();
     }
 
-    public static Button tristate(State<TriState> state, Consumer<Button> factory) {
+    public static <T extends Enum<?>> Button dropdown(DropdownState<T> state, Class<T> clazz, Consumer<DropdownBuilder<T>> dropdownFactory, Consumer<Button> buttonFactory) {
         return dropdown(
-                new DropdownState<>(null, state, false),
-                List.of(TriState.TRUE, TriState.FALSE, TriState.UNDEFINED),
-                tristate -> Component.literal(tristate.name().toLowerCase()),
-                factory,
-                dropdown -> {
-                }
+                state,
+                List.of(clazz.getEnumConstants()),
+                Translatable::toComponent,
+                buttonFactory,
+                dropdownFactory
         );
     }
 
-    public static Button tristate(State<TriState> state) {
+    public static <T extends Enum<?>> Button dropdown(DropdownState<T> state, Class<T> clazz) {
+        return dropdown(state, clazz, UIHelper.emptyConsumer(), UIHelper.emptyConsumer());
+    }
+
+    public static Button tristate(DropdownState<TriState> state, Consumer<Button> factory) {
+        return dropdown(
+                state,
+                List.of(TriState.TRUE, TriState.UNDEFINED, TriState.FALSE),
+                tristate -> switch (tristate) {
+                    case TRUE -> Component.translatable("olympus.ui.tristate.true");
+                    case FALSE -> Component.translatable("olympus.ui.tristate.false");
+                    case UNDEFINED -> Component.translatable("olympus.ui.tristate.undefined");
+                },
+                factory,
+                dropdown -> dropdown.withEntryRenderer(tristate -> WidgetRenderers.tristate(tristate)
+                        .withPadding(0, 4)
+                )
+        );
+    }
+
+    public static Button tristate(DropdownState<TriState> state) {
         return tristate(state, button -> {
         });
     }

@@ -5,13 +5,13 @@ import earth.terrarium.example.base.ExampleScreen;
 import earth.terrarium.example.base.OlympusExample;
 import earth.terrarium.olympus.client.components.Widgets;
 import earth.terrarium.olympus.client.components.base.BaseWidget;
-import earth.terrarium.olympus.client.utils.State;
+import earth.terrarium.olympus.client.components.dropdown.DropdownState;
 import net.minecraft.client.gui.layouts.FrameLayout;
 
 @OlympusExample(id = "tristate", description = "A simple tristate example")
 public class TristateExample extends ExampleScreen {
 
-    private final State<TriState> state = State.of(TriState.UNDEFINED);
+    private final DropdownState<TriState> state = DropdownState.of(TriState.UNDEFINED);
 
     @Override
     protected void init() {
