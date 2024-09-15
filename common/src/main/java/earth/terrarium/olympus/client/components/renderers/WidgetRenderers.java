@@ -1,9 +1,7 @@
 package earth.terrarium.olympus.client.components.renderers;
 
-import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;
-import earth.terrarium.olympus.client.constants.MinecraftColors;
 import earth.terrarium.olympus.client.ui.UIIcons;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.WidgetSprites;
@@ -64,28 +62,5 @@ public class WidgetRenderers {
 
     public static <T extends AbstractWidget> TextWithIconWidgetRenderer<T> ellpsisWithChevron(boolean open) {
         return textWithChevron(CommonComponents.ELLIPSIS, open);
-    }
-
-    public static <T extends AbstractWidget> TextWithIconWidgetRenderer<T> tristate(TriState state) {
-        Component text = switch (state) {
-            case TRUE -> Component.translatable("olympus.ui.tristate.true");
-            case FALSE -> Component.translatable("olympus.ui.tristate.false");
-            case UNDEFINED -> Component.translatable("olympus.ui.tristate.undefined");
-        };
-        ResourceLocation icon = switch (state) {
-            case TRUE -> UIIcons.CHECKMARK;
-            case FALSE -> UIIcons.CROSS;
-            case UNDEFINED -> UIIcons.DASH;
-        };
-        return WidgetRenderers.<T>textWithIcon(text, icon)
-                .withShadow()
-                .withTextLeftIconLeft()
-                .withIconSize(12)
-                .withGap(6)
-                .withColor(switch (state) {
-                    case TRUE -> MinecraftColors.GREEN;
-                    case FALSE -> MinecraftColors.RED;
-                    case UNDEFINED -> MinecraftColors.GRAY;
-                });
     }
 }

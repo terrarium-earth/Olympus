@@ -5,6 +5,7 @@ import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.buttons.Button;
 import earth.terrarium.olympus.client.components.dropdown.DropdownBuilder;
 import earth.terrarium.olympus.client.components.dropdown.DropdownState;
+import earth.terrarium.olympus.client.components.renderers.TristateRenderers;
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import earth.terrarium.olympus.client.constants.MinecraftColors;
 import earth.terrarium.olympus.client.ui.UIConstants;
@@ -75,15 +76,11 @@ public final class Widgets {
         return dropdown(
                 state,
                 List.of(TriState.TRUE, TriState.UNDEFINED, TriState.FALSE),
-                tristate -> switch (tristate) {
-                    case TRUE -> Component.translatable("olympus.ui.tristate.true");
-                    case FALSE -> Component.translatable("olympus.ui.tristate.false");
-                    case UNDEFINED -> Component.translatable("olympus.ui.tristate.undefined");
-                },
+                TristateRenderers::getText,
                 factory,
-                dropdown -> dropdown.withEntryRenderer(tristate -> WidgetRenderers.tristate(tristate)
-                        .withPadding(0, 4)
-                )
+                dropdown -> dropdown
+                        .withEntryRenderer(tristate -> TristateRenderers.iconWithText(tristate).withPadding(0, 4))
+                        .withSize(100, 150)
         );
     }
 
