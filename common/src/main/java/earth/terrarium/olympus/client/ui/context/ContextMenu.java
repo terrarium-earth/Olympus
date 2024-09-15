@@ -4,7 +4,7 @@ import com.mojang.blaze3d.platform.Window;
 import earth.terrarium.olympus.client.components.base.ListWidget;
 import earth.terrarium.olympus.client.components.Widgets;
 import earth.terrarium.olympus.client.components.dropdown.DropdownState;
-import earth.terrarium.olympus.client.components.dropdown.DropdownAlignment;
+import earth.terrarium.olympus.client.ui.OverlayAlignment;
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import earth.terrarium.olympus.client.constants.MinecraftColors;
 import earth.terrarium.olympus.client.ui.Overlay;
@@ -37,7 +37,7 @@ public class ContextMenu extends Overlay {
     private int maxWidth;
     private int maxHeight;
 
-    private DropdownAlignment alignment = null;
+    private OverlayAlignment alignment = null;
     private DropdownState<?> parent = null;
     private Runnable onClose = () -> {};
 
@@ -115,7 +115,7 @@ public class ContextMenu extends Overlay {
         return this;
     }
 
-    public ContextMenu withAlignment(DropdownAlignment side, DropdownState<?> parent) {
+    public ContextMenu withAlignment(OverlayAlignment side, DropdownState<?> parent) {
         this.alignment = side;
         this.parent = parent;
         return this;

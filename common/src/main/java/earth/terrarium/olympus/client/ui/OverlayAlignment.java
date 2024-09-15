@@ -1,9 +1,9 @@
-package earth.terrarium.olympus.client.components.dropdown;
+package earth.terrarium.olympus.client.ui;
 
 import net.minecraft.client.gui.components.AbstractWidget;
 import org.joml.Vector2i;
 
-public enum DropdownAlignment {
+public enum OverlayAlignment {
     TOP_LEFT,
     TOP_RIGHT,
     BOTTOM_LEFT,
@@ -12,15 +12,6 @@ public enum DropdownAlignment {
     LEFT_BOTTOM,
     RIGHT_TOP,
     RIGHT_BOTTOM;
-
-    /*
-    case TOP_LEFT -> new Vector2i(widget.left(), widget.top() - contextHeight);
-            case TOP_RIGHT -> new Vector2i(widget.right() - contextWidth, widget.top() - contextHeight);
-            case BOTTOM_LEFT -> new Vector2i(widget.left(), widget.bottom());
-            case BOTTOM_RIGHT -> new Vector2i(widget.right() - contextWidth, widget.bottom());
-            case LEFT -> new Vector2i(widget.left() - contextWidth, widget.top());
-            case RIGHT -> new Vector2i(widget.right(), widget.top());
-     */
 
     public Vector2i getPos(AbstractWidget widget, int contextWidth, int contextHeight) {
         return switch (this) {

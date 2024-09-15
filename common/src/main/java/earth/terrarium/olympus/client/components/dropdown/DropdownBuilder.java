@@ -4,6 +4,7 @@ import earth.terrarium.olympus.client.components.Widgets;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.buttons.Button;
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
+import earth.terrarium.olympus.client.ui.OverlayAlignment;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import earth.terrarium.olympus.client.ui.context.ContextMenu;
 import net.minecraft.client.gui.components.WidgetSprites;
@@ -19,7 +20,7 @@ public class DropdownBuilder<T> {
     private final DropdownState<T> state;
     private final List<T> options = new ArrayList<>();
 
-    private DropdownAlignment alignment = DropdownAlignment.BOTTOM_LEFT;
+    private OverlayAlignment alignment = OverlayAlignment.BOTTOM_LEFT;
     private ResourceLocation background = UIConstants.LIST_BG;
     private WidgetSprites entrySprites = UIConstants.LIST_ENTRY;
     private Function<T, WidgetRenderer<? super Button>> entryRenderer = t -> WidgetRenderers.text(CommonComponents.ELLIPSIS);
@@ -49,7 +50,7 @@ public class DropdownBuilder<T> {
         return this;
     }
 
-    public DropdownBuilder<T> withAlignment(DropdownAlignment alignment) {
+    public DropdownBuilder<T> withAlignment(OverlayAlignment alignment) {
         this.alignment = alignment;
         return this;
     }
