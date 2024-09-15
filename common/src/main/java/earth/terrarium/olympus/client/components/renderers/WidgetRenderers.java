@@ -80,7 +80,7 @@ public class WidgetRenderers {
         return WidgetRenderers.<T>textWithIcon(text, icon)
                 .withShadow()
                 .withTextLeftIconLeft()
-                .withIconSize(10)
+                .withIconSize(12)
                 .withGap(6)
                 .withColor(switch (state) {
                     case TRUE -> MinecraftColors.GREEN;
