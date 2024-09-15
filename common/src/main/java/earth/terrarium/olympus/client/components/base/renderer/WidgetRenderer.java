@@ -16,11 +16,15 @@ public interface WidgetRenderer<T extends AbstractWidget> {
     }
 
     default WidgetRenderer<T> withPadding(int vertical, int horizontal) {
-        return WidgetRenderers.padded(vertical, horizontal, vertical, vertical, this);
+        return WidgetRenderers.padded(vertical, horizontal, vertical, horizontal, this);
     }
 
     default WidgetRenderer<T> withPadding(int top, int right, int bottom, int left) {
         return WidgetRenderers.padded(top, right, bottom, left, this);
+    }
+
+    default WidgetRenderer<T> withCentered(int width, int height) {
+        return WidgetRenderers.center(width, height, this);
     }
 
     static <T extends AbstractWidget> WidgetRenderer<T> empty() {

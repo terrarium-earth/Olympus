@@ -6,7 +6,10 @@ import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import earth.terrarium.olympus.client.components.base.BaseWidget;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;
+import earth.terrarium.olympus.client.components.dropdown.DropdownBuilder;
+import earth.terrarium.olympus.client.components.dropdown.DropdownState;
 import earth.terrarium.olympus.client.ui.UIConstants;
+import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.WidgetSprites;
 import org.jetbrains.annotations.Nullable;
@@ -55,5 +58,15 @@ public class Button extends BaseWidget implements CursorWidget {
     public Button withTexture(@Nullable WidgetSprites sprites) {
         this.sprites = sprites;
         return this;
+    }
+
+    @Override
+    public Button withSize(int width, int height) {
+        return (Button) super.withSize(width, height);
+    }
+
+    public <T> DropdownBuilder<T> withDropdown(DropdownState<T> state) {
+        state.setButton(this);
+        return new DropdownBuilder<>(state);
     }
 }

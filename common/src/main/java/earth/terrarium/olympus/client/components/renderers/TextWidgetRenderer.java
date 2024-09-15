@@ -20,6 +20,8 @@ public class TextWidgetRenderer<T extends AbstractWidget> implements WidgetRende
     private Color color = MinecraftColors.DARK_GRAY;
     private boolean drawShadow = false;
 
+    private float alignX = 0.5f;
+
     TextWidgetRenderer(Component text) {
         this.text = text;
     }
@@ -27,10 +29,10 @@ public class TextWidgetRenderer<T extends AbstractWidget> implements WidgetRende
     @Override
     public void render(GuiGraphics graphics, WidgetRendererContext<T> context, float partialTick) {
         int textWidth = this.font.width(this.text);
-        int centerX = context.getX() + context.getWidth() / 2;
         int centerY = context.getY() + context.getHeight() / 2 - font.lineHeight / 2 - 1;
         double seconds = (double) Util.getMillis() / 1000.0;
         if (textWidth > context.getWidth()) {
+            int centerX = context.getX() + context.getWidth() / 2;
             int overhang = textWidth - context.getWidth();
             double e = Math.max((double) overhang * 0.5, 3.0);
             double f = Math.sin(Mth.HALF_PI * Math.cos(Mth.TWO_PI * seconds / e)) / 2.0 + 0.5;
@@ -39,7 +41,8 @@ public class TextWidgetRenderer<T extends AbstractWidget> implements WidgetRende
             graphics.drawString(this.font, this.text, context.getX() - (int) g, centerY, UIHelper.getEnsureAlpha(color), this.drawShadow);
             graphics.disableScissor();
         } else {
-            graphics.drawString(this.font, this.text, centerX - textWidth / 2, centerY, UIHelper.getEnsureAlpha(color), this.drawShadow);
+            int centerX = context.getX() + Math.round(context.getWidth() * alignX);
+            graphics.drawString(this.font, this.text, centerX - Math.round(textWidth * alignX), centerY, UIHelper.getEnsureAlpha(color), this.drawShadow);
         }
     }
 
@@ -55,6 +58,26 @@ public class TextWidgetRenderer<T extends AbstractWidget> implements WidgetRende
 
     public TextWidgetRenderer<T> withFont(Font font) {
         this.font = font;
+        return this;
+    }
+
+    public TextWidgetRenderer<T> withAlignment(float alignX) {
+        this.alignX = alignX;
+        return this;
+    }
+
+    public TextWidgetRenderer<T> withLeftAlignment() {
+        this.alignX = 0;
+        return this;
+    }
+
+    public TextWidgetRenderer<T> withCenterAlignment() {
+        this.alignX = 0.5f;
+        return this;
+    }
+
+    public TextWidgetRenderer<T> withRightAlignment() {
+        this.alignX = 1;
         return this;
     }
 }

@@ -1,6 +1,10 @@
 package earth.terrarium.olympus.client.utils;
 
+import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
+import net.minecraft.client.gui.components.AbstractWidget;
+
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public interface State<T> extends Consumer<T>, Supplier<T> {
@@ -14,6 +18,10 @@ public interface State<T> extends Consumer<T>, Supplier<T> {
 
     @Override
     T get();
+
+    default <W extends AbstractWidget> WidgetRenderer<W> withRenderer(Function<T, WidgetRenderer<W>> factory) {
+        return (graphics, context, partialTick) -> factory.apply(get()).render(graphics, context, partialTick);
+    }
 
     static <T> State<T> of(T initial) {
         return new State<>() {

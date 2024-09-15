@@ -2,10 +2,17 @@ package earth.terrarium.olympus.client.components.renderers;
 
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;
+import earth.terrarium.olympus.client.components.dropdown.DropdownState;
+import earth.terrarium.olympus.client.ui.UIIcons;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.function.BiFunction;
 
 public class WidgetRenderers {
 
@@ -47,5 +54,19 @@ public class WidgetRenderers {
 
     public static <T extends AbstractWidget> TextWidgetRenderer<T> text(Component text) {
         return new TextWidgetRenderer<>(text);
+    }
+
+    public static <T extends AbstractWidget> TextWithIconWidgetRenderer<T> textWithIcon(Component text, ResourceLocation icon) {
+        return new TextWithIconWidgetRenderer<>(text(text), icon(icon));
+    }
+
+    public static <T extends AbstractWidget> TextWithIconWidgetRenderer<T> textWithChevron(Component text, boolean open) {
+        TextWithIconWidgetRenderer<T> renderer = textWithIcon(text, open ? UIIcons.CHEVRON_DOWN : UIIcons.CHEVRON_UP);
+        renderer.withTextLeftIconLeft();
+        return renderer;
+    }
+
+    public static <T extends AbstractWidget> TextWithIconWidgetRenderer<T> ellpsisWithChevron(boolean open) {
+        return textWithChevron(CommonComponents.ELLIPSIS, open);
     }
 }

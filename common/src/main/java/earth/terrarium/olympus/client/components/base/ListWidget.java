@@ -48,7 +48,7 @@ public class ListWidget extends BaseParentWidget {
     }
 
     @Override
-    protected void clear() {
+    public void clear() {
         super.clear();
         this.items.clear();
     }
@@ -65,7 +65,7 @@ public class ListWidget extends BaseParentWidget {
     }
 
     @Override
-    public @NotNull List<? extends GuiEventListener> children() {
+    public @NotNull List<AbstractWidget> children() {
         return items;
     }
 
