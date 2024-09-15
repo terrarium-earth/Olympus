@@ -76,7 +76,7 @@ public class DropdownBuilder<T> {
         return this;
     }
 
-    public DropdownBuilder<T> onSelection(Consumer<T> action) {
+    public DropdownBuilder<T> withCallback(Consumer<T> action) {
         this.action = action;
         return this;
     }
