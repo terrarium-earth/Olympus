@@ -126,7 +126,7 @@ public class ContextMenu extends Overlay {
         return this;
     }
 
-    public ContextMenu onClose(Runnable onClose) {
+    public ContextMenu withCloseCallback(Runnable onClose) {
         this.onClose = onClose;
         return this;
     }
