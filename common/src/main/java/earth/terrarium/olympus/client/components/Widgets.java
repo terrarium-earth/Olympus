@@ -1,10 +1,11 @@
 package earth.terrarium.olympus.client.components;
 
+import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
+import earth.terrarium.olympus.client.components.buttons.Button;
 import earth.terrarium.olympus.client.components.dropdown.DropdownBuilder;
 import earth.terrarium.olympus.client.components.dropdown.DropdownState;
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
-import earth.terrarium.olympus.client.components.buttons.Button;
 import earth.terrarium.olympus.client.constants.MinecraftColors;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import earth.terrarium.olympus.client.utils.State;
@@ -54,5 +55,21 @@ public final class Widgets {
 
         builder.accept(dropdown);
         return dropdown.build();
+    }
+
+    public static Button tristate(State<TriState> state, Consumer<Button> factory) {
+        return dropdown(
+                new DropdownState<>(null, state, false),
+                List.of(TriState.TRUE, TriState.FALSE, TriState.UNDEFINED),
+                tristate -> Component.literal(tristate.name().toLowerCase()),
+                factory,
+                dropdown -> {
+                }
+        );
+    }
+
+    public static Button tristate(State<TriState> state) {
+        return tristate(state, button -> {
+        });
     }
 }

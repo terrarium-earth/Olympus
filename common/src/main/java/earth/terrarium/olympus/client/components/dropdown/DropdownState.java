@@ -10,30 +10,27 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.BiFunction;
 
 public class DropdownState<T> implements State<T> {
+
+    private final State<T> state;
     private Button button;
-    private T state;
     private boolean openState;
 
-    public DropdownState(Button button, T state, boolean openState) {
+    public DropdownState(Button button, State<T> state, boolean openState) {
         this.button = button;
         this.state = state;
         this.openState = openState;
     }
 
-    public DropdownState(T state) {
-        this(null, state, false);
-    }
-
     public static <T> DropdownState<T> of(T state) {
-        return new DropdownState<>(state);
+        return new DropdownState<>(null, State.of(state), false);
     }
 
     public static <T> DropdownState<T> empty() {
-        return new DropdownState<>(null);
+        return DropdownState.of(null);
     }
 
     public <W extends AbstractWidget> WidgetRenderer<W> withRenderer(BiFunction<@Nullable T, Boolean, @NotNull WidgetRenderer<W>> text) {
-        return (graphics, context, partialTick) -> text.apply(this.state, this.openState).render(graphics, context, partialTick);
+        return (graphics, context, partialTick) -> text.apply(this.get(), this.openState).render(graphics, context, partialTick);
     }
 
     public Button getButton() {
@@ -54,11 +51,11 @@ public class DropdownState<T> implements State<T> {
 
     @Override
     public void set(T value) {
-        this.state = value;
+        this.state.set(value);
     }
 
     @Override
     public T get() {
-        return state;
+        return this.state.get();
     }
 }

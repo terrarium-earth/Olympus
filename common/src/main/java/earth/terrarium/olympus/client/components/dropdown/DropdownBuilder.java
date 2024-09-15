@@ -26,13 +26,12 @@ public class DropdownBuilder<T> {
     private Function<T, WidgetRenderer<? super Button>> entryRenderer = t -> WidgetRenderers.text(CommonComponents.ELLIPSIS);
     private Consumer<T> action = t -> {};
 
-    private int width;
+    private int width = -1;
     private int height = 150;
     private int entryHeight = 20;
 
     public DropdownBuilder(DropdownState<T> state) {
         this.state = state;
-        this.width = state.getButton().getWidth();
     }
 
     public DropdownBuilder<T> withOptions(List<T> options) {
@@ -83,18 +82,19 @@ public class DropdownBuilder<T> {
 
     public Button build() {
         return state.getButton().withCallback(() -> {
+            int entryWidth = width == -1 ? state.getButton().getWidth() : width;
             state.setOpened(true);
             ContextMenu.open(ctx -> {
-                ctx.withBounds(width, height)
+                ctx.withBounds(entryWidth, height)
                         .withAlignment(alignment, state)
                         .withTexture(background)
-                        .onClose(() -> state.setOpened(false));
+                        .withCloseCallback(() -> state.setOpened(false));
 
                 for (T option : options) {
                     ctx.add(() -> Widgets.button()
                             .withTexture(entrySprites)
                             .withRenderer(entryRenderer.apply(option))
-                            .withSize(width, entryHeight)
+                            .withSize(entryWidth, entryHeight)
                             .withCallback(() -> {
                                 state.set(option);
                                 action.accept(option);
