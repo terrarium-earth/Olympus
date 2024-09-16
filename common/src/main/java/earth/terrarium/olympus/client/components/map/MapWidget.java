@@ -4,6 +4,7 @@ import com.mojang.math.Axis;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import earth.terrarium.olympus.client.components.base.BaseWidget;
 import earth.terrarium.olympus.client.ui.UIConstants;
+import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
@@ -15,17 +16,23 @@ public class MapWidget extends BaseWidget {
     private static final ResourceLocation MAP_ICONS = ResourceLocation.withDefaultNamespace("textures/map/decorations/player.png");
 
     private final int scale;
-    private MapRenderer mapRenderer;
+    private final State<MapRenderer> mapRenderer;
+    private ResourceLocation texture = UIConstants.MODAL_INSET;
 
-    public MapWidget(int size, int scale) {
+    public static State<MapRenderer> emptyState() {
+        return State.of(null);
+    }
+
+    public MapWidget(State<MapRenderer> state, int size, int scale) {
         super(size, size);
         this.scale = scale;
+        this.mapRenderer = state;
         this.refreshMap();
     }
 
-    public static MapWidget create(int size) {
+    public static MapWidget create(State<MapRenderer> state, int size) {
         int scale = Minecraft.getInstance().options.renderDistance().get() * 8;
-        return new MapWidget(size, (scale - scale % 16));
+        return new MapWidget(state, size, (scale - scale % 16));
     }
 
     private void renderLoading(GuiGraphics graphics) {
@@ -33,14 +40,23 @@ public class MapWidget extends BaseWidget {
         graphics.drawCenteredString(font, UIConstants.LOADING, (int) (getX() + getWidth() / 2f), (int) (getY() + getHeight() / 2f), 0xFFFFFF);
     }
 
+    public MapWidget withTexture(ResourceLocation texture) {
+        this.texture = texture;
+        return this;
+    }
+
     @Override
     protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        if (mapRenderer == null) {
+        graphics.blitSprite(this.texture, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+
+        if (mapRenderer.get() == null) {
             this.renderLoading(graphics);
         } else {
             var player = Minecraft.getInstance().player;
             if (player == null) return;
-            mapRenderer.render(graphics, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+
+            mapRenderer.get().render(graphics, this.getX() + 1, this.getY() + 1, this.getWidth() - 2, this.getHeight() - 2);
+
             try (var pose = new CloseablePoseStack(graphics)) {
                 pose.translate(0f, 0f, 2f);
                 this.renderPlayerAvatar(player, graphics);
@@ -61,10 +77,10 @@ public class MapWidget extends BaseWidget {
         if (scale / 8 > 12) {
             // If the render distance is greater than 12 chunks, run asynchronously to avoid stuttering.
             CompletableFuture.supplyAsync(() -> MapTopologyAlgorithm.getColors(minX, minZ, maxX, maxZ, player.clientLevel, player)).thenAcceptAsync(colors ->
-                    this.mapRenderer = new MapRenderer(colors, scale * 2 + 16), Minecraft.getInstance());
+                    this.mapRenderer.set(new MapRenderer(colors, scale * 2 + 16)), Minecraft.getInstance());
         } else {
             int[][] colors = MapTopologyAlgorithm.getColors(minX, minZ, maxX, maxZ, player.clientLevel, player);
-            this.mapRenderer = new MapRenderer(colors, scale * 2 + 16);
+            this.mapRenderer.set(new MapRenderer(colors, scale * 2 + 16));
         }
     }
 
