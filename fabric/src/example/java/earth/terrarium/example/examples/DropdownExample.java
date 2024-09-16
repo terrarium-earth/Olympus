@@ -25,14 +25,14 @@ public class DropdownExample extends ExampleScreen {
     public final HashMap<OverlayAlignment, DropdownState<Color>> states = new HashMap<>();
 
     public DropdownExample() {
-        states.put(OverlayAlignment.BOTTOM_RIGHT, new DropdownState<>(MinecraftColors.RED));
-        states.put(OverlayAlignment.TOP_RIGHT, new DropdownState<>(MinecraftColors.RED));
-        states.put(OverlayAlignment.TOP_LEFT, new DropdownState<>(MinecraftColors.RED));
-        states.put(OverlayAlignment.BOTTOM_LEFT, new DropdownState<>(MinecraftColors.RED));
-        states.put(OverlayAlignment.RIGHT_TOP, new DropdownState<>(MinecraftColors.RED));
-        states.put(OverlayAlignment.RIGHT_BOTTOM, new DropdownState<>(MinecraftColors.RED));
-        states.put(OverlayAlignment.LEFT_TOP, new DropdownState<>(MinecraftColors.RED));
-        states.put(OverlayAlignment.LEFT_BOTTOM, new DropdownState<>(MinecraftColors.RED));
+        states.put(OverlayAlignment.BOTTOM_RIGHT, DropdownState.of(MinecraftColors.RED));
+        states.put(OverlayAlignment.TOP_RIGHT, DropdownState.of(MinecraftColors.RED));
+        states.put(OverlayAlignment.TOP_LEFT, DropdownState.of(MinecraftColors.RED));
+        states.put(OverlayAlignment.BOTTOM_LEFT, DropdownState.of(MinecraftColors.RED));
+        states.put(OverlayAlignment.RIGHT_TOP, DropdownState.of(MinecraftColors.RED));
+        states.put(OverlayAlignment.RIGHT_BOTTOM, DropdownState.of(MinecraftColors.RED));
+        states.put(OverlayAlignment.LEFT_TOP, DropdownState.of(MinecraftColors.RED));
+        states.put(OverlayAlignment.LEFT_BOTTOM, DropdownState.of(MinecraftColors.RED));
     }
 
     @Override

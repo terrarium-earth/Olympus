@@ -29,10 +29,9 @@ public class TextWidgetRenderer<T extends AbstractWidget> implements WidgetRende
     @Override
     public void render(GuiGraphics graphics, WidgetRendererContext<T> context, float partialTick) {
         int textWidth = this.font.width(this.text);
-        int centerY = context.getY() + context.getHeight() / 2 - font.lineHeight / 2 - 1;
+        int centerY = context.getY() + context.getHeight() / 2 - font.lineHeight / 2;
         double seconds = (double) Util.getMillis() / 1000.0;
         if (textWidth > context.getWidth()) {
-            int centerX = context.getX() + context.getWidth() / 2;
             int overhang = textWidth - context.getWidth();
             double e = Math.max((double) overhang * 0.5, 3.0);
             double f = Math.sin(Mth.HALF_PI * Math.cos(Mth.TWO_PI * seconds / e)) / 2.0 + 0.5;

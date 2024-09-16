@@ -40,6 +40,9 @@ public class ContextMenu extends Overlay {
     private OverlayAlignment alignment = null;
     private DropdownState<?> parent = null;
     private Runnable onClose = () -> {};
+    private boolean autoClose = true;
+
+    private ListWidget list;
 
     protected ContextMenu(Screen background, int x, int y) {
         super(background);
@@ -57,8 +60,8 @@ public class ContextMenu extends Overlay {
         this.contextWidth = maxWidth > 0 ? Math.min(maxWidth, contentWidth + 4) : contentWidth + 4;
         this.contextHeight = maxHeight > 0 ? Math.min(maxHeight, contentHeight + 3) : contentHeight + 3;
 
-        var layout = new ListWidget(contextWidth - 3, contextHeight - 3 - (maxHeight > 0 ? 1 : 0));
-        layout.set(currentActions);
+        this.list = new ListWidget(contextWidth - 3, contextHeight - 3 - (maxHeight < contentHeight ? 1 : 0));
+        this.list.set(currentActions);
 
         if (this.alignment != null && this.parent != null) {
             var pos = this.alignment.getPos(parent.getButton(), this.contextWidth, this.contextHeight);
@@ -73,8 +76,8 @@ public class ContextMenu extends Overlay {
             }
         }
 
-        layout.setPosition(this.x + 1, this.y + 2);
-        this.addRenderableWidget(layout);
+        this.list.setPosition(this.x + 1, this.y + 2);
+        this.addRenderableWidget(this.list);
     }
 
     public ContextMenu add(Supplier<AbstractWidget> action) {
@@ -109,6 +112,10 @@ public class ContextMenu extends Overlay {
         );
     }
 
+    public ContextMenu divider() {
+        return this.add(DividerWidget::new);
+    }
+
     public ContextMenu withBounds(int x, int y) {
         this.maxWidth = x;
         this.maxHeight = y;
@@ -131,8 +138,9 @@ public class ContextMenu extends Overlay {
         return this;
     }
 
-    public ContextMenu divider() {
-        return this.add(DividerWidget::new);
+    public ContextMenu withAutoCloseOff() {
+        this.autoClose = false;
+        return this;
     }
 
     @Override
@@ -143,8 +151,14 @@ public class ContextMenu extends Overlay {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        this.onClose();
         super.mouseClicked(mouseX, mouseY, button);
+        if (this.list.isMouseOver(mouseX, mouseY)) {
+            if (!this.list.isScrolling() && this.autoClose) {
+                this.onClose();
+            }
+        } else {
+            this.onClose();
+        }
         return true;
     }
 

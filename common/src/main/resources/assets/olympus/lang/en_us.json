@@ -3,5 +3,9 @@
     "olympus.ui.delete": "Delete",
     "olympus.ui.cancel": "Cancel",
     "olympus.ui.refresh": "Refresh",
-    "olympus.ui.loading": "Loading..."
+    "olympus.ui.loading": "Loading...",
+
+    "olympus.ui.tristate.true": "True",
+    "olympus.ui.tristate.false": "False",
+    "olympus.ui.tristate.undefined": "Undefined"
 }
