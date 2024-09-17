@@ -60,6 +60,10 @@ public class MapWidget extends BaseWidget {
         if (mapRenderer.get() == null) {
             this.renderLoading(graphics);
         } else {
+            if (mapRenderer.get().getScale() != this.scale) {
+                this.refreshMap();
+            }
+
             var player = Minecraft.getInstance().player;
             if (player == null) return;
 
