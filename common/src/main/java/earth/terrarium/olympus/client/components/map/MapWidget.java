@@ -115,9 +115,4 @@ public class MapWidget extends BaseWidget {
             graphics.blit(MAP_ICONS, 0, 0, 0f, 0f, 8, 8, 8, 8);
         }
     }
-
-    @Override
-    public CursorScreen.Cursor getCursor() {
-        return super.getCursor();
-    }
 }
