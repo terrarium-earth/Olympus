@@ -39,4 +39,8 @@ public interface State<T> extends Consumer<T>, Supplier<T> {
             }
         };
     }
+
+    static <T> State<T> empty() {
+        return of(null);
+    }
 }
