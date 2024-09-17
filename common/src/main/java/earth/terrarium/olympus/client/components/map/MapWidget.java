@@ -2,6 +2,7 @@ package earth.terrarium.olympus.client.components.map;
 
 import com.mojang.math.Axis;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
+import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import earth.terrarium.olympus.client.components.base.BaseWidget;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import earth.terrarium.olympus.client.utils.State;
@@ -15,24 +16,19 @@ import java.util.concurrent.CompletableFuture;
 public class MapWidget extends BaseWidget {
     private static final ResourceLocation MAP_ICONS = ResourceLocation.withDefaultNamespace("textures/map/decorations/player.png");
 
-    private final int scale;
     private final State<MapRenderer> mapRenderer;
+
+    private int scale;
+    private boolean initialized = false;
     private ResourceLocation texture = UIConstants.MODAL_INSET;
 
     public static State<MapRenderer> emptyState() {
         return State.of(null);
     }
 
-    public MapWidget(State<MapRenderer> state, int size, int scale) {
-        super(size, size);
-        this.scale = scale;
+    public MapWidget(State<MapRenderer> state) {
+        super();
         this.mapRenderer = state;
-        this.refreshMap();
-    }
-
-    public static MapWidget create(State<MapRenderer> state, int size) {
-        int scale = Minecraft.getInstance().options.renderDistance().get() * 8;
-        return new MapWidget(state, size, (scale - scale % 16));
     }
 
     private void renderLoading(GuiGraphics graphics) {
@@ -45,9 +41,25 @@ public class MapWidget extends BaseWidget {
         return this;
     }
 
+    public MapWidget withScale(int scale) {
+        this.scale = scale;
+        return this;
+    }
+
+    public MapWidget withRenderDistanceScale() {
+        this.scale = Minecraft.getInstance().options.renderDistance().get() * 8;
+        this.scale -= this.scale % 16;
+        return this;
+    }
+
     @Override
     protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         graphics.blitSprite(this.texture, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+
+        if (!initialized) {
+            this.refreshMap();
+            initialized = true;
+        }
 
         if (mapRenderer.get() == null) {
             this.renderLoading(graphics);
@@ -102,5 +114,10 @@ public class MapWidget extends BaseWidget {
             pose.translate(-4f, -4f, 0f);
             graphics.blit(MAP_ICONS, 0, 0, 0f, 0f, 8, 8, 8, 8);
         }
+    }
+
+    @Override
+    public CursorScreen.Cursor getCursor() {
+        return super.getCursor();
     }
 }

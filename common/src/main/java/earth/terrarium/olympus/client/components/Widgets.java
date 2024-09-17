@@ -5,6 +5,8 @@ import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.buttons.Button;
 import earth.terrarium.olympus.client.components.dropdown.DropdownBuilder;
 import earth.terrarium.olympus.client.components.dropdown.DropdownState;
+import earth.terrarium.olympus.client.components.map.MapRenderer;
+import earth.terrarium.olympus.client.components.map.MapWidget;
 import earth.terrarium.olympus.client.components.renderers.TristateRenderers;
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import earth.terrarium.olympus.client.constants.MinecraftColors;
@@ -87,5 +89,15 @@ public final class Widgets {
     public static Button tristate(DropdownState<TriState> state) {
         return tristate(state, button -> {
         });
+    }
+
+    public static MapWidget map(State<MapRenderer> state, Consumer<MapWidget> factory) {
+        var map = new MapWidget(state).withRenderDistanceScale();
+        factory.accept(map);
+        return map;
+    }
+
+    public static MapWidget map(State<MapRenderer> state) {
+        return map(state, map -> {});
     }
 }

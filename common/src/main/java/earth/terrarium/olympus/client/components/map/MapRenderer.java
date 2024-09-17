@@ -1,7 +1,10 @@
 package earth.terrarium.olympus.client.components.map;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.BufferUploader;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -11,12 +14,14 @@ import net.minecraft.resources.ResourceLocation;
 
 public class MapRenderer {
     private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("olympus","claimmaptextures");
+    private final int scale;
 
     public MapRenderer(int[][] colors, int scale) {
         var textureManager = Minecraft.getInstance().getTextureManager();
         var dynamicTexture = new DynamicTexture(scale, scale, true);
         textureManager.register(TEXTURE, dynamicTexture);
         updateTexture(dynamicTexture, colors, scale);
+        this.scale = scale;
     }
 
     private void updateTexture(DynamicTexture texture, int[][] colors, int scale) {
@@ -30,6 +35,10 @@ public class MapRenderer {
         }
 
         texture.upload();
+    }
+
+    public int getScale() {
+        return scale;
     }
 
     public void render(GuiGraphics graphics, int x, int y, int width, int height) {

@@ -1,7 +1,6 @@
 package earth.terrarium.olympus.client.components.textbox.autocomplete;
 
 import earth.terrarium.olympus.client.components.base.BaseWidget;
-import earth.terrarium.olympus.client.components.base.ListWidget;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;

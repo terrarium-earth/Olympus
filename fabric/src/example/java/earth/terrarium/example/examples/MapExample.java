@@ -2,6 +2,7 @@ package earth.terrarium.example.examples;
 
 import earth.terrarium.example.base.ExampleScreen;
 import earth.terrarium.example.base.OlympusExample;
+import earth.terrarium.olympus.client.components.Widgets;
 import earth.terrarium.olympus.client.components.map.MapRenderer;
 import earth.terrarium.olympus.client.components.map.MapWidget;
 import earth.terrarium.olympus.client.utils.State;
@@ -13,7 +14,7 @@ public class MapExample extends ExampleScreen {
 
     @Override
     protected void init() {
-        var map = MapWidget.create(mapState, 100);
+        var map = Widgets.map(mapState, widget -> widget.withSize(128));
         FrameLayout.centerInRectangle(map, 0, 0, this.width, this.height);
         this.addRenderableWidget(map);
     }

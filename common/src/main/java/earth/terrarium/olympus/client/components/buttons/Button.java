@@ -9,7 +9,6 @@ import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererCon
 import earth.terrarium.olympus.client.components.dropdown.DropdownBuilder;
 import earth.terrarium.olympus.client.components.dropdown.DropdownState;
 import earth.terrarium.olympus.client.ui.UIConstants;
-import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.WidgetSprites;
 import org.jetbrains.annotations.Nullable;

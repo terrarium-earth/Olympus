@@ -31,6 +31,12 @@ public abstract class BaseWidget extends AbstractWidget implements CursorWidget 
         return this;
     }
 
+    public BaseWidget withSize(int size) {
+        this.setWidth(size);
+        this.setHeight(size);
+        return this;
+    }
+
     public BaseWidget withPosition(int x, int y) {
         this.setPosition(x, y);
         return this;
