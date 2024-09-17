@@ -10,7 +10,7 @@ import net.minecraft.client.gui.layouts.FrameLayout;
 
 @OlympusExample(id = "maps", description = "A simple example of using maps")
 public class MapExample extends ExampleScreen {
-    public State<MapRenderer> mapState = MapWidget.emptyState();
+    public State<MapRenderer> mapState = State.empty();
 
     @Override
     protected void init() {

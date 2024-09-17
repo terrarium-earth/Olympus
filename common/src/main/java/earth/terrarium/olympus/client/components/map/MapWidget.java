@@ -22,10 +22,6 @@ public class MapWidget extends BaseWidget {
     private boolean initialized = false;
     private ResourceLocation texture = UIConstants.MODAL_INSET;
 
-    public static State<MapRenderer> emptyState() {
-        return State.of(null);
-    }
-
     public MapWidget(State<MapRenderer> state) {
         super();
         this.mapRenderer = state;
