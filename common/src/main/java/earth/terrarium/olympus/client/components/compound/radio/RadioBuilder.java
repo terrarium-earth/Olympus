@@ -2,12 +2,12 @@ package earth.terrarium.olympus.client.components.compound.radio;
 
 import earth.terrarium.olympus.client.components.Widgets;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
-import earth.terrarium.olympus.client.components.buttons.Button;
+import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;
 import earth.terrarium.olympus.client.components.compound.CompoundWidget;
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import earth.terrarium.olympus.client.layouts.Layouts;
 import earth.terrarium.olympus.client.ui.UIConstants;
-import earth.terrarium.olympus.client.utils.State;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.CommonComponents;
 
@@ -20,13 +20,15 @@ import java.util.function.Function;
 public class RadioBuilder<T> {
     private final List<T> options = new ArrayList<>();
     private final RadioState<T> state;
-    private BiFunction<T, Boolean, WidgetRenderer<Button>> entryRenderer = (t, ignored) -> WidgetRenderers.text(CommonComponents.ELLIPSIS);
-    private BiFunction<T, Boolean, WidgetSprites> entrySprites = (t, ignored) -> UIConstants.BUTTON;
+    private BiFunction<T, Boolean, WidgetRenderer<AbstractWidget>> entryRenderer = (ignored, depressed) -> WidgetRenderers.text(CommonComponents.ELLIPSIS);
+    private Function<T, WidgetSprites> entrySprites = (ignored) -> UIConstants.BUTTON;
     private Consumer<T> action = t -> {};
 
     private int width = 120;
     private int height = 20;
     private int gap = 0;
+
+    private boolean preventDeselection = false;
 
     public RadioBuilder(RadioState<T> state) {
         this.state = state;
@@ -42,22 +44,22 @@ public class RadioBuilder<T> {
         return this;
     }
 
-    public RadioBuilder<T> withRenderer(BiFunction<T, Boolean, WidgetRenderer<Button>> renderer) {
+    public RadioBuilder<T> withRenderer(BiFunction<T, Boolean, WidgetRenderer<AbstractWidget>> renderer) {
         this.entryRenderer = renderer;
         return this;
     }
 
-    public RadioBuilder<T> withEntrySprites(WidgetSprites sprites, WidgetSprites depressedSprites) {
-        this.entrySprites = (ignored, depressed) -> depressed ? depressedSprites : sprites;
+    public RadioBuilder<T> withoutEntrySprites() {
+        this.entrySprites = (ignored) -> null;
         return this;
     }
 
     public RadioBuilder<T> withEntrySprites(WidgetSprites sprites) {
-        this.entrySprites = (ignored, depressed) -> sprites;
+        this.entrySprites = (ignored) -> sprites;
         return this;
     }
 
-    public RadioBuilder<T> withEntrySprites(BiFunction<T, Boolean, WidgetSprites> sprites) {
+    public RadioBuilder<T> withEntrySprites(Function<T, WidgetSprites> sprites) {
         this.entrySprites = sprites;
         return this;
     }
@@ -81,20 +83,23 @@ public class RadioBuilder<T> {
                 int finalIndex = index;
                 var button = Widgets.button()
                         .withSize((width - gap * (options.size() - 1)) / options.size(), height)
-                        .withRenderer((graphics, widget, partialTick) -> entryRenderer.apply(option, state.getIndex() == finalIndex).render(graphics, widget, partialTick))
-                        .withTexture(entrySprites.apply(option, state.getIndex() == index));
-                button.withCallback(() -> {
-                    if (state.getIndex() != finalIndex) {
-                        state.setIndex(finalIndex);
-                        state.set(option);
-                        action.accept(option);
-                    } else {
-                        state.setIndex(-1);
-                        state.set(null);
-                        action.accept(null);
-                    }
-                    button.withTexture(entrySprites.apply(option, state.getIndex() == finalIndex));
-                });
+                        .withRenderer((graphics, widget, partialTick) -> {
+                            WidgetRenderer<AbstractWidget> apply = entryRenderer.apply(option, state.getIndex() == finalIndex);
+                            WidgetRendererContext<AbstractWidget> context = new WidgetRendererContext<AbstractWidget>(widget.getWidget(), widget.getMouseX(), widget.getMouseY()).setWidth(widget.getWidth()).setHeight(widget.getHeight());
+                            apply.render(graphics, context, partialTick);
+                        })
+                        .withTexture(entrySprites.apply(option))
+                        .withCallback(() -> {
+                            if (state.getIndex() != finalIndex) {
+                                state.setIndex(finalIndex);
+                                state.set(option);
+                                action.accept(option);
+                            } else if (!preventDeselection) {
+                                state.setIndex(-1);
+                                state.set(null);
+                                action.accept(null);
+                            }
+                        });
                 radioGroup.withChild(button);
             }
             layout.addChild(radioGroup);

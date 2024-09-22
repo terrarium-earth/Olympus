@@ -28,6 +28,7 @@ public class CompoundWidget extends BaseWidget implements ContainerEventHandler 
     public CompoundWidget withContents(Consumer<FrameLayout> consumer) {
         consumer.accept(layout);
         layout.visitWidgets(widgets::add);
+        layout.arrangeElements();
         return this;
     }
 
@@ -73,12 +74,12 @@ public class CompoundWidget extends BaseWidget implements ContainerEventHandler 
     }
 
     @Override
-    public int getHeight() {
+    public int getWidth() {
         return layout.getWidth();
     }
 
     @Override
-    public int getWidth() {
+    public int getHeight() {
         return layout.getHeight();
     }
 
@@ -92,6 +93,21 @@ public class CompoundWidget extends BaseWidget implements ContainerEventHandler 
     public void setY(int y) {
         super.setY(y);
         layout.setY(y);
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        return ContainerEventHandler.super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        return ContainerEventHandler.super.mouseReleased(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
+        return ContainerEventHandler.super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
     }
 
     @Override
