@@ -3,6 +3,9 @@ package earth.terrarium.olympus.client.components;
 import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.buttons.Button;
+import earth.terrarium.olympus.client.components.compound.CompoundWidget;
+import earth.terrarium.olympus.client.components.compound.radio.RadioBuilder;
+import earth.terrarium.olympus.client.components.compound.radio.RadioState;
 import earth.terrarium.olympus.client.components.dropdown.DropdownBuilder;
 import earth.terrarium.olympus.client.components.dropdown.DropdownState;
 import earth.terrarium.olympus.client.components.map.MapRenderer;
@@ -99,5 +102,12 @@ public final class Widgets {
 
     public static MapWidget map(State<MapRenderer> state) {
         return map(state, map -> {});
+    }
+
+    public static <T> CompoundWidget radio(RadioState<T> state, Consumer<RadioBuilder<T>> builder, Consumer<CompoundWidget> factory) {
+        RadioBuilder<T> radioBuilder = new RadioBuilder<>(state);
+        builder.accept(radioBuilder);
+        factory.accept(radioBuilder.build());
+        return radioBuilder.build();
     }
 }
