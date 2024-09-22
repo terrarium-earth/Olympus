@@ -101,11 +101,28 @@ public final class Widgets {
     }
 
     public static MapWidget map(State<MapRenderer> state) {
-        return map(state, map -> {});
+        return map(state, map -> {
+        });
     }
 
     public static <T> CompoundWidget radio(RadioState<T> state, Consumer<RadioBuilder<T>> builder, Consumer<CompoundWidget> factory) {
         RadioBuilder<T> radioBuilder = new RadioBuilder<>(state);
+        builder.accept(radioBuilder);
+        factory.accept(radioBuilder.build());
+        return radioBuilder.build();
+    }
+
+    public static CompoundWidget tristateRadio(RadioState<TriState> state, Consumer<RadioBuilder<TriState>> builder, Consumer<CompoundWidget> factory) {
+        RadioBuilder<TriState> radioBuilder = new RadioBuilder<>(state);
+        radioBuilder.withoutEntrySprites()
+                .withRenderer((triState, depressed) -> WidgetRenderers.layered(
+                        WidgetRenderers.sprite(depressed ? TristateRenderers.getSprites(triState) : UIConstants.BUTTON),
+                        WidgetRenderers.icon(TristateRenderers.getIcon(triState)).withColor(depressed ? MinecraftColors.WHITE : TristateRenderers.getColor(triState)).withCentered(12, 12).withPadding(0, 0, 2, 0)
+                ))
+                .withOption(TriState.TRUE)
+                .withOption(TriState.UNDEFINED)
+                .withOption(TriState.FALSE)
+                .withSize(60, 20);
         builder.accept(radioBuilder);
         factory.accept(radioBuilder.build());
         return radioBuilder.build();
