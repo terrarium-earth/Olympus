@@ -28,7 +28,7 @@ public class RadioBuilder<T> {
     private int height = 20;
     private int gap = 0;
 
-    private boolean preventDeselection = false;
+    private boolean allowDeselection = false;
 
     public RadioBuilder(RadioState<T> state) {
         this.state = state;
@@ -64,6 +64,16 @@ public class RadioBuilder<T> {
         return this;
     }
 
+    public RadioBuilder<T> withGap(int gap) {
+        this.gap = gap;
+        return this;
+    }
+
+    public RadioBuilder<T> withDeselection() {
+        this.allowDeselection = true;
+        return this;
+    }
+
     public RadioBuilder<T> withCallback(Consumer<T> action) {
         this.action = action;
         return this;
@@ -94,7 +104,7 @@ public class RadioBuilder<T> {
                                 state.setIndex(finalIndex);
                                 state.set(option);
                                 action.accept(option);
-                            } else if (!preventDeselection) {
+                            } else if (allowDeselection) {
                                 state.setIndex(-1);
                                 state.set(null);
                                 action.accept(null);

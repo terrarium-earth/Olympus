@@ -77,23 +77,6 @@ public final class Widgets {
         return dropdown(state, clazz, UIHelper.emptyConsumer(), UIHelper.emptyConsumer());
     }
 
-    public static Button tristate(DropdownState<TriState> state, Consumer<Button> factory) {
-        return dropdown(
-                state,
-                List.of(TriState.TRUE, TriState.UNDEFINED, TriState.FALSE),
-                TristateRenderers::getText,
-                factory,
-                dropdown -> dropdown
-                        .withEntryRenderer(tristate -> TristateRenderers.iconWithText(tristate).withPadding(0, 4))
-                        .withSize(100, 150)
-        );
-    }
-
-    public static Button tristate(DropdownState<TriState> state) {
-        return tristate(state, button -> {
-        });
-    }
-
     public static MapWidget map(State<MapRenderer> state, Consumer<MapWidget> factory) {
         var map = new MapWidget(state).withRenderDistanceScale();
         factory.accept(map);
@@ -112,11 +95,11 @@ public final class Widgets {
         return radioBuilder.build();
     }
 
-    public static CompoundWidget tristateRadio(RadioState<TriState> state, Consumer<RadioBuilder<TriState>> builder, Consumer<CompoundWidget> factory) {
+    public static CompoundWidget tristate(RadioState<TriState> state, Consumer<RadioBuilder<TriState>> builder, Consumer<CompoundWidget> factory) {
         RadioBuilder<TriState> radioBuilder = new RadioBuilder<>(state);
         radioBuilder.withoutEntrySprites()
                 .withRenderer((triState, depressed) -> WidgetRenderers.layered(
-                        WidgetRenderers.sprite(depressed ? TristateRenderers.getSprites(triState) : UIConstants.BUTTON),
+                        WidgetRenderers.sprite(depressed ? TristateRenderers.getButtonSprites(triState) : UIConstants.BUTTON),
                         WidgetRenderers.icon(TristateRenderers.getIcon(triState)).withColor(depressed ? MinecraftColors.WHITE : TristateRenderers.getColor(triState)).withCentered(12, 12).withPadding(0, 0, 2, 0)
                 ))
                 .withOption(TriState.TRUE)
@@ -126,5 +109,9 @@ public final class Widgets {
         builder.accept(radioBuilder);
         factory.accept(radioBuilder.build());
         return radioBuilder.build();
+    }
+
+    public static CompoundWidget tristate(RadioState<TriState> state) {
+        return tristate(state, ignored -> {}, ignored -> {});
     }
 }

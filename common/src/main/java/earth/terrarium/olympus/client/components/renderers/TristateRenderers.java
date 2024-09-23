@@ -37,7 +37,7 @@ public class TristateRenderers {
         };
     }
 
-    public static WidgetSprites getSprites(TriState state) {
+    public static WidgetSprites getButtonSprites(TriState state) {
         return switch (state) {
             case TRUE -> UIConstants.PRIMARY_BUTTON;
             case FALSE -> UIConstants.DANGER_BUTTON;
