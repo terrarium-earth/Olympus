@@ -49,7 +49,7 @@ public abstract class BaseModal extends Overlay {
 
         GridLayout layout = initButtons(0);
         layout.arrangeElements();
-        layout.setPosition(this.left + this.modalWidth - layout.getWidth() - INNER_PADDING, this.top);
+        layout.setPosition(this.left + this.modalWidth - layout.getWidth() - INNER_PADDING, this.top + 3);
         layout.visitWidgets(this::addRenderableWidget);
     }
 
