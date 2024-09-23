@@ -43,6 +43,7 @@ public class WidgetRenderers {
         );
     }
 
+    @SafeVarargs
     public static <T extends AbstractWidget> WidgetRenderer<T> layered(WidgetRenderer<T>... renderers) {
         return (graphics, context, partialTick) -> {
             for (WidgetRenderer<T> renderer : renderers) {

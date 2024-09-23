@@ -10,6 +10,7 @@ import earth.terrarium.olympus.client.ui.UIConstants;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.CommonComponents;
+import org.apache.commons.lang3.function.Consumers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class RadioBuilder<T> {
     private final RadioState<T> state;
     private BiFunction<T, Boolean, WidgetRenderer<AbstractWidget>> entryRenderer = (ignored, depressed) -> WidgetRenderers.text(CommonComponents.ELLIPSIS);
     private Function<T, WidgetSprites> entrySprites = (ignored) -> UIConstants.BUTTON;
-    private Consumer<T> action = t -> {};
+    private Consumer<T> action = Consumers.nop();
 
     private int width = 120;
     private int height = 20;

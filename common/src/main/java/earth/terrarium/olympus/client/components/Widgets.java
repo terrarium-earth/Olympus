@@ -17,8 +17,8 @@ import earth.terrarium.olympus.client.ui.UIConstants;
 import earth.terrarium.olympus.client.utils.State;
 import earth.terrarium.olympus.client.utils.StateUtils;
 import earth.terrarium.olympus.client.utils.Translatable;
-import earth.terrarium.olympus.client.utils.UIHelper;
 import net.minecraft.network.chat.Component;
+import org.apache.commons.lang3.function.Consumers;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -33,7 +33,7 @@ public final class Widgets {
     }
 
     public static Button button() {
-        return button(UIHelper.emptyConsumer());
+        return button(Consumers.nop());
     }
 
     public static Button toggle(State<Boolean> state, Consumer<Button> factory) {
@@ -49,7 +49,7 @@ public final class Widgets {
     }
 
     public static Button toggle(State<Boolean> state) {
-        return toggle(state, UIHelper.emptyConsumer());
+        return toggle(state, Consumers.nop());
     }
 
     public static <T> Button dropdown(DropdownState<T> state, List<T> options, Function<T, Component> optionText, Consumer<Button> factory, Consumer<DropdownBuilder<T>> builder) {
@@ -74,7 +74,7 @@ public final class Widgets {
     }
 
     public static <T extends Enum<?>> Button dropdown(DropdownState<T> state, Class<T> clazz) {
-        return dropdown(state, clazz, UIHelper.emptyConsumer(), UIHelper.emptyConsumer());
+        return dropdown(state, clazz, Consumers.nop(), Consumers.nop());
     }
 
     public static MapWidget map(State<MapRenderer> state, Consumer<MapWidget> factory) {
@@ -84,8 +84,7 @@ public final class Widgets {
     }
 
     public static MapWidget map(State<MapRenderer> state) {
-        return map(state, map -> {
-        });
+        return map(state, Consumers.nop());
     }
 
     public static <T> CompoundWidget radio(RadioState<T> state, Consumer<RadioBuilder<T>> builder, Consumer<CompoundWidget> factory) {
@@ -112,6 +111,6 @@ public final class Widgets {
     }
 
     public static CompoundWidget tristate(RadioState<TriState> state) {
-        return tristate(state, ignored -> {}, ignored -> {});
+        return tristate(state, Consumers.nop(), Consumers.nop());
     }
 }

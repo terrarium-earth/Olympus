@@ -7,11 +7,12 @@ import earth.terrarium.olympus.client.components.Widgets;
 import earth.terrarium.olympus.client.components.dropdown.DropdownState;
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import earth.terrarium.olympus.client.constants.MinecraftColors;
-import earth.terrarium.olympus.client.ui.UIIcons;
 import earth.terrarium.olympus.client.ui.OverlayAlignment;
+import earth.terrarium.olympus.client.ui.UIIcons;
 import net.minecraft.client.gui.layouts.FrameLayout;
 import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.network.chat.Component;
+import org.apache.commons.lang3.function.Consumers;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -65,7 +66,7 @@ public class DropdownExample extends ExampleScreen {
                 Arrays.asList(MinecraftColors.COLORS),
                 color -> Component.literal(color.toString()),
                 button -> button.withSize(100, 24),
-                (ignored) -> {}
+                Consumers.nop()
         ));
 
         for (OverlayAlignment align : OverlayAlignment.values()) {
