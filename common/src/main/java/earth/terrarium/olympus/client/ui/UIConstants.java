@@ -62,6 +62,12 @@ public class UIConstants {
         id("buttons/primary/hovered")
     );
 
+    public static final WidgetSprites DARK_BUTTON = new WidgetSprites(
+        id("buttons/dark/normal"),
+        id("buttons/disabled"),
+        id("buttons/dark/hovered")
+    );
+
     public static final WidgetSprites SWITCH = new WidgetSprites(
             id("buttons/switch/off/normal"),
             id("buttons/switch/off/disabled"),

@@ -10,6 +10,7 @@ import earth.terrarium.olympus.client.ui.context.ContextMenu;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
+import org.apache.commons.lang3.function.Consumers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ public class DropdownBuilder<T> {
     private ResourceLocation background = UIConstants.LIST_BG;
     private WidgetSprites entrySprites = UIConstants.LIST_ENTRY;
     private Function<T, WidgetRenderer<? super Button>> entryRenderer = t -> WidgetRenderers.text(CommonComponents.ELLIPSIS);
-    private Consumer<T> action = t -> {};
+    private Consumer<T> action = Consumers.nop();
 
     private int width = -1;
     private int height = 150;
