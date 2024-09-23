@@ -1,5 +1,6 @@
 package earth.terrarium.olympus.client.components.base;
 
+import com.teamresourceful.resourcefullib.client.components.CursorWidget;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.ContainerEventHandler;
@@ -24,6 +25,8 @@ public abstract class BaseParentWidget extends BaseWidget implements ContainerEv
     public BaseParentWidget(int width, int height) {
         super(width, height);
     }
+
+    public BaseParentWidget() {}
 
     @Override
     public @NotNull List<? extends GuiEventListener> children() {

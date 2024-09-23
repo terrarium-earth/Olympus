@@ -1,13 +1,13 @@
 package earth.terrarium.olympus.client.ui.context;
 
 import com.mojang.blaze3d.platform.Window;
-import earth.terrarium.olympus.client.components.base.ListWidget;
 import earth.terrarium.olympus.client.components.Widgets;
+import earth.terrarium.olympus.client.components.base.ListWidget;
 import earth.terrarium.olympus.client.components.dropdown.DropdownState;
-import earth.terrarium.olympus.client.ui.OverlayAlignment;
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import earth.terrarium.olympus.client.constants.MinecraftColors;
 import earth.terrarium.olympus.client.ui.Overlay;
+import earth.terrarium.olympus.client.ui.OverlayAlignment;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;

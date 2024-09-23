@@ -43,6 +43,15 @@ public class WidgetRenderers {
         );
     }
 
+    @SafeVarargs
+    public static <T extends AbstractWidget> WidgetRenderer<T> layered(WidgetRenderer<T>... renderers) {
+        return (graphics, context, partialTick) -> {
+            for (WidgetRenderer<T> renderer : renderers) {
+                renderer.render(graphics, context, partialTick);
+            }
+        };
+    }
+
     public static <T extends AbstractWidget> IconWidgetRenderer<T> icon(ResourceLocation icon) {
         return new IconWidgetRenderer<>(icon);
     }
