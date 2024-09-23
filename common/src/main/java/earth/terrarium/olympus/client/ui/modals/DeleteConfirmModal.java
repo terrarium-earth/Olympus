@@ -8,6 +8,7 @@ import earth.terrarium.olympus.client.ui.UIConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.layouts.GridLayout;
+import net.minecraft.client.gui.layouts.LayoutSettings;
 import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -49,22 +50,22 @@ public class DeleteConfirmModal extends BaseModal {
 
         int buttonWidth = (this.modalContentWidth - INNER_PADDING) / 2;
 
-        GridLayout layout = new GridLayout().rowSpacing(INNER_PADDING * 2);
+        GridLayout layout = new GridLayout().spacing(INNER_PADDING);
 
-        layout.addChild(
-            new MultilineTextWidget(this.modalContentWidth, this.description, this.font).setColor(0xFFFFFF),
-            0, 0
+        var content = layout.createRowHelper(2);
+
+        content.addChild(
+            new MultilineTextWidget(this.modalContentWidth - INNER_PADDING * 2, this.description, this.font).setColor(0xFFFFFF),
+            2, LayoutSettings.defaults().padding(INNER_PADDING, INNER_PADDING * 2)
         );
 
-        LinearLayout buttons = LinearLayout.horizontal().spacing(INNER_PADDING);
-
-        buttons.addChild(Widgets.button()
+        content.addChild(Widgets.button()
                 .withCallback(this::onClose)
                 .withRenderer(WidgetRenderers.text(UIConstants.CANCEL))
                 .withSize(buttonWidth, WIDGET_HEIGHT)
         );
 
-        buttons.addChild(Widgets.button()
+        content.addChild(Widgets.button()
                 .withCallback(() -> {
                     this.action.run();
                     this.onClose();
@@ -76,14 +77,13 @@ public class DeleteConfirmModal extends BaseModal {
                 .withSize(buttonWidth, WIDGET_HEIGHT)
         );
 
-        layout.addChild(buttons, 1, 0);
         layout.arrangeElements();
 
-        this.modalHeight = layout.getHeight() + TITLE_BAR_HEIGHT + INNER_PADDING * 2;
+        this.modalHeight = layout.getHeight() + TITLE_BAR_HEIGHT + INNER_PADDING;
         this.top = (this.height - this.modalHeight) / 2;
-        this.modalContentTop = this.top + TITLE_BAR_HEIGHT + INNER_PADDING;
-        this.modalContentHeight = this.modalHeight - TITLE_BAR_HEIGHT - INNER_PADDING * 2;
-        this.buttonsHeight = buttons.getHeight();
+        this.modalContentTop = this.top + TITLE_BAR_HEIGHT;
+        this.modalContentHeight = this.modalHeight - TITLE_BAR_HEIGHT - WIDGET_HEIGHT - INNER_PADDING * 2;
+        this.buttonsHeight = WIDGET_HEIGHT;
 
         layout.setPosition(this.modalContentLeft, this.modalContentTop);
         layout.visitWidgets(this::addRenderableWidget);
@@ -94,8 +94,8 @@ public class DeleteConfirmModal extends BaseModal {
         super.renderBackground(graphics, mouseX, mouseY, partialTick);
         graphics.blitSprite(
                 UIConstants.MODAL_FOOTER,
-                this.left + 1, this.top + this.modalHeight - this.buttonsHeight - INNER_PADDING * 2 - 1,
-                this.modalWidth - 2, this.buttonsHeight + INNER_PADDING * 2
+                this.left + 1, this.top + this.modalHeight - this.buttonsHeight - INNER_PADDING * 2,
+                this.modalWidth - 2, this.buttonsHeight + INNER_PADDING * 2 - 1
         );
     }
 

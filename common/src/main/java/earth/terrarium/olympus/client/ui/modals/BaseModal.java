@@ -11,8 +11,6 @@ import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class BaseModal extends Overlay {
-
-    protected static final int PADDING = 10;
     protected static final int INNER_PADDING = 5;
     protected static final int TITLE_BAR_HEIGHT = 15;
 
@@ -51,7 +49,7 @@ public abstract class BaseModal extends Overlay {
 
         GridLayout layout = initButtons(0);
         layout.arrangeElements();
-        layout.setPosition(this.left + this.modalWidth - layout.getWidth() - INNER_PADDING, this.top + (TITLE_BAR_HEIGHT - layout.getHeight()) / 2);
+        layout.setPosition(this.left + this.modalWidth - layout.getWidth() - INNER_PADDING, this.top);
         layout.visitWidgets(this::addRenderableWidget);
     }
 
@@ -68,6 +66,8 @@ public abstract class BaseModal extends Overlay {
     @Override
     public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.renderBackground(graphics, mouseX, mouseY, partialTick);
+        this.renderBlurredBackground(partialTick);
+        this.renderMenuBackground(graphics);
         graphics.blitSprite(UIConstants.MODAL, this.left, this.top, this.modalWidth, this.modalHeight);
         graphics.blitSprite(UIConstants.MODAL_HEADER, this.left + 1, this.top + 1, this.modalWidth - 2, TITLE_BAR_HEIGHT);
     }
@@ -81,7 +81,7 @@ public abstract class BaseModal extends Overlay {
     public void renderForeground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         graphics.drawString(
             this.font,
-            this.title, this.left + PADDING, (int) (this.top + (TITLE_BAR_HEIGHT - 9) / 2f) + 1,
+            this.title, this.left + INNER_PADDING, (int) (this.top + (TITLE_BAR_HEIGHT - 9) / 2f) + 2,
             0xffffffff, false
         );
     }
