@@ -12,11 +12,13 @@ import earth.terrarium.olympus.client.components.map.MapRenderer;
 import earth.terrarium.olympus.client.components.map.MapWidget;
 import earth.terrarium.olympus.client.components.renderers.TristateRenderers;
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
+import earth.terrarium.olympus.client.components.textbox.TextBox;
 import earth.terrarium.olympus.client.constants.MinecraftColors;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import earth.terrarium.olympus.client.utils.State;
 import earth.terrarium.olympus.client.utils.StateUtils;
 import earth.terrarium.olympus.client.utils.Translatable;
+import net.minecraft.client.gui.layouts.FrameLayout;
 import net.minecraft.network.chat.Component;
 import org.apache.commons.lang3.function.Consumers;
 
@@ -94,7 +96,7 @@ public final class Widgets {
         return radioBuilder.build();
     }
 
-    public static CompoundWidget tristate(RadioState<TriState> state, Consumer<RadioBuilder<TriState>> builder, Consumer<CompoundWidget> factory) {
+    public static CompoundWidget<FrameLayout> tristate(RadioState<TriState> state, Consumer<RadioBuilder<TriState>> builder, Consumer<CompoundWidget> factory) {
         RadioBuilder<TriState> radioBuilder = new RadioBuilder<>(state);
         radioBuilder.withoutEntrySprites()
                 .withRenderer((triState, depressed) -> WidgetRenderers.layered(
@@ -110,7 +112,19 @@ public final class Widgets {
         return radioBuilder.build();
     }
 
-    public static CompoundWidget tristate(RadioState<TriState> state) {
+    public static CompoundWidget<FrameLayout> tristate(RadioState<TriState> state) {
         return tristate(state, Consumers.nop(), Consumers.nop());
+    }
+
+    public static CompoundWidget<FrameLayout> compound(Consumer<CompoundWidget<FrameLayout>> factory) {
+        var compound = new CompoundWidget<>(new FrameLayout());
+        factory.accept(compound);
+        return compound;
+    }
+
+    public static TextBox text(State<String> state, Consumer<TextBox> factory) {
+        var textBox = new TextBox(state);
+        factory.accept(textBox);
+        return textBox;
     }
 }

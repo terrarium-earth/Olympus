@@ -4,6 +4,8 @@ import earth.terrarium.olympus.client.components.base.ListWidget;
 import earth.terrarium.olympus.client.components.textbox.TextBox;
 import earth.terrarium.olympus.client.ui.Overlay;
 import earth.terrarium.olympus.client.ui.UIConstants;
+import earth.terrarium.olympus.client.utils.ListenableState;
+import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
@@ -28,7 +30,7 @@ public class AutocompleteScreen<T> extends Overlay {
     protected final AutocompleteTextBox<T> widget;
 
     protected ListWidget options;
-    protected TextBox textBox;
+    protected ListenableState<String> text = ListenableState.of("");
 
     protected AutocompleteScreen(Screen background, AutocompleteTextBox<T> widget) {
         super(background);
@@ -36,6 +38,8 @@ public class AutocompleteScreen<T> extends Overlay {
         this.mapper = widget.mapper;
         this.suggestions.addAll(widget.suggestions);
         this.widget = widget;
+
+        text.registerListener(this::filter);
     }
 
     public int x() {
@@ -60,19 +64,15 @@ public class AutocompleteScreen<T> extends Overlay {
 
     @Override
     protected void init() {
-        this.textBox = addRenderableWidget(new TextBox(
-            this.textBox, this.widget.value,
-            this.widget.getWidth(), this.widget.getHeight(), Short.MAX_VALUE,
-            s -> true, this::filter
-        ));
-        this.textBox.setPosition(this.widget.getX(), this.widget.getY());
+        var textBox = addRenderableWidget(new TextBox(this.text).withSize(this.widget.getWidth(), this.widget.getHeight()));
+        textBox.setPosition(this.widget.getX(), this.widget.getY());
 
         ListWidget old = this.options;
         this.options = addRenderableWidget(new ListWidget(this.width() - 3, this.height() - 3));
         this.options.setPosition(this.x() + 1, this.y() + 2);
         this.options.update(old);
 
-        setFocused(this.textBox);
+        setFocused(textBox);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class AutocompleteScreen<T> extends Overlay {
     }
 
     public void clear() {
-        this.textBox.setValue("");
+        this.text.set("");
     }
 
     public T value() {
@@ -105,7 +105,7 @@ public class AutocompleteScreen<T> extends Overlay {
     }
 
     public String text() {
-        return this.textBox.getValue();
+        return this.text.get();
     }
 
     public void filter(String text) {
@@ -119,7 +119,7 @@ public class AutocompleteScreen<T> extends Overlay {
                     this.filteredSuggestions.add(new AutocompleteEntry<>(
                         this.width() - 3, ENTRY_HEIGHT,
                         value, () -> {
-                            this.textBox.setValue(value);
+                            this.text.set(value);
                             this.onClose();
                         }
                     ));

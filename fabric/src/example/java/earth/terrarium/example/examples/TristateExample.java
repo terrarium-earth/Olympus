@@ -20,6 +20,7 @@ public class TristateExample extends ExampleScreen {
     @Override
     protected void init() {
         CompoundWidget tristateRadio = addRenderableWidget(Widgets.tristate(state));
+        CompoundWidget tristateRadio2 = addRenderableWidget(Widgets.tristate(state));
 
         FrameLayout.centerInRectangle(tristateRadio, 0, 0, this.width, this.height);
     }

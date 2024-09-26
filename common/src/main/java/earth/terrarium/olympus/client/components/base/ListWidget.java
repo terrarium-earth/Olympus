@@ -1,5 +1,6 @@
 package earth.terrarium.olympus.client.components.base;
 
+import com.teamresourceful.resourcefullib.client.components.CursorWidget;
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import net.minecraft.client.gui.GuiGraphics;
@@ -66,10 +67,11 @@ public class ListWidget extends BaseParentWidget {
 
     @Override
     public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        boolean gotCursor = false;
         boolean showsScrollBar = this.lastHeight > this.height;
         int actualWidth = getWidth() - (showsScrollBar ? getScrollbarThumbWidth() + getScrollbarPadding() * 2 : 0);
 
-        graphics.enableScissor(getX() + 1, getY(), getX() + actualWidth, getY() + this.height);
+        graphics.enableScissor(getX(), getY(), getX() + actualWidth, getY() + this.height);
 
         int y = this.getY() - (int) scroll;
         this.lastHeight = 0;
@@ -82,6 +84,24 @@ public class ListWidget extends BaseParentWidget {
             item.render(graphics, this.isHovered ? mouseX : -1, this.isHovered ? mouseY : -1, partialTicks);
             y += item.getHeight() + gap;
             this.lastHeight += item.getHeight() + gap;
+        }
+
+        if (this.isMouseOver(mouseX, mouseY)) {
+            getChildAt(mouseX, mouseY).ifPresentOrElse(
+                widget -> {
+                    if (widget instanceof CursorWidget) {
+                        CursorScreen.Cursor cursor = ((CursorWidget) widget).getCursor();
+                        if (cursor != CursorScreen.Cursor.DEFAULT) {
+                            this.cursor = cursor;
+                        }
+                    }
+                },
+                () -> {
+                    this.cursor = CursorScreen.Cursor.DEFAULT;
+                }
+            );
+        } else {
+            this.cursor = CursorScreen.Cursor.DEFAULT;
         }
 
         graphics.disableScissor();
@@ -148,21 +168,12 @@ public class ListWidget extends BaseParentWidget {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (clicked(mouseX, mouseY)) {
-            if (isMouseOverScrollBar(mouseX, mouseY)) {
-                this.scrolling = true;
-                return true;
-            }
-            int y = getY() - Mth.floor(this.scroll);
-            for (AbstractWidget entry : this.items) {
-                int height = entry.getHeight();
-                if (mouseY >= y && mouseY <= y + height) {
-                    return entry.mouseClicked(mouseX, mouseY, button);
-                }
-                y += height + gap;
-            }
+        if (!clicked(mouseX, mouseY)) return false;
+        if (isMouseOverScrollBar(mouseX, mouseY)) {
+            this.scrolling = true;
+            return true;
         }
-        return false;
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
@@ -203,11 +214,6 @@ public class ListWidget extends BaseParentWidget {
 
     public boolean isScrolling() {
         return this.scrolling;
-    }
-
-    @Override
-    public CursorScreen.Cursor getCursor() {
-        return CursorScreen.Cursor.POINTER;
     }
 
     @Override

@@ -9,6 +9,7 @@ import earth.terrarium.olympus.client.layouts.Layouts;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.client.gui.layouts.FrameLayout;
 import net.minecraft.network.chat.CommonComponents;
 import org.apache.commons.lang3.function.Consumers;
 
@@ -86,8 +87,8 @@ public class RadioBuilder<T> {
         return this;
     }
 
-    public CompoundWidget build() {
-        return new CompoundWidget().withContents(layout -> {
+    public CompoundWidget<FrameLayout> build() {
+        return new CompoundWidget<>(new FrameLayout()).withContents(layout -> {
             var radioGroup = Layouts.row().withGap(gap);
             for (int index = 0; index < options.size(); index++) {
                 T option = options.get(index);
