@@ -65,27 +65,21 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
 
         layout.setPosition(getX() - xScroll, getY() - yScroll);
 
-        var showScrollX = isXScrollbarVisible();
-        var showScrollY = isYScrollbarVisible();
-
-        var actualWidth = this.getWidth() - (showScrollX ? 6 : 0);
-        var actualHeight = this.getHeight() - (showScrollY ? 6 : 0);
-
-        graphics.enableScissor(getX(), getY(), getX() + actualWidth, getY() + actualHeight);
+        graphics.enableScissor(getX(), getY(), getX() + getViewWidth(), getY() + getViewHeight());
         super.renderWidget(graphics, mouseX, mouseY, partialTick);
         graphics.disableScissor();
 
-        if (showScrollX) {
-            var scrollWidth = (int) (actualWidth * (actualWidth / (float) layout.getWidth()));
-            var scrollX = (int) (xScroll / (float) layout.getWidth() * actualWidth) + overscroll;
-            graphics.blitSprite(UIConstants.SCROLLBAR, getX() + scrollX, getY() + this.getHeight() - 6, scrollWidth, 6);
+        if (isXScrollbarVisible()) {
+            var scrollWidth = (int) (getViewWidth() * (getViewWidth() / (float) layout.getWidth()));
+            var scrollX = (int) (xScroll / (float) layout.getWidth() * getViewWidth()) + overscroll;
+            graphics.blitSprite(UIConstants.SCROLLBAR, getX(), getY() + this.getHeight() - 4, getViewWidth(), 2);
             graphics.blitSprite(UIConstants.SCROLLBAR_THUMB, getX() + scrollX, getY() + this.getHeight() - 6, scrollWidth, 6);
         }
 
-        if (showScrollY) {
-            var scrollHeight = (int) (actualHeight * (actualHeight / (float) layout.getHeight()));
-            var scrollY = (int) (yScroll / (float) layout.getHeight() * actualHeight) + overscroll;
-            graphics.blitSprite(UIConstants.SCROLLBAR, getX() + this.getWidth() - 6, getY() + scrollY, 6, scrollHeight);
+        if (isYScrollbarVisible()) {
+            var scrollHeight = (int) (getViewHeight() * (getViewHeight() / (float) layout.getHeight()));
+            var scrollY = (int) (yScroll / (float) layout.getHeight() * getViewHeight()) + overscroll;
+            graphics.blitSprite(UIConstants.SCROLLBAR, getX() + this.getWidth() - 4, getY(), 2, getViewHeight());
             graphics.blitSprite(UIConstants.SCROLLBAR_THUMB, getX() + this.getWidth() - 6, getY() + scrollY, 6, scrollHeight);
         }
     }
@@ -100,17 +94,20 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-        if (draggingScrollbarY) {
-            double scrollBarHeight = (this.getHeight() / ((double) layout.getHeight() + overscroll * 2)) * this.getHeight();
-            double scrollBarDragY = dragY / (this.getHeight() - scrollBarHeight);
-            yScroll = Mth.clamp(yScroll + (int) (scrollBarDragY * (layout.getHeight() + overscroll * 2)), -overscroll, Math.max(0, layout.getHeight() + 6 + overscroll - this.getHeight()));
+        var actualWidth = getViewWidth();
+        var actualHeight = getViewHeight();
+
+        if (draggingScrollbarX) {
+            double scrollBarWidth = (actualWidth / ((double) layout.getWidth() + overscroll * 2)) * actualWidth;
+            double scrollBarDragX = dragX / (actualWidth - scrollBarWidth);
+            xScroll = Mth.clamp(xScroll + (int) (scrollBarDragX * (layout.getWidth() + overscroll * 2)), -overscroll, Math.max(0, layout.getWidth() + overscroll - actualWidth));
             return true;
         }
 
-        if (draggingScrollbarX) {
-            double scrollBarWidth = (this.getWidth() / ((double) layout.getWidth() + overscroll * 2)) * this.getWidth();
-            double scrollBarDragX = dragX / (this.getWidth() - scrollBarWidth);
-            xScroll = Mth.clamp(xScroll + (int) (scrollBarDragX * (layout.getWidth() + overscroll * 2)), -overscroll, Math.max(0, layout.getWidth() + 6 + overscroll - this.getWidth()));
+        if (draggingScrollbarY) {
+            double scrollBarHeight = (actualHeight / ((double) layout.getHeight() + overscroll * 2)) * actualHeight;
+            double scrollBarDragY = dragY / (actualHeight - scrollBarHeight);
+            yScroll = Mth.clamp(yScroll + (int) (scrollBarDragY * (layout.getHeight() + overscroll * 2)), -overscroll, Math.max(0, layout.getHeight() + overscroll - actualHeight));
             return true;
         }
 
@@ -123,12 +120,12 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
         if (isMouseOver(mouseX, mouseY) && !contentScrolled) {
             var scrolled = false;
             if (isXScrollbarVisible()) {
-                xScroll = Mth.clamp(xScroll - (int) (scrollX * 10), -overscroll, Math.max(0, layout.getWidth() + 6 + overscroll - this.getWidth()));
+                xScroll = Mth.clamp(xScroll - (int) (scrollX * 10), -overscroll, Math.max(0, layout.getWidth() + overscroll - this.getViewWidth()));
                 scrolled = true;
             }
 
             if (isYScrollbarVisible()) {
-                yScroll = Mth.clamp(yScroll - (int) (scrollY * 10), -overscroll, Math.max(0, layout.getHeight() + 6 + overscroll - this.getHeight()));
+                yScroll = Mth.clamp(yScroll - (int) (scrollY * 10), -overscroll, Math.max(0, layout.getHeight() + overscroll - this.getViewHeight()));
                 scrolled = true;
             }
 
@@ -139,6 +136,7 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (!isMouseOver(mouseX, mouseY)) return false;
         if (isOverScrollbarX((int) mouseX, (int) mouseY) && isXScrollbarVisible()) {
             draggingScrollbarX = true;
             return true;

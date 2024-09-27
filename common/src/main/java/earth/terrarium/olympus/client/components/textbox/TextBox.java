@@ -53,6 +53,7 @@ public class TextBox extends BaseWidget {
 
         this.setCursorPosition(this.state.get().length());
         this.setHighlightPos(this.cursorPos);
+        this.displayPos = 0;
     }
 
     public TextBox withPlaceholder(String placeholder) {
