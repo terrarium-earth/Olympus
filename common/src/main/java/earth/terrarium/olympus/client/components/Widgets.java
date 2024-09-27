@@ -130,9 +130,53 @@ public final class Widgets {
         return compound;
     }
 
-    public static TextBox text(State<String> state, Consumer<TextBox> factory) {
+    public static TextBox textInput(State<String> state, Consumer<TextBox> factory) {
         var textBox = new TextBox(state);
         factory.accept(textBox);
         return textBox;
+    }
+
+    public static TextBox textInput(State<String> state) {
+        return textInput(state, Consumers.nop());
+    }
+
+    public static TextBox intInput(State<Integer> state, Consumer<TextBox> factory) {
+        var textBox = new TextBox(new State<>() {
+            String temp = state.get().toString();
+
+            @Override
+            public void set(String value) {
+                value = value.trim();
+                if (value.isEmpty() || value.equals("-")) {
+                    state.set(0);
+                    temp = value;
+                } else try {
+                    state.set(Integer.parseInt(value));
+                    temp = value;
+                } catch (NumberFormatException e) {
+                    state.set(0);
+                    temp = "";
+                }
+            }
+
+            @Override
+            public String get() {
+                return temp;
+            }
+        }).withFilter(s -> {
+            if (s.isEmpty() || s.equals("-")) return true;
+            try {
+                Integer.parseInt(s);
+                return true;
+            } catch (NumberFormatException e) {
+                return false;
+            }
+        });
+        factory.accept(textBox);
+        return textBox;
+    }
+
+    public static TextBox intInput(State<Integer> state) {
+        return intInput(state, Consumers.nop());
     }
 }

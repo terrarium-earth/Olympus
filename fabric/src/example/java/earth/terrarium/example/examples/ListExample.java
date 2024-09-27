@@ -15,6 +15,7 @@ import net.minecraft.network.chat.Component;
 @OlympusExample(id = "list", description = "A simple list example")
 public class ListExample extends ExampleScreen {
     public State<String> text = State.of("List Example");
+    public State<Integer> number = State.of(0);
 
     @Override
     protected void init() {
@@ -65,7 +66,8 @@ public class ListExample extends ExampleScreen {
                     .withWidthCallback((frameWidget, frameLayout) -> frameLayout.setMinWidth(frameWidget.getViewWidth()))
                 ));
 
-                layout.withChild(Widgets.text(text, textBox -> textBox.withSize(200, 20)));
+                layout.withChild(Widgets.textInput(text, textBox -> textBox.withSize(200, 20)));
+                layout.withChild(Widgets.intInput(number, textBox -> textBox.withSize(200, 20)));
             });
         });
 
