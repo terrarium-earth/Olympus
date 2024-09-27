@@ -6,10 +6,14 @@ import earth.terrarium.olympus.client.ui.UIConstants;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.layouts.Layout;
 import net.minecraft.util.Mth;
+import org.apache.commons.lang3.function.Consumers;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-public class CompoundWidget<T extends Layout> extends BaseParentWidget {
+public class LayoutWidget<T extends Layout> extends BaseParentWidget {
     private final T layout;
     private boolean arranged = false;
 
@@ -24,39 +28,45 @@ public class CompoundWidget<T extends Layout> extends BaseParentWidget {
     private boolean draggingScrollbarX = false;
     private boolean draggingScrollbarY = false;
 
-    public CompoundWidget(T layout) {
+    private final List<BiConsumer<LayoutWidget<T>, T>> widthCallbacks = new ArrayList<>();
+    private final List<BiConsumer<LayoutWidget<T>, T>> heightCallbacks = new ArrayList<>();
+    private final List<BiConsumer<LayoutWidget<T>, T>> layoutCallbacks = new ArrayList<>();
+
+    public LayoutWidget(T layout) {
         this.layout = layout;
     }
 
-    public CompoundWidget<T> withContents(Consumer<T> consumer) {
+    public LayoutWidget<T> withContents(Consumer<T> consumer) {
         consumer.accept(layout);
         this.clear();
-        layout.visitWidgets(this::addRenderableWidget);
         layout.arrangeElements();
+        layout.visitWidgets(this::addRenderableWidget);
+
+        layoutCallbacks.forEach(callback -> callback.accept(this, layout));
+        widthCallbacks.forEach(callback -> callback.accept(this, layout));
+        heightCallbacks.forEach(callback -> callback.accept(this, layout));
         return this;
     }
 
-    protected boolean isXScrollable() {
+    protected boolean isXScrollbarVisible() {
         return scrollableX.isTrue() || (scrollableX.isUndefined() && layout.getWidth() > this.getWidth());
     }
 
-    protected boolean isYScrollable() {
+    protected boolean isYScrollbarVisible() {
         return scrollableY.isTrue() || (scrollableY.isUndefined() && layout.getHeight() > this.getHeight());
     }
 
     @Override
     protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        graphics.blitSprite(UIConstants.MODAL_INSET, getX(), getY(), this.getWidth(), this.getHeight());
-
         if (!arranged) {
-            layout.arrangeElements();
+            withContents(Consumers.nop());
             arranged = true;
         }
 
         layout.setPosition(getX() - xScroll, getY() - yScroll);
 
-        var showScrollX = isXScrollable();
-        var showScrollY = isYScrollable();
+        var showScrollX = isXScrollbarVisible();
+        var showScrollY = isYScrollbarVisible();
 
         var actualWidth = this.getWidth() - (showScrollX ? 6 : 0);
         var actualHeight = this.getHeight() - (showScrollY ? 6 : 0);
@@ -81,11 +91,11 @@ public class CompoundWidget<T extends Layout> extends BaseParentWidget {
     }
 
     public boolean isOverScrollbarX(int mouseX, int mouseY) {
-        return isXScrollable() && mouseX >= getX() && mouseX <= getX() + getWidth() && mouseY >= getY() + getHeight() - 6 && mouseY <= getY() + getHeight();
+        return isXScrollbarVisible() && mouseX >= getX() && mouseX <= getX() + getWidth() && mouseY >= getY() + getHeight() - 6 && mouseY <= getY() + getHeight();
     }
 
     public boolean isOverScrollbarY(int mouseX, int mouseY) {
-        return isYScrollable() && mouseX >= getX() + getWidth() - 6 && mouseX <= getX() + getWidth() && mouseY >= getY() && mouseY <= getY() + getHeight();
+        return isYScrollbarVisible() && mouseX >= getX() + getWidth() - 6 && mouseX <= getX() + getWidth() && mouseY >= getY() && mouseY <= getY() + getHeight();
     }
 
     @Override
@@ -109,23 +119,30 @@ public class CompoundWidget<T extends Layout> extends BaseParentWidget {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
-        if (scrollableX.isTrue()) {
-            xScroll = Mth.clamp(xScroll - (int) (scrollX * 10), -overscroll, Math.max(0, layout.getWidth() + 6 + overscroll - this.getWidth()));
-        }
+        boolean contentScrolled = super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+        if (isMouseOver(mouseX, mouseY) && !contentScrolled) {
+            var scrolled = false;
+            if (isXScrollbarVisible()) {
+                xScroll = Mth.clamp(xScroll - (int) (scrollX * 10), -overscroll, Math.max(0, layout.getWidth() + 6 + overscroll - this.getWidth()));
+                scrolled = true;
+            }
 
-        if (scrollableY.isTrue()) {
-            yScroll = Mth.clamp(yScroll - (int) (scrollY * 10), -overscroll, Math.max(0, layout.getHeight() + 6 + overscroll - this.getHeight()));
-        }
+            if (isYScrollbarVisible()) {
+                yScroll = Mth.clamp(yScroll - (int) (scrollY * 10), -overscroll, Math.max(0, layout.getHeight() + 6 + overscroll - this.getHeight()));
+                scrolled = true;
+            }
 
-        return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+            return scrolled;
+        }
+        return contentScrolled;
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (isOverScrollbarX((int) mouseX, (int) mouseY) && isXScrollable()) {
+        if (isOverScrollbarX((int) mouseX, (int) mouseY) && isXScrollbarVisible()) {
             draggingScrollbarX = true;
             return true;
-        } else if (isOverScrollbarY((int) mouseX, (int) mouseY) && isYScrollable()) {
+        } else if (isOverScrollbarY((int) mouseX, (int) mouseY) && isYScrollbarVisible()) {
             draggingScrollbarY = true;
             return true;
         }
@@ -139,55 +156,81 @@ public class CompoundWidget<T extends Layout> extends BaseParentWidget {
         return super.mouseReleased(d, e, i);
     }
 
+    public LayoutWidget<T> withStretchToContentSize() {
+        return withLayoutCallback((widget, layout) -> widget.setSize(layout.getWidth(), layout.getHeight()));
+    }
 
-    public CompoundWidget<T> withStretchedSize() {
-        setSize(layout.getWidth(), layout.getHeight());
+    public LayoutWidget<T> withStretchToContentWidth() {
+        return withLayoutCallback((widget, layout) -> widget.setWidth(layout.getWidth()));
+    }
+
+    public LayoutWidget<T> withStretchToContentHeight() {
+        return withLayoutCallback((widget, layout) -> widget.setHeight(layout.getHeight()));
+    }
+
+    public LayoutWidget<T> withContentFillWidth() {
+        return withWidthCallback((widget, layout) -> layout.visitWidgets(child -> child.setWidth(widget.getViewWidth())));
+    }
+
+    public LayoutWidget<T> withContentFillHeight() {
+        return withHeightCallback((widget, layout) -> layout.visitWidgets(child -> child.setHeight(widget.getViewHeight())));
+    }
+
+    public LayoutWidget<T> withContentFill() {
+        return withContentFillWidth().withContentFillHeight();
+    }
+
+    public LayoutWidget<T> withLayoutCallback(BiConsumer<LayoutWidget<T>, T> callback) {
+        layoutCallbacks.add(callback);
+        callback.accept(this, layout);
         return this;
     }
 
-    public CompoundWidget<T> withStretchedWidth() {
-        setWidth(layout.getWidth());
+    public LayoutWidget<T> withWidthCallback(BiConsumer<LayoutWidget<T>, T> callback) {
+        widthCallbacks.add(callback);
+        callback.accept(this, layout);
         return this;
     }
 
-    public CompoundWidget<T> withStretchedHeight() {
-        setHeight(layout.getHeight());
+    public LayoutWidget<T> withHeightCallback(BiConsumer<LayoutWidget<T>, T> callback) {
+        heightCallbacks.add(callback);
+        callback.accept(this, layout);
         return this;
     }
 
-    public CompoundWidget<T> withScrollableX(TriState scrollableX) {
+    public LayoutWidget<T> withScrollableX(TriState scrollableX) {
         this.scrollableX = scrollableX;
         return this;
     }
 
-    public CompoundWidget<T> withScrollableY(TriState scrollableY) {
+    public LayoutWidget<T> withScrollableY(TriState scrollableY) {
         this.scrollableY = scrollableY;
         return this;
     }
 
-    public CompoundWidget<T> withScrollable(TriState scrollableX, TriState scrollableY) {
+    public LayoutWidget<T> withScrollable(TriState scrollableX, TriState scrollableY) {
         this.scrollableX = scrollableX;
         this.scrollableY = scrollableY;
         return this;
     }
 
-    public CompoundWidget<T> withScroll(int x, int y) {
+    public LayoutWidget<T> withScroll(int x, int y) {
         this.xScroll = x;
         this.yScroll = y;
         return this;
     }
 
-    public CompoundWidget<T> withOverscroll(int overscroll) {
+    public LayoutWidget<T> withOverscroll(int overscroll) {
         this.overscroll = overscroll;
         return this;
     }
 
-    public CompoundWidget<T> withScrollToBottom() {
+    public LayoutWidget<T> withScrollToBottom() {
         this.yScroll = layout.getHeight() - this.getHeight();
         return this;
     }
 
-    public CompoundWidget<T> withScrollToRight() {
+    public LayoutWidget<T> withScrollToRight() {
         this.xScroll = layout.getWidth() - this.getWidth();
         return this;
     }
@@ -202,5 +245,35 @@ public class CompoundWidget<T extends Layout> extends BaseParentWidget {
     public void setY(int y) {
         super.setY(y);
         layout.setY(y);
+    }
+
+    @Override
+    public void setWidth(int width) {
+        super.setWidth(width);
+        widthCallbacks.forEach(callback -> callback.accept(this, layout));
+        layout.arrangeElements();
+    }
+
+    @Override
+    public void setHeight(int height) {
+        super.setHeight(height);
+        heightCallbacks.forEach(callback -> callback.accept(this, layout));
+        layout.arrangeElements();
+    }
+
+    @Override
+    public void setSize(int width, int height) {
+        super.setSize(width, height);
+        widthCallbacks.forEach(callback -> callback.accept(this, layout));
+        heightCallbacks.forEach(callback -> callback.accept(this, layout));
+        layout.arrangeElements();
+    }
+
+    public int getViewWidth() {
+        return this.getWidth() - (isYScrollbarVisible() ? 6 : 0);
+    }
+
+    public int getViewHeight() {
+        return this.getHeight() - (isXScrollbarVisible() ? 6 : 0);
     }
 }

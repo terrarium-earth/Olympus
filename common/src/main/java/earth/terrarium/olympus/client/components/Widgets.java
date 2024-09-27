@@ -3,7 +3,7 @@ package earth.terrarium.olympus.client.components;
 import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.buttons.Button;
-import earth.terrarium.olympus.client.components.compound.CompoundWidget;
+import earth.terrarium.olympus.client.components.compound.LayoutWidget;
 import earth.terrarium.olympus.client.components.compound.radio.RadioBuilder;
 import earth.terrarium.olympus.client.components.compound.radio.RadioState;
 import earth.terrarium.olympus.client.components.dropdown.DropdownBuilder;
@@ -14,6 +14,8 @@ import earth.terrarium.olympus.client.components.renderers.TristateRenderers;
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import earth.terrarium.olympus.client.components.textbox.TextBox;
 import earth.terrarium.olympus.client.constants.MinecraftColors;
+import earth.terrarium.olympus.client.layouts.Layouts;
+import earth.terrarium.olympus.client.layouts.LinearViewLayout;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import earth.terrarium.olympus.client.utils.State;
 import earth.terrarium.olympus.client.utils.StateUtils;
@@ -89,14 +91,14 @@ public final class Widgets {
         return map(state, Consumers.nop());
     }
 
-    public static <T> CompoundWidget radio(RadioState<T> state, Consumer<RadioBuilder<T>> builder, Consumer<CompoundWidget> factory) {
+    public static <T> LayoutWidget radio(RadioState<T> state, Consumer<RadioBuilder<T>> builder, Consumer<LayoutWidget> factory) {
         RadioBuilder<T> radioBuilder = new RadioBuilder<>(state);
         builder.accept(radioBuilder);
         factory.accept(radioBuilder.build());
         return radioBuilder.build();
     }
 
-    public static CompoundWidget<FrameLayout> tristate(RadioState<TriState> state, Consumer<RadioBuilder<TriState>> builder, Consumer<CompoundWidget> factory) {
+    public static LayoutWidget<LinearViewLayout> tristate(RadioState<TriState> state, Consumer<RadioBuilder<TriState>> builder, Consumer<LayoutWidget> factory) {
         RadioBuilder<TriState> radioBuilder = new RadioBuilder<>(state);
         radioBuilder.withoutEntrySprites()
                 .withRenderer((triState, depressed) -> WidgetRenderers.layered(
@@ -112,12 +114,18 @@ public final class Widgets {
         return radioBuilder.build();
     }
 
-    public static CompoundWidget<FrameLayout> tristate(RadioState<TriState> state) {
+    public static LayoutWidget<LinearViewLayout> tristate(RadioState<TriState> state) {
         return tristate(state, Consumers.nop(), Consumers.nop());
     }
 
-    public static CompoundWidget<FrameLayout> compound(Consumer<CompoundWidget<FrameLayout>> factory) {
-        var compound = new CompoundWidget<>(new FrameLayout());
+    public static LayoutWidget<FrameLayout> frame(Consumer<LayoutWidget<FrameLayout>> factory) {
+        var compound = new LayoutWidget<>(new FrameLayout());
+        factory.accept(compound);
+        return compound;
+    }
+
+    public static LayoutWidget<LinearViewLayout> list(Consumer<LayoutWidget<LinearViewLayout>> factory) {
+        var compound = new LayoutWidget<>(Layouts.column());
         factory.accept(compound);
         return compound;
     }

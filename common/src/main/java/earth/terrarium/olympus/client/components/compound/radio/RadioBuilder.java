@@ -3,13 +3,13 @@ package earth.terrarium.olympus.client.components.compound.radio;
 import earth.terrarium.olympus.client.components.Widgets;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;
-import earth.terrarium.olympus.client.components.compound.CompoundWidget;
+import earth.terrarium.olympus.client.components.compound.LayoutWidget;
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import earth.terrarium.olympus.client.layouts.Layouts;
+import earth.terrarium.olympus.client.layouts.LinearViewLayout;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.WidgetSprites;
-import net.minecraft.client.gui.layouts.FrameLayout;
 import net.minecraft.network.chat.CommonComponents;
 import org.apache.commons.lang3.function.Consumers;
 
@@ -87,13 +87,12 @@ public class RadioBuilder<T> {
         return this;
     }
 
-    public CompoundWidget<FrameLayout> build() {
-        return new CompoundWidget<>(new FrameLayout()).withContents(layout -> {
-            var radioGroup = Layouts.row().withGap(gap);
+    public LayoutWidget<LinearViewLayout> build() {
+        return new LayoutWidget<>(Layouts.row().withGap(gap)).withContents(layout -> {
             for (int index = 0; index < options.size(); index++) {
                 T option = options.get(index);
                 int finalIndex = index;
-                var button = Widgets.button()
+                layout.withChild(Widgets.button()
                         .withSize((width - gap * (options.size() - 1)) / options.size(), height)
                         .withRenderer((graphics, widget, partialTick) -> {
                             WidgetRenderer<AbstractWidget> apply = entryRenderer.apply(option, state.getIndex() == finalIndex);
@@ -111,10 +110,8 @@ public class RadioBuilder<T> {
                                 state.set(null);
                                 action.accept(null);
                             }
-                        });
-                radioGroup.withChild(button);
+                        }));
             }
-            layout.addChild(radioGroup);
-        });
+        }).withStretchToContentSize();
     }
 }

@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.example.base.ExampleScreen;
 import earth.terrarium.example.base.OlympusExample;
 import earth.terrarium.olympus.client.components.Widgets;
-import earth.terrarium.olympus.client.components.compound.CompoundWidget;
+import earth.terrarium.olympus.client.components.compound.LayoutWidget;
 import earth.terrarium.olympus.client.layouts.Layouts;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -36,7 +36,7 @@ public class LayoutsExample extends ExampleScreen {
                 .withPosition(200, 0)
                 .build(this::addRenderableWidget);
 
-        var test = new CompoundWidget<>(Layouts.columns(5));
+        var test = new LayoutWidget<>(Layouts.columns(5));
         test.withContents(gridViewLayout -> {
                 gridViewLayout.withGap(5);
                 gridViewLayout.withChildren(createButtons());
