@@ -2,6 +2,8 @@ package earth.terrarium.olympus.client.components.base;
 
 import com.teamresourceful.resourcefullib.client.components.CursorWidget;
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
+import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
+import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -15,8 +17,6 @@ import java.util.List;
 
 public class ListWidget extends BaseParentWidget {
 
-    private static final int SCROLLBAR_WIDTH = 6;
-    private static final int SCROLLBAR_PADDING = 2;
     private static final ResourceLocation SCROLLBAR = UIConstants.id("lists/scroll/bar");
     private static final ResourceLocation SCROLLBAR_THUMB = UIConstants.id("lists/scroll/thumb");
 
@@ -27,6 +27,30 @@ public class ListWidget extends BaseParentWidget {
     protected boolean scrolling = false;
     protected int gap = 0;
     protected int overScroll = 0;
+
+    protected int scrollWidth = 6;
+    protected int scrollbarGap = 2;
+
+    protected WidgetRenderer<ListWidget> scrollbarRenderer = (graphics, context, partialTick) -> {
+        var widget = context.getWidget();
+        int scrollBarHeight = (int) ((widget.getHeight() / (double) widget.getContentHeight()) * widget.getHeight());
+        int scrollBarY = context.getY() + Math.round(((float) widget.getScroll() / (float) widget.getContentHeight()) * context.getHeight());
+
+        graphics.blitSprite(SCROLLBAR,
+            context.getX() + (context.getWidth() - 2) / 2,
+            context.getY(),
+            context.getWidth() - 4,
+            context.getHeight()
+        );
+
+        graphics.blitSprite(
+            SCROLLBAR_THUMB,
+            context.getX(),
+            scrollBarY,
+                context.getWidth(),
+            scrollBarHeight
+        );
+    };
 
     public ListWidget(int width, int height) {
         super(width, height);
@@ -107,43 +131,17 @@ public class ListWidget extends BaseParentWidget {
         graphics.disableScissor();
 
         if (this.lastHeight > this.height) {
-            int scrollBarHeight = (int) ((this.height / (double) this.lastHeight) * this.height) - getScrollbarPadding() * 2;
-
-            int scrollBarX = this.getX() + this.width - getScrollbarThumbWidth() - getScrollbarPadding();
-            int scrollBarY = this.getY() + getScrollbarPadding() + Math.round(((float) this.scroll / (float) this.lastHeight) * this.height);
-
-            renderScrollbar(graphics, scrollBarX, scrollBarY, scrollBarHeight, mouseX, mouseY, partialTicks);
+            this.scrollbarRenderer.render(graphics, new WidgetRendererContext<>(this, mouseX, mouseY).setWidth(scrollWidth).setHeight(getHeight() - scrollbarGap * 2).setY(getY() + scrollbarGap).setX(this.getX() + this.getWidth() - scrollWidth - scrollbarGap), partialTicks);
         }
     }
 
-    public void renderScrollbar(GuiGraphics graphics, int scrollBarX, int scrollBarY, int scrollBarHeight, int mouseX, int mouseY, float partialTicks) {
-        graphics.blitSprite(SCROLLBAR,
-            scrollBarX + (getScrollbarThumbWidth() - getScrollbarTrackWidth()) / 2,
-            this.getY() + getScrollbarPadding(),
-                getScrollbarTrackWidth(),
-            this.height - getScrollbarPadding() * 2
-        );
-
-        graphics.blitSprite(
-            SCROLLBAR_THUMB,
-            scrollBarX,
-            scrollBarY,
-            getScrollbarThumbWidth(),
-            scrollBarHeight
-        );
-
-    }
 
     public int getScrollbarThumbWidth() {
-        return SCROLLBAR_WIDTH;
+        return scrollWidth;
     }
 
     public int getScrollbarPadding() {
-        return SCROLLBAR_PADDING;
-    }
-
-    public int getScrollbarTrackWidth() {
-        return SCROLLBAR_WIDTH - SCROLLBAR_PADDING * 2;
+        return scrollbarGap;
     }
 
     @Override
@@ -223,5 +221,38 @@ public class ListWidget extends BaseParentWidget {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public int getContentHeight() {
+        return this.lastHeight;
+    }
+
+    public int getScroll() {
+        return (int) this.scroll;
+    }
+
+    public ListWidget withGap(int gap) {
+        this.gap = gap;
+        return this;
+    }
+
+    public ListWidget withOverScroll(int overScroll) {
+        this.overScroll = overScroll;
+        return this;
+    }
+
+    public ListWidget withScrollbarRenderer(WidgetRenderer<ListWidget> scrollbarRenderer) {
+        this.scrollbarRenderer = scrollbarRenderer;
+        return this;
+    }
+
+    public ListWidget withScrollWidth(int scrollWidth) {
+        this.scrollWidth = scrollWidth;
+        return this;
+    }
+
+    public ListWidget withScrollGap(int gap) {
+        this.scrollbarGap = gap;
+        return this;
     }
 }

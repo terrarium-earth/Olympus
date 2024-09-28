@@ -2,6 +2,8 @@ package earth.terrarium.olympus.client.components.compound;
 
 import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.olympus.client.components.base.BaseParentWidget;
+import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
+import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.layouts.Layout;
@@ -17,7 +19,8 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
     private final T layout;
     private boolean arranged = false;
 
-    private int overscroll = 0;
+    private int overscrollX = 0;
+    private int overscrollY = 0;
 
     private int xScroll;
     private int yScroll;
@@ -31,6 +34,51 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
     private final List<BiConsumer<LayoutWidget<T>, T>> widthCallbacks = new ArrayList<>();
     private final List<BiConsumer<LayoutWidget<T>, T>> heightCallbacks = new ArrayList<>();
     private final List<BiConsumer<LayoutWidget<T>, T>> layoutCallbacks = new ArrayList<>();
+
+    private int scrollWidth = 6;
+    private int scrollMargin = 2;
+
+    private WidgetRenderer<LayoutWidget<T>> scrollbarXRenderer = (graphics, context, partialTick) -> {
+        var widget = context.getWidget();
+
+        int scrollWidth = (int) (context.getWidth() * (context.getWidth() / (float) widget.getContentWidth())) + (widget.getViewWidth() - context.getWidth());
+        int scrollX = (int) (widget.getXScroll() / (float) widget.getContentWidth() * context.getWidth());
+
+        graphics.blitSprite(UIConstants.SCROLLBAR,
+                context.getX(),
+                context.getY() + 2,
+                context.getWidth(),
+                context.getHeight() - 4
+        );
+
+        graphics.blitSprite(UIConstants.SCROLLBAR_THUMB,
+                context.getX() + scrollX,
+                context.getY(),
+                scrollWidth,
+                context.getHeight()
+        );
+    };
+
+    private WidgetRenderer<LayoutWidget<T>> scrollbarYRenderer = (graphics, context, partialTick) -> {
+        var widget = context.getWidget();
+
+        int scrollHeight = (int) (context.getHeight() * (context.getHeight() / (float) widget.getContentHeight())) + (widget.getViewHeight() - context.getHeight());
+        int scrollY = (int) (widget.getYScroll() / (float) widget.getContentHeight() * context.getHeight());
+
+        graphics.blitSprite(UIConstants.SCROLLBAR,
+                context.getX() + 2,
+                context.getY(),
+                context.getWidth() - 4,
+                context.getHeight()
+        );
+
+        graphics.blitSprite(UIConstants.SCROLLBAR_THUMB,
+                context.getX(),
+                context.getY() + scrollY,
+                context.getWidth(),
+                scrollHeight
+        );
+    };
 
     public LayoutWidget(T layout) {
         this.layout = layout;
@@ -70,17 +118,11 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
         graphics.disableScissor();
 
         if (isXScrollbarVisible()) {
-            var scrollWidth = (int) (getViewWidth() * (getViewWidth() / (float) layout.getWidth()));
-            var scrollX = (int) (xScroll / (float) layout.getWidth() * getViewWidth()) + overscroll;
-            graphics.blitSprite(UIConstants.SCROLLBAR, getX(), getY() + this.getHeight() - 4, getViewWidth(), 2);
-            graphics.blitSprite(UIConstants.SCROLLBAR_THUMB, getX() + scrollX, getY() + this.getHeight() - 6, scrollWidth, 6);
+            scrollbarXRenderer.render(graphics, new WidgetRendererContext<>(this, mouseX, mouseY).setHeight(scrollWidth).setWidth(getViewWidth() - scrollMargin * 2).setX(getX() + scrollMargin).setY(this.getY() + this.getViewHeight() + scrollMargin), partialTick);
         }
 
         if (isYScrollbarVisible()) {
-            var scrollHeight = (int) (getViewHeight() * (getViewHeight() / (float) layout.getHeight()));
-            var scrollY = (int) (yScroll / (float) layout.getHeight() * getViewHeight()) + overscroll;
-            graphics.blitSprite(UIConstants.SCROLLBAR, getX() + this.getWidth() - 4, getY(), 2, getViewHeight());
-            graphics.blitSprite(UIConstants.SCROLLBAR_THUMB, getX() + this.getWidth() - 6, getY() + scrollY, 6, scrollHeight);
+            scrollbarYRenderer.render(graphics, new WidgetRendererContext<>(this, mouseX, mouseY).setWidth(scrollWidth).setHeight(getViewHeight() - scrollMargin * 2).setY(getY() + scrollMargin).setX(this.getX() + this.getViewWidth() + scrollMargin), partialTick);
         }
     }
 
@@ -98,16 +140,16 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
         var actualHeight = getViewHeight();
 
         if (draggingScrollbarX) {
-            double scrollBarWidth = (actualWidth / ((double) layout.getWidth() + overscroll * 2)) * actualWidth;
+            double scrollBarWidth = (actualWidth / ((double) layout.getWidth() + overscrollX * 2)) * actualWidth;
             double scrollBarDragX = dragX / (actualWidth - scrollBarWidth);
-            xScroll = Mth.clamp(xScroll + (int) (scrollBarDragX * (layout.getWidth() + overscroll * 2)), -overscroll, Math.max(0, layout.getWidth() + overscroll - actualWidth));
+            xScroll = Mth.clamp(xScroll + (int) (scrollBarDragX * (layout.getWidth() + overscrollX * 2)), -overscrollX, Math.max(0, layout.getWidth() + overscrollX - actualWidth));
             return true;
         }
 
         if (draggingScrollbarY) {
-            double scrollBarHeight = (actualHeight / ((double) layout.getHeight() + overscroll * 2)) * actualHeight;
+            double scrollBarHeight = (actualHeight / ((double) layout.getHeight() + overscrollY * 2)) * actualHeight;
             double scrollBarDragY = dragY / (actualHeight - scrollBarHeight);
-            yScroll = Mth.clamp(yScroll + (int) (scrollBarDragY * (layout.getHeight() + overscroll * 2)), -overscroll, Math.max(0, layout.getHeight() + overscroll - actualHeight));
+            yScroll = Mth.clamp(yScroll + (int) (scrollBarDragY * (layout.getHeight() + overscrollY * 2)), -overscrollY, Math.max(0, layout.getHeight() + overscrollY - actualHeight));
             return true;
         }
 
@@ -120,12 +162,12 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
         if (isMouseOver(mouseX, mouseY) && !contentScrolled) {
             var scrolled = false;
             if (isXScrollbarVisible()) {
-                xScroll = Mth.clamp(xScroll - (int) (scrollX * 10), -overscroll, Math.max(0, layout.getWidth() + overscroll - this.getViewWidth()));
+                xScroll = Mth.clamp(xScroll - (int) (scrollX * 10), -overscrollX, Math.max(0, layout.getWidth() + overscrollX - this.getViewWidth()));
                 scrolled = true;
             }
 
             if (isYScrollbarVisible()) {
-                yScroll = Mth.clamp(yScroll - (int) (scrollY * 10), -overscroll, Math.max(0, layout.getHeight() + overscroll - this.getViewHeight()));
+                yScroll = Mth.clamp(yScroll - (int) (scrollY * 10), -overscrollY, Math.max(0, layout.getHeight() + overscrollY - this.getViewHeight()));
                 scrolled = true;
             }
 
@@ -218,9 +260,30 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
         return this;
     }
 
-    public LayoutWidget<T> withOverscroll(int overscroll) {
-        this.overscroll = overscroll;
+    public LayoutWidget<T> withScrollX(int x) {
+        this.xScroll = x;
         return this;
+    }
+
+    public LayoutWidget<T> withScrollY(int y) {
+        this.yScroll = y;
+        return this;
+    }
+
+    public LayoutWidget<T> withOverscroll(int overscrollX, int overscrollY) {
+        this.overscrollX = overscrollX;
+        this.overscrollY = overscrollY;
+        return withScroll(-overscrollX, -overscrollY);
+    }
+
+    public LayoutWidget<T> withOverscrollX(int overscrollX) {
+        this.overscrollX = overscrollX;
+        return withScrollX(-overscrollX);
+    }
+
+    public LayoutWidget<T> withOverscrollY(int overscrollY) {
+        this.overscrollY = overscrollY;
+        return withScrollY(-overscrollY);
     }
 
     public LayoutWidget<T> withScrollToBottom() {
@@ -230,6 +293,26 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
 
     public LayoutWidget<T> withScrollToRight() {
         this.xScroll = layout.getWidth() - this.getWidth();
+        return this;
+    }
+
+    public LayoutWidget<T> withScrollbarWidth(int scrollWidth) {
+        this.scrollWidth = scrollWidth;
+        return this;
+    }
+
+    public LayoutWidget<T> withScrollbarMargin(int margin) {
+        this.scrollMargin = margin;
+        return this;
+    }
+
+    public LayoutWidget<T> withScrollbarXRenderer(WidgetRenderer<LayoutWidget<T>> scrollbarXRenderer) {
+        this.scrollbarXRenderer = scrollbarXRenderer;
+        return this;
+    }
+
+    public LayoutWidget<T> withScrollbarYRenderer(WidgetRenderer<LayoutWidget<T>> scrollbarYRenderer) {
+        this.scrollbarYRenderer = scrollbarYRenderer;
         return this;
     }
 
@@ -268,10 +351,34 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
     }
 
     public int getViewWidth() {
-        return this.getWidth() - (isYScrollbarVisible() ? 6 : 0);
+        return this.getWidth() - (isYScrollbarVisible() ? scrollWidth + scrollMargin * 2 : 0);
     }
 
     public int getViewHeight() {
-        return this.getHeight() - (isXScrollbarVisible() ? 6 : 0);
+        return this.getHeight() - (isXScrollbarVisible() ? scrollWidth + scrollMargin * 2 : 0);
+    }
+
+    public int getContentWidth() {
+        return layout.getWidth() + overscrollX * 2;
+    }
+
+    public int getContentHeight() {
+        return layout.getHeight() + overscrollY * 2;
+    }
+
+    public int getXScroll() {
+        return xScroll;
+    }
+
+    public int getYScroll() {
+        return yScroll;
+    }
+
+    public int getOverscrollX() {
+        return overscrollX;
+    }
+
+    public int getOverscrollY() {
+        return overscrollY;
     }
 }
