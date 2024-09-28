@@ -91,7 +91,6 @@ public class ListWidget extends BaseParentWidget {
 
     @Override
     public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        boolean gotCursor = false;
         boolean showsScrollBar = this.lastHeight > this.height;
         int actualWidth = getWidth() - (showsScrollBar ? getScrollbarThumbWidth() + getScrollbarPadding() * 2 : 0);
 

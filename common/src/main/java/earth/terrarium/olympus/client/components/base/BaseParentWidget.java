@@ -72,10 +72,10 @@ public abstract class BaseParentWidget extends BaseWidget implements ContainerEv
         childAt.ifPresentOrElse(guiEventListener -> {
             if (guiEventListener instanceof CursorWidget cursorWidget) {
                 this.cursor = cursorWidget.getCursor();
+            } else {
+                this.cursor = CursorScreen.Cursor.DEFAULT;
             }
-        }, () -> {
-            this.cursor = CursorScreen.Cursor.DEFAULT;
-        });
+        }, () -> this.cursor = CursorScreen.Cursor.DEFAULT);
     }
 
     @Override

@@ -1,12 +1,16 @@
 package earth.terrarium.olympus.client.components.compound;
 
+import com.teamresourceful.resourcefullib.client.scissor.CloseableScissorStack;
+import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.olympus.client.components.base.BaseParentWidget;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;
 import earth.terrarium.olympus.client.ui.UIConstants;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.layouts.Layout;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.apache.commons.lang3.function.Consumers;
 
@@ -37,12 +41,16 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
 
     private int scrollWidth = 6;
     private int scrollMargin = 2;
+    private int contentMargin = 0;
+
+    private ResourceLocation scrollbarBackground = null;
+    private ResourceLocation background = null;
 
     private WidgetRenderer<LayoutWidget<T>> scrollbarXRenderer = (graphics, context, partialTick) -> {
         var widget = context.getWidget();
 
         int scrollWidth = (int) (context.getWidth() * (context.getWidth() / (float) widget.getContentWidth())) + (widget.getViewWidth() - context.getWidth());
-        int scrollX = (int) (widget.getXScroll() / (float) widget.getContentWidth() * context.getWidth());
+        int scrollX = (int) ((widget.getXScroll() + widget.getOverscrollX()) / (float) widget.getContentWidth() * context.getWidth());
 
         graphics.blitSprite(UIConstants.SCROLLBAR,
                 context.getX(),
@@ -63,7 +71,7 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
         var widget = context.getWidget();
 
         int scrollHeight = (int) (context.getHeight() * (context.getHeight() / (float) widget.getContentHeight())) + (widget.getViewHeight() - context.getHeight());
-        int scrollY = (int) (widget.getYScroll() / (float) widget.getContentHeight() * context.getHeight());
+        int scrollY = (int) ((widget.getYScroll() + widget.getOverscrollY()) / (float) widget.getContentHeight() * context.getHeight());
 
         graphics.blitSprite(UIConstants.SCROLLBAR,
                 context.getX() + 2,
@@ -111,27 +119,41 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
             arranged = true;
         }
 
-        layout.setPosition(getX() - xScroll, getY() - yScroll);
+        layout.setPosition(getX() - xScroll + contentMargin, getY() - yScroll + contentMargin);
 
-        graphics.enableScissor(getX(), getY(), getX() + getViewWidth(), getY() + getViewHeight());
+        if (background != null) {
+            graphics.blitSprite(background, getX(), getY(), getViewWidth() + contentMargin * 2, getViewHeight() + contentMargin * 2);
+        }
+
+        graphics.enableScissor(getX() + contentMargin, getY() + contentMargin, getX() + getViewWidth() + contentMargin, getY() + getViewHeight() + contentMargin);
         super.renderWidget(graphics, mouseX, mouseY, partialTick);
         graphics.disableScissor();
 
         if (isXScrollbarVisible()) {
-            scrollbarXRenderer.render(graphics, new WidgetRendererContext<>(this, mouseX, mouseY).setHeight(scrollWidth).setWidth(getViewWidth() - scrollMargin * 2).setX(getX() + scrollMargin).setY(this.getY() + this.getViewHeight() + scrollMargin), partialTick);
+            if (scrollbarBackground != null) {
+                graphics.blitSprite(scrollbarBackground, getX(), getY() + getViewHeight() + contentMargin * 2, getViewWidth() + contentMargin * 2, getHeight() - getViewHeight() - contentMargin * 2);
+            }
+            scrollbarXRenderer.render(graphics, new WidgetRendererContext<>(this, mouseX, mouseY).setHeight(scrollWidth).setWidth(getViewWidth() - scrollMargin * 2).setX(getX() + scrollMargin).setY(this.getY() + this.getViewHeight() + scrollMargin + contentMargin * 2), partialTick);
         }
 
         if (isYScrollbarVisible()) {
-            scrollbarYRenderer.render(graphics, new WidgetRendererContext<>(this, mouseX, mouseY).setWidth(scrollWidth).setHeight(getViewHeight() - scrollMargin * 2).setY(getY() + scrollMargin).setX(this.getX() + this.getViewWidth() + scrollMargin), partialTick);
+            if (scrollbarBackground != null) {
+                graphics.blitSprite(scrollbarBackground, getX() + getViewWidth() + contentMargin * 2, getY(), getWidth() - getViewWidth() - contentMargin * 2, getViewHeight() + contentMargin * 2);
+            }
+            scrollbarYRenderer.render(graphics, new WidgetRendererContext<>(this, mouseX, mouseY).setWidth(scrollWidth).setHeight(getViewHeight() - scrollMargin * 2).setX(this.getX() + this.getViewWidth() + scrollMargin + contentMargin * 2).setY(getY() + scrollMargin), partialTick);
+        }
+
+        if (isYScrollbarVisible() && isXScrollbarVisible() && scrollbarBackground != null) {
+            graphics.blitSprite(scrollbarBackground, getX() + getViewWidth() + contentMargin * 2, getY() + getViewHeight() + contentMargin * 2, getWidth() - getViewWidth() - contentMargin * 2, getHeight() - getViewHeight() - contentMargin * 2);
         }
     }
 
     public boolean isOverScrollbarX(int mouseX, int mouseY) {
-        return isXScrollbarVisible() && mouseX >= getX() && mouseX <= getX() + getWidth() && mouseY >= getY() + getHeight() - 6 && mouseY <= getY() + getHeight();
+        return isXScrollbarVisible() && mouseX >= getX() + scrollMargin && mouseX <= getX() + getViewHeight() - scrollMargin && mouseY >= getY() + getViewHeight() + scrollMargin && mouseY <= getY() + getHeight() - scrollMargin;
     }
 
     public boolean isOverScrollbarY(int mouseX, int mouseY) {
-        return isYScrollbarVisible() && mouseX >= getX() + getWidth() - 6 && mouseX <= getX() + getWidth() && mouseY >= getY() && mouseY <= getY() + getHeight();
+        return isYScrollbarVisible() && mouseX >= getX() + getViewWidth() + scrollMargin && mouseX <= getX() + getWidth() - scrollMargin && mouseY >= getY() + scrollMargin && mouseY <= getY() + getViewHeight() - scrollMargin;
     }
 
     @Override
@@ -306,6 +328,11 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
         return this;
     }
 
+    public LayoutWidget<T> withContentMargin(int margin) {
+        this.contentMargin = margin;
+        return this;
+    }
+
     public LayoutWidget<T> withScrollbarXRenderer(WidgetRenderer<LayoutWidget<T>> scrollbarXRenderer) {
         this.scrollbarXRenderer = scrollbarXRenderer;
         return this;
@@ -313,6 +340,16 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
 
     public LayoutWidget<T> withScrollbarYRenderer(WidgetRenderer<LayoutWidget<T>> scrollbarYRenderer) {
         this.scrollbarYRenderer = scrollbarYRenderer;
+        return this;
+    }
+
+    public LayoutWidget<T> withScrollbarBackground(ResourceLocation scrollbarBackground) {
+        this.scrollbarBackground = scrollbarBackground;
+        return this;
+    }
+
+    public LayoutWidget<T> withBackground(ResourceLocation background) {
+        this.background = background;
         return this;
     }
 
@@ -351,11 +388,11 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
     }
 
     public int getViewWidth() {
-        return this.getWidth() - (isYScrollbarVisible() ? scrollWidth + scrollMargin * 2 : 0);
+        return this.getWidth() - (contentMargin * 2) - (isYScrollbarVisible() ? scrollWidth + scrollMargin * 2 : 0);
     }
 
     public int getViewHeight() {
-        return this.getHeight() - (isXScrollbarVisible() ? scrollWidth + scrollMargin * 2 : 0);
+        return this.getHeight() - (contentMargin * 2) - (isXScrollbarVisible() ? scrollWidth + scrollMargin * 2 : 0);
     }
 
     public int getContentWidth() {
