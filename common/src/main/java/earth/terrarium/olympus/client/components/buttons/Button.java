@@ -9,8 +9,10 @@ import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererCon
 import earth.terrarium.olympus.client.components.dropdown.DropdownBuilder;
 import earth.terrarium.olympus.client.components.dropdown.DropdownState;
 import earth.terrarium.olympus.client.ui.UIConstants;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.client.gui.navigation.CommonInputs;
 import org.jetbrains.annotations.Nullable;
 
 public class Button extends BaseWidget implements CursorWidget {
@@ -67,5 +69,20 @@ public class Button extends BaseWidget implements CursorWidget {
     public <T> DropdownBuilder<T> withDropdown(DropdownState<T> state) {
         state.setButton(this);
         return new DropdownBuilder<>(state);
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (this.active && this.visible) {
+            if (CommonInputs.selected(keyCode)) {
+                this.playDownSound(Minecraft.getInstance().getSoundManager());
+                this.onPress.run();
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 }

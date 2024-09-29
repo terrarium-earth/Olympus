@@ -1,10 +1,16 @@
 package earth.terrarium.olympus.client.components.base;
 
 import com.teamresourceful.resourcefullib.client.components.CursorWidget;
+import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
+import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.MultiLineEditBox;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.ContainerEventHandler;
 import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.navigation.FocusNavigationEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,6 +27,8 @@ public abstract class BaseParentWidget extends BaseWidget implements ContainerEv
     @Nullable
     protected GuiEventListener focused;
     protected boolean isDragging;
+
+    protected CursorScreen.Cursor cursor = CursorScreen.Cursor.DEFAULT;
 
     public BaseParentWidget(int width, int height) {
         super(width, height);
@@ -56,12 +64,40 @@ public abstract class BaseParentWidget extends BaseWidget implements ContainerEv
         this.children.clear();
     }
 
-
     @Override
     protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        for (Renderable renderable : renderables) {
-            renderable.render(graphics, mouseX, mouseY, partialTicks);
+        if (isMouseOver(mouseX, mouseY)) {
+            for (Renderable renderable : renderables) {
+                renderable.render(graphics, mouseX, mouseY, partialTicks);
+            }
+
+            updateCursor(mouseX, mouseY);
+        } else {
+            for (Renderable renderable : renderables) {
+                renderable.render(graphics, -1, -1, partialTicks);
+            }
+
+            this.cursor = CursorScreen.Cursor.DEFAULT;
         }
+    }
+
+    public void updateCursor(int mouseX, int mouseY) {
+        getChildAt(mouseX, mouseY).ifPresentOrElse(
+            widget -> {
+                if (widget instanceof CursorWidget cursorWidget) {
+                    this.cursor = cursorWidget.getCursor();
+                } else if (widget instanceof AbstractWidget abstractWidget && abstractWidget.visible) {
+                    if (abstractWidget.active) {
+                        cursor = widget instanceof EditBox || widget instanceof MultiLineEditBox ? CursorScreen.Cursor.TEXT : CursorScreen.Cursor.POINTER;
+                    } else {
+                        cursor = CursorScreen.Cursor.DISABLED;
+                    }
+                } else {
+                    this.cursor = CursorScreen.Cursor.DEFAULT;
+                }
+            },
+            () -> this.cursor = CursorScreen.Cursor.DEFAULT
+        );
     }
 
     @Override
@@ -94,6 +130,18 @@ public abstract class BaseParentWidget extends BaseWidget implements ContainerEv
     }
 
     @Override
+    public boolean isFocused() {
+        return ContainerEventHandler.super.isFocused();
+    }
+
+    @Override
+    public void setFocused(boolean focused) {
+        if (this.focused != null) {
+            this.focused.setFocused(focused);
+        }
+    }
+
+    @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         return ContainerEventHandler.super.mouseClicked(mouseX, mouseY, button);
     }
@@ -108,11 +156,41 @@ public abstract class BaseParentWidget extends BaseWidget implements ContainerEv
         return ContainerEventHandler.super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
     }
 
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        return ContainerEventHandler.super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    @Override
+    public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
+        return ContainerEventHandler.super.keyReleased(keyCode, scanCode, modifiers);
+    }
+
+    @Override
+    public boolean charTyped(char codePoint, int modifiers) {
+        return ContainerEventHandler.super.charTyped(codePoint, modifiers);
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        return ContainerEventHandler.super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+    }
+
+    @Override
+    public @Nullable ComponentPath nextFocusPath(FocusNavigationEvent event) {
+        return ContainerEventHandler.super.nextFocusPath(event);
+    }
+
     public <T> void visit(Class<T> tClass, Consumer<T> consumer) {
         for (Renderable renderable : renderables) {
             if (tClass.isInstance(renderable)) {
                 consumer.accept(tClass.cast(renderable));
             }
         }
+    }
+
+    @Override
+    public CursorScreen.Cursor getCursor() {
+        return this.cursor;
     }
 }

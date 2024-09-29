@@ -2,9 +2,11 @@ package earth.terrarium.olympus.client.components.textbox;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
+import com.teamresourceful.resourcefullib.common.color.Color;
 import earth.terrarium.olympus.client.components.base.BaseWidget;
+import earth.terrarium.olympus.client.constants.MinecraftColors;
 import earth.terrarium.olympus.client.ui.UIConstants;
-import net.minecraft.Optionull;
+import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ComponentPath;
@@ -18,9 +20,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class TextBox extends BaseWidget {
@@ -30,67 +32,87 @@ public class TextBox extends BaseWidget {
         UIConstants.id("textbox/hovered"),
         UIConstants.id("textbox/focused")
     );
-    protected static final int TEXT_COLOR = 0xe0e0e0;
-    protected static final int ERROR_COLOR = 0xFF5555;
-    protected static final int PLACEHOLDER_COLOR = 0xD0D0D0;
+    protected Color textColor = MinecraftColors.GRAY;
+    protected Color errorColor = MinecraftColors.RED;
+    protected Color placeholderColor = MinecraftColors.DARK_GRAY;
     protected static final int PADDING = 4;
 
     protected final Font font = Minecraft.getInstance().font;
+    private final State<String> state;
 
-    private final int maxLength;
-    private final Predicate<String> filter;
-    private final Consumer<String> responder;
-
+    private Predicate<String> filter = s -> true;
     protected String placeholder = "";
-    protected String value;
     private boolean shiftPressed;
+    private int maxLength = Short.MAX_VALUE;
     private int displayPos;
     private int cursorPos;
     private int highlightPos;
 
-    public TextBox(TextBox box, String value, int width, int height, int maxLength) {
-        this(box, value, width, height, maxLength, s -> true, s -> {});
+    public TextBox(State<@NotNull String> state) {
+        this.state = state;
+
+        this.setCursorPosition(this.state.get().length());
+        this.setHighlightPos(this.cursorPos);
+        this.displayPos = 0;
     }
 
-    public TextBox(TextBox box, String value, int width, int height, int maxLength, Predicate<String> filter, Consumer<String> responder) {
-        super(width, height);
-        this.maxLength = maxLength;
-        this.filter = filter;
-        this.responder = responder;
-        this.value = Optionull.mapOrDefault(box, TextBox::getValue, value);
+    public TextBox withPlaceholder(String placeholder) {
+        this.placeholder = placeholder;
+        return this;
+    }
 
-        this.setCursorPosition(this.value.length());
-        this.setHighlightPos(this.cursorPos);
+    public TextBox withMaxLength(int maxLength) {
+        this.maxLength = maxLength;
+        return this;
+    }
+
+    public TextBox withFilter(Predicate<String> filter) {
+        this.filter = filter;
+        return this;
+    }
+
+    public TextBox withTextColor(Color color) {
+        this.textColor = color;
+        return this;
+    }
+
+    public TextBox withErrorColor(Color color) {
+        this.errorColor = color;
+        return this;
+    }
+
+    public TextBox withPlaceholderColor(Color color) {
+        this.placeholderColor = color;
+        return this;
+    }
+
+    public String getValue() {
+        return this.state.get();
     }
 
     public void setValue(String text) {
         if (this.filter.test(text)) {
             if (text.length() > this.maxLength) {
-                this.value = text.substring(0, this.maxLength);
+                this.state.set(text.substring(0, this.maxLength));
             } else {
-                this.value = text;
+                this.state.set(text);
             }
 
-            this.moveCursorTo(this.value.length());
+            this.moveCursorTo(this.state.get().length());
             this.setHighlightPos(this.cursorPos);
-            this.onValueChange();
         }
-    }
-
-    public String getValue() {
-        return this.value;
     }
 
     public String getHighlighted() {
         int min = Math.min(this.cursorPos, this.highlightPos);
         int max = Math.max(this.cursorPos, this.highlightPos);
-        return this.value.substring(min, max);
+        return this.state.get().substring(min, max);
     }
 
     public void insertText(String textToWrite) {
         int min = Math.min(this.cursorPos, this.highlightPos);
         int max = Math.max(this.cursorPos, this.highlightPos);
-        int k = this.maxLength - this.value.length() - (min - max);
+        int k = this.maxLength - this.state.get().length() - (min - max);
         String string = StringUtil.filterText(textToWrite);
         int l = string.length();
         if (k < l) {
@@ -98,21 +120,16 @@ public class TextBox extends BaseWidget {
             l = k;
         }
 
-        String string2 = new StringBuilder(this.value).replace(min, max, string).toString();
+        String string2 = new StringBuilder(this.state.get()).replace(min, max, string).toString();
         if (this.filter.test(string2)) {
-            this.value = string2;
+            this.state.set(string2);
             this.setCursorPosition(min + l);
             this.setHighlightPos(this.cursorPos);
-            this.onValueChange();
         }
     }
 
-    protected void onValueChange() {
-        this.responder.accept(this.value);
-    }
-
     private void deleteText(int count) {
-        if (this.value.isEmpty()) return;
+        if (this.state.get().isEmpty()) return;
 
         if (Screen.hasControlDown()) {
             if (this.highlightPos != this.cursorPos) {
@@ -126,7 +143,7 @@ public class TextBox extends BaseWidget {
     }
 
     public void deleteChars(int num) {
-        if (!this.value.isEmpty()) {
+        if (!this.state.get().isEmpty()) {
             if (this.highlightPos != this.cursorPos) {
                 this.insertText("");
             } else {
@@ -134,9 +151,9 @@ public class TextBox extends BaseWidget {
                 int j = Math.min(i, this.cursorPos);
                 int k = Math.max(i, this.cursorPos);
                 if (j != k) {
-                    String string = new StringBuilder(this.value).delete(j, k).toString();
+                    String string = new StringBuilder(this.state.get()).delete(j, k).toString();
                     if (this.filter.test(string)) {
-                        this.value = string;
+                        this.state.set(string);
                         this.moveCursorTo(j);
                     }
                 }
@@ -153,23 +170,24 @@ public class TextBox extends BaseWidget {
         boolean bl = n < 0;
         int j = Math.abs(n);
 
+        String value = this.state.get();
         for (int k = 0; k < j; ++k) {
             if (!bl) {
-                int l = this.value.length();
-                i = this.value.indexOf(32, i);
+                int l = value.length();
+                i = value.indexOf(32, i);
                 if (i == -1) {
                     i = l;
                 } else {
-                    while (i < l && this.value.charAt(i) == ' ') {
+                    while (i < l && value.charAt(i) == ' ') {
                         ++i;
                     }
                 }
             } else {
-                while (i > 0 && this.value.charAt(i - 1) == ' ') {
+                while (i > 0 && value.charAt(i - 1) == ' ') {
                     --i;
                 }
 
-                while (i > 0 && this.value.charAt(i - 1) != ' ') {
+                while (i > 0 && value.charAt(i - 1) != ' ') {
                     --i;
                 }
             }
@@ -179,7 +197,7 @@ public class TextBox extends BaseWidget {
     }
 
     private int getCursorPos(int delta) {
-        return Util.offsetByCodepoints(this.value, this.cursorPos, delta);
+        return Util.offsetByCodepoints(this.state.get(), this.cursorPos, delta);
     }
 
     public void moveCursorTo(int pos) {
@@ -187,12 +205,10 @@ public class TextBox extends BaseWidget {
         if (!this.shiftPressed) {
             this.setHighlightPos(this.cursorPos);
         }
-
-        this.onValueChange();
     }
 
     public void setCursorPosition(int pos) {
-        this.cursorPos = Mth.clamp(pos, 0, this.value.length());
+        this.cursorPos = Mth.clamp(pos, 0, this.state.get().length());
     }
 
     @Override
@@ -201,7 +217,7 @@ public class TextBox extends BaseWidget {
 
         this.shiftPressed = Screen.hasShiftDown();
         if (Screen.isSelectAll(keyCode)) {
-            this.moveCursorTo(this.value.length());
+            this.moveCursorTo(this.state.get().length());
             this.setHighlightPos(0);
             return true;
         } else if (Screen.isCopy(keyCode)) {
@@ -243,7 +259,7 @@ public class TextBox extends BaseWidget {
                     yield true;
                 }
                 case InputConstants.KEY_END -> {
-                    this.moveCursorTo(this.value.length());
+                    this.moveCursorTo(this.state.get().length());
                     yield true;
                 }
                 default -> false;
@@ -264,12 +280,16 @@ public class TextBox extends BaseWidget {
     @Override
     public void onClick(double mouseX, double mouseY) {
         int relativeX = Mth.floor(mouseX) - this.getX() - PADDING;
-        String string = this.font.plainSubstrByWidth(this.value.substring(this.displayPos), this.width - PADDING * 2);
+        String string = this.font.plainSubstrByWidth(this.state.get().substring(this.displayPos), this.width - PADDING * 2);
         this.moveCursorTo(this.font.plainSubstrByWidth(string, relativeX).length() + this.displayPos);
     }
 
     public int getTextColor() {
-        return TEXT_COLOR;
+        if (this.state.get().isEmpty()) {
+            return placeholderColor.getValue();
+        } else {
+            return this.filter.test(this.state.get()) ? textColor.getValue() : errorColor.getValue();
+        }
     }
 
     public void setPlaceholder(Component placeholder) {
@@ -279,10 +299,7 @@ public class TextBox extends BaseWidget {
     @Override
     public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         if (this.isVisible()) {
-
-            boolean showPlaceholder = this.value.isEmpty() && !this.placeholder.isEmpty();
-
-            String value = showPlaceholder ? this.placeholder : this.value;
+            String value = this.state.get().isEmpty() && !this.placeholder.isEmpty() ? this.placeholder : this.state.get();
 
             ResourceLocation texture = SPRITES.get(this.isHoveredOrFocused(), !this.isActive());
 
@@ -302,7 +319,7 @@ public class TextBox extends BaseWidget {
 
             if (!truncatedValue.isEmpty()) {
                 String string2 = cursorVisible ? truncatedValue.substring(0, displayCursorDiff) : truncatedValue;
-                n = graphics.drawString(this.font, string2, l, m, showPlaceholder ? PLACEHOLDER_COLOR : getTextColor(), false) + 1;
+                n = graphics.drawString(this.font, string2, l, m, getTextColor(), false) + 1;
             }
 
             boolean bl3 = this.cursorPos < value.length() || value.length() >= this.maxLength;
@@ -315,7 +332,7 @@ public class TextBox extends BaseWidget {
             }
 
             if (!truncatedValue.isEmpty() && cursorVisible && displayCursorDiff < truncatedValue.length()) {
-                graphics.drawString(this.font, truncatedValue.substring(displayCursorDiff), n, m, showPlaceholder ? PLACEHOLDER_COLOR : getTextColor(), false);
+                graphics.drawString(this.font, truncatedValue.substring(displayCursorDiff), n, m, getTextColor(), false);
             }
 
             if (showCursor) {
@@ -353,17 +370,17 @@ public class TextBox extends BaseWidget {
     }
 
     public void setHighlightPos(int position) {
-        int length = this.value.length();
+        int length = this.state.get().length();
         this.highlightPos = Mth.clamp(position, 0, length);
         if (this.displayPos > length) {
             this.displayPos = length;
         }
 
         int textWidth = this.width - PADDING * 2;
-        String string = this.font.plainSubstrByWidth(this.value.substring(this.displayPos), textWidth);
+        String string = this.font.plainSubstrByWidth(this.state.get().substring(this.displayPos), textWidth);
         int k = string.length() + this.displayPos;
         if (this.highlightPos == this.displayPos) {
-            this.displayPos -= this.font.plainSubstrByWidth(this.value, textWidth, true).length();
+            this.displayPos -= this.font.plainSubstrByWidth(this.state.get(), textWidth, true).length();
         }
 
         if (this.highlightPos > k) {

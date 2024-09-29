@@ -1,9 +1,12 @@
 package earth.terrarium.olympus.client.components.base;
 
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
+import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
+import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
@@ -14,8 +17,6 @@ import java.util.List;
 
 public class ListWidget extends BaseParentWidget {
 
-    private static final int SCROLLBAR_WIDTH = 6;
-    private static final int SCROLLBAR_PADDING = 2;
     private static final ResourceLocation SCROLLBAR = UIConstants.id("lists/scroll/bar");
     private static final ResourceLocation SCROLLBAR_THUMB = UIConstants.id("lists/scroll/thumb");
 
@@ -26,6 +27,30 @@ public class ListWidget extends BaseParentWidget {
     protected boolean scrolling = false;
     protected int gap = 0;
     protected int overScroll = 0;
+
+    protected int scrollWidth = 6;
+    protected int scrollbarGap = 2;
+
+    protected WidgetRenderer<ListWidget> scrollbarRenderer = (graphics, context, partialTick) -> {
+        var widget = context.getWidget();
+        int scrollBarHeight = (int) ((widget.getHeight() / (double) widget.getContentHeight()) * widget.getHeight());
+        int scrollBarY = context.getY() + Math.round(((float) widget.getScroll() / (float) widget.getContentHeight()) * context.getHeight());
+
+        graphics.blitSprite(SCROLLBAR,
+            context.getX() + (context.getWidth() - 2) / 2,
+            context.getY(),
+            context.getWidth() - 4,
+            context.getHeight()
+        );
+
+        graphics.blitSprite(
+            SCROLLBAR_THUMB,
+            context.getX(),
+            scrollBarY,
+                context.getWidth(),
+            scrollBarHeight
+        );
+    };
 
     public ListWidget(int width, int height) {
         super(width, height);
@@ -69,7 +94,7 @@ public class ListWidget extends BaseParentWidget {
         boolean showsScrollBar = this.lastHeight > this.height;
         int actualWidth = getWidth() - (showsScrollBar ? getScrollbarThumbWidth() + getScrollbarPadding() * 2 : 0);
 
-        graphics.enableScissor(getX() + 1, getY(), getX() + actualWidth, getY() + this.height);
+        graphics.enableScissor(getX(), getY(), getX() + actualWidth, getY() + this.height);
 
         int y = this.getY() - (int) scroll;
         this.lastHeight = 0;
@@ -84,46 +109,30 @@ public class ListWidget extends BaseParentWidget {
             this.lastHeight += item.getHeight() + gap;
         }
 
+        if (isMouseOverContent(mouseX, mouseY)) {
+            updateCursor(mouseX, mouseY);
+        } else {
+            this.cursor = CursorScreen.Cursor.DEFAULT;
+        }
+
         graphics.disableScissor();
 
         if (this.lastHeight > this.height) {
-            int scrollBarHeight = (int) ((this.height / (double) this.lastHeight) * this.height) - getScrollbarPadding() * 2;
-
-            int scrollBarX = this.getX() + this.width - getScrollbarThumbWidth() - getScrollbarPadding();
-            int scrollBarY = this.getY() + getScrollbarPadding() + Math.round(((float) this.scroll / (float) this.lastHeight) * this.height);
-
-            renderScrollbar(graphics, scrollBarX, scrollBarY, scrollBarHeight, mouseX, mouseY, partialTicks);
+            this.scrollbarRenderer.render(graphics, new WidgetRendererContext<>(this, mouseX, mouseY).setWidth(scrollWidth).setHeight(getHeight() - scrollbarGap * 2).setY(getY() + scrollbarGap).setX(this.getX() + this.getWidth() - scrollWidth - scrollbarGap), partialTicks);
         }
     }
 
-    public void renderScrollbar(GuiGraphics graphics, int scrollBarX, int scrollBarY, int scrollBarHeight, int mouseX, int mouseY, float partialTicks) {
-        graphics.blitSprite(SCROLLBAR,
-            scrollBarX + (getScrollbarThumbWidth() - getScrollbarTrackWidth()) / 2,
-            this.getY() + getScrollbarPadding(),
-                getScrollbarTrackWidth(),
-            this.height - getScrollbarPadding() * 2
-        );
-
-        graphics.blitSprite(
-            SCROLLBAR_THUMB,
-            scrollBarX,
-            scrollBarY,
-            getScrollbarThumbWidth(),
-            scrollBarHeight
-        );
-
+    public boolean isMouseOverContent(double mouseX, double mouseY) {
+        return mouseX >= this.getX() && mouseX <= this.getX() + this.getWidth() - scrollWidth - scrollbarGap * 2 && mouseY >= this.getY() && mouseY <= this.getY() + this.height;
     }
 
+
     public int getScrollbarThumbWidth() {
-        return SCROLLBAR_WIDTH;
+        return scrollWidth;
     }
 
     public int getScrollbarPadding() {
-        return SCROLLBAR_PADDING;
-    }
-
-    public int getScrollbarTrackWidth() {
-        return SCROLLBAR_WIDTH - SCROLLBAR_PADDING * 2;
+        return scrollbarGap;
     }
 
     @Override
@@ -148,21 +157,12 @@ public class ListWidget extends BaseParentWidget {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (clicked(mouseX, mouseY)) {
-            if (isMouseOverScrollBar(mouseX, mouseY)) {
-                this.scrolling = true;
-                return true;
-            }
-            int y = getY() - Mth.floor(this.scroll);
-            for (AbstractWidget entry : this.items) {
-                int height = entry.getHeight();
-                if (mouseY >= y && mouseY <= y + height) {
-                    return entry.mouseClicked(mouseX, mouseY, button);
-                }
-                y += height + gap;
-            }
+        if (!clicked(mouseX, mouseY)) return false;
+        if (isMouseOverScrollBar(mouseX, mouseY)) {
+            this.scrolling = true;
+            return true;
         }
-        return false;
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
@@ -196,6 +196,19 @@ public class ListWidget extends BaseParentWidget {
         }
     }
 
+    @Override
+    public void setFocused(@Nullable GuiEventListener focused) {
+        super.setFocused(focused);
+
+        if (focused instanceof AbstractWidget widget) {
+            if (widget.getBottom() > this.getBottom()) {
+                this.scroll = Math.min(this.scroll + widget.getBottom() - this.getBottom(), this.lastHeight - this.height);
+            } else if (widget.getY() < this.getY()) {
+                this.scroll = Math.max(this.scroll - this.getY() + widget.getY(), 0);
+            }
+        }
+    }
+
     protected void updateScrollBar() {
         updateLastHeight();
         this.scroll = Mth.clamp(this.scroll, 0, Math.max(0, this.lastHeight - this.height + this.overScroll));
@@ -206,16 +219,44 @@ public class ListWidget extends BaseParentWidget {
     }
 
     @Override
-    public CursorScreen.Cursor getCursor() {
-        return CursorScreen.Cursor.POINTER;
-    }
-
-    @Override
     public void setWidth(int width) {
         super.setWidth(width);
     }
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public int getContentHeight() {
+        return this.lastHeight;
+    }
+
+    public int getScroll() {
+        return (int) this.scroll;
+    }
+
+    public ListWidget withGap(int gap) {
+        this.gap = gap;
+        return this;
+    }
+
+    public ListWidget withOverScroll(int overScroll) {
+        this.overScroll = overScroll;
+        return this;
+    }
+
+    public ListWidget withScrollbarRenderer(WidgetRenderer<ListWidget> scrollbarRenderer) {
+        this.scrollbarRenderer = scrollbarRenderer;
+        return this;
+    }
+
+    public ListWidget withScrollWidth(int scrollWidth) {
+        this.scrollWidth = scrollWidth;
+        return this;
+    }
+
+    public ListWidget withScrollGap(int gap) {
+        this.scrollbarGap = gap;
+        return this;
     }
 }
