@@ -5,7 +5,6 @@ import earth.terrarium.example.base.OlympusExample;
 import earth.terrarium.olympus.client.components.Widgets;
 import earth.terrarium.olympus.client.layouts.Layouts;
 import earth.terrarium.olympus.client.utils.ListenableState;
-import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.gui.layouts.FrameLayout;
 import net.minecraft.network.chat.Component;
 

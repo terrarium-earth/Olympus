@@ -1,6 +1,5 @@
 package earth.terrarium.olympus.client.components.base;
 
-import com.teamresourceful.resourcefullib.client.components.CursorWidget;
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;

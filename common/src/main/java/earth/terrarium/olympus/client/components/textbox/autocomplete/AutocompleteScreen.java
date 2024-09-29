@@ -5,7 +5,6 @@ import earth.terrarium.olympus.client.components.textbox.TextBox;
 import earth.terrarium.olympus.client.ui.Overlay;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import earth.terrarium.olympus.client.utils.ListenableState;
-import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;

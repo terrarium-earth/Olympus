@@ -1,11 +1,8 @@
 package earth.terrarium.olympus.client.components.compound.radio;
 
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
-import earth.terrarium.olympus.client.components.buttons.Button;
 import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.gui.components.AbstractWidget;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiFunction;
 

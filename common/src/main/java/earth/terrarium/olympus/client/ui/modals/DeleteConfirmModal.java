@@ -9,7 +9,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.layouts.GridLayout;
 import net.minecraft.client.gui.layouts.LayoutSettings;
-import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
