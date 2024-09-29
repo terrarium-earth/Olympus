@@ -12,7 +12,7 @@ public class UIIcons {
     public static final ResourceLocation CHECKMARK = create("checkmark");
     public static final ResourceLocation CROSS = create("cross");
     public static final ResourceLocation DASH = create("dash");
-
+    public static final ResourceLocation TRASH = create("trash");
 
     private static ResourceLocation create(String name) {
         return UIConstants.id("icons/%s".formatted(name));

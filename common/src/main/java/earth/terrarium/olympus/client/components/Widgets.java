@@ -20,7 +20,11 @@ import earth.terrarium.olympus.client.ui.UIConstants;
 import earth.terrarium.olympus.client.utils.State;
 import earth.terrarium.olympus.client.utils.StateUtils;
 import earth.terrarium.olympus.client.utils.Translatable;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.layouts.FrameLayout;
+import net.minecraft.client.gui.layouts.LayoutSettings;
 import net.minecraft.network.chat.Component;
 import org.apache.commons.lang3.function.Consumers;
 
@@ -128,6 +132,28 @@ public final class Widgets {
         var compound = new LayoutWidget<>(Layouts.column());
         factory.accept(compound);
         return compound;
+    }
+
+    public static LayoutWidget<LinearViewLayout> carousel(Consumer<LayoutWidget<LinearViewLayout>> factory) {
+        var compound = new LayoutWidget<>(Layouts.row());
+        factory.accept(compound);
+        return compound;
+    }
+
+    public static LayoutWidget<FrameLayout> labelled(Font font, Component label, AbstractWidget widget, Consumer<LayoutWidget<FrameLayout>> factory) {
+        return frame(frame -> {
+            frame.withStretchToContentHeight();
+            frame.withWidthCallback((frameWidget, frameLayout) -> frameLayout.setMinWidth(frameWidget.getViewWidth()));
+            frame.withContents(contents -> {
+                contents.addChild(new StringWidget(label, font), LayoutSettings::alignHorizontallyLeft);
+                contents.addChild(widget, LayoutSettings::alignHorizontallyRight);
+            });
+            factory.accept(frame);
+        });
+    }
+
+    public static LayoutWidget<FrameLayout> labelled(Font font, Component label, AbstractWidget widget) {
+        return labelled(font, label, widget, Consumers.nop());
     }
 
     public static TextBox textInput(State<String> state, Consumer<TextBox> factory) {
