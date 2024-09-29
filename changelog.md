@@ -1,3 +1,7 @@
-# 1.0.1
+# 1.0.7
 
-Change internals of widgets to be more flexible for changes when extended
+Add layout widget
+Make list widget more flexible
+Add keyboard navigation to layout and list widget
+Add more utility functions
+Trash can icon
