@@ -7,6 +7,7 @@ import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererCon
 import earth.terrarium.olympus.client.ui.UIConstants;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
@@ -193,6 +194,19 @@ public class ListWidget extends BaseParentWidget {
             item.setY(y);
             this.lastHeight += item.getHeight();
             y += item.getHeight();
+        }
+    }
+
+    @Override
+    public void setFocused(@Nullable GuiEventListener focused) {
+        super.setFocused(focused);
+
+        if (focused instanceof AbstractWidget widget) {
+            if (widget.getBottom() > this.getBottom()) {
+                this.scroll = Math.min(this.scroll + widget.getBottom() - this.getBottom(), this.lastHeight - this.height);
+            } else if (widget.getY() < this.getY()) {
+                this.scroll = Math.max(this.scroll - this.getY() + widget.getY(), 0);
+            }
         }
     }
 

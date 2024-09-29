@@ -1,19 +1,19 @@
 package earth.terrarium.olympus.client.components.compound;
 
-import com.teamresourceful.resourcefullib.client.scissor.CloseableScissorStack;
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
-import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.olympus.client.components.base.BaseParentWidget;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;
 import earth.terrarium.olympus.client.ui.UIConstants;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.layouts.Layout;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.apache.commons.lang3.function.Consumers;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -365,6 +365,28 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
     public LayoutWidget<T> withBackground(ResourceLocation background) {
         this.background = background;
         return this;
+    }
+
+    @Override
+    public void setFocused(@Nullable GuiEventListener focused) {
+        super.setFocused(focused);
+        if (focused instanceof AbstractWidget widget) {
+            if (isYScrollbarVisible()) {
+                if (widget.getBottom() > this.getY() + contentMargin + this.getViewHeight()) {
+                    yScroll = Mth.clamp(yScroll + widget.getBottom() - (this.getY() + contentMargin + this.getViewHeight()), -overscrollY, Math.max(0, layout.getHeight() + overscrollY - this.getViewHeight()));
+                } else if (widget.getY() < this.getY() + contentMargin) {
+                    yScroll = Mth.clamp(yScroll - (this.getY() + contentMargin - widget.getY()), -overscrollY, Math.max(0, layout.getHeight() + overscrollY - this.getViewHeight()));
+                }
+            }
+
+            if (isXScrollbarVisible()) {
+                if (widget.getRight() > this.getX() + contentMargin + this.getViewWidth()) {
+                    xScroll = Mth.clamp(xScroll + widget.getRight() - (this.getX() + contentMargin + this.getViewWidth()), -overscrollX, Math.max(0, layout.getWidth() + overscrollX - this.getViewWidth()));
+                } else if (widget.getX() < this.getX() + contentMargin) {
+                    xScroll = Mth.clamp(xScroll - (this.getX() + contentMargin - widget.getX()), -overscrollX, Math.max(0, layout.getWidth() + overscrollX - this.getViewWidth()));
+                }
+            }
+        }
     }
 
     @Override

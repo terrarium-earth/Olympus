@@ -46,9 +46,9 @@ public class LayoutWidgetExample extends ExampleScreen {
                 }
 
                 layout.withChild(Widgets.frame(frame -> frame.withContents(frameLayout -> {
-                    frameLayout.addChild(new StringWidget(Component.literal("WOAAHHH"), font));
+                    frameLayout.addChild(new StringWidget(Component.literal("WOAAHHH"), font), LayoutSettings::alignHorizontallyLeft);
                     frameLayout.addChild(Widgets.list(listWidget -> {
-                        listWidget.withSize(50, 50);
+                        listWidget.withSize(60, 50);
                         listWidget.withScrollableY(TriState.UNDEFINED);
                         listWidget.withContentFillWidth();
                         listWidget.withContents(innerLayout -> {
@@ -60,7 +60,7 @@ public class LayoutWidgetExample extends ExampleScreen {
                             innerLayout.withChild(Widgets.tristate(RadioState.empty()));
                             innerLayout.withChild(Widgets.tristate(RadioState.empty()));
                         });
-                    }));
+                    }), LayoutSettings::alignHorizontallyRight);
                     })
                     .withStretchToContentHeight()
                     .withWidthCallback((frameWidget, frameLayout) -> frameLayout.setMinWidth(frameWidget.getViewWidth()))
