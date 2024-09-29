@@ -4,6 +4,9 @@ import com.teamresourceful.resourcefullib.client.components.CursorWidget;
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.MultiLineEditBox;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.ContainerEventHandler;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -64,18 +67,38 @@ public abstract class BaseParentWidget extends BaseWidget implements ContainerEv
 
     @Override
     protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        for (Renderable renderable : renderables) {
-            renderable.render(graphics, mouseX, mouseY, partialTicks);
-        }
-
-        var childAt = getChildAt(mouseX, mouseY);
-        childAt.ifPresentOrElse(guiEventListener -> {
-            if (guiEventListener instanceof CursorWidget cursorWidget) {
-                this.cursor = cursorWidget.getCursor();
-            } else {
-                this.cursor = CursorScreen.Cursor.DEFAULT;
+        if (isMouseOver(mouseX, mouseY)) {
+            for (Renderable renderable : renderables) {
+                renderable.render(graphics, mouseX, mouseY, partialTicks);
             }
-        }, () -> this.cursor = CursorScreen.Cursor.DEFAULT);
+
+            updateCursor(mouseX, mouseY);
+        } else {
+            for (Renderable renderable : renderables) {
+                renderable.render(graphics, -1, -1, partialTicks);
+            }
+
+            this.cursor = CursorScreen.Cursor.DEFAULT;
+        }
+    }
+
+    public void updateCursor(int mouseX, int mouseY) {
+        getChildAt(mouseX, mouseY).ifPresentOrElse(
+            widget -> {
+                if (widget instanceof CursorWidget cursorWidget) {
+                    this.cursor = cursorWidget.getCursor();
+                } else if (widget instanceof AbstractWidget abstractWidget && abstractWidget.visible) {
+                    if (abstractWidget.active) {
+                        cursor = widget instanceof EditBox || widget instanceof MultiLineEditBox ? CursorScreen.Cursor.TEXT : CursorScreen.Cursor.POINTER;
+                    } else {
+                        cursor = CursorScreen.Cursor.DISABLED;
+                    }
+                } else {
+                    this.cursor = CursorScreen.Cursor.DEFAULT;
+                }
+            },
+            () -> this.cursor = CursorScreen.Cursor.DEFAULT
+        );
     }
 
     @Override

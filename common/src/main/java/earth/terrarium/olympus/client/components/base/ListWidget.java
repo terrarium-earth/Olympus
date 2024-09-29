@@ -109,20 +109,8 @@ public class ListWidget extends BaseParentWidget {
             this.lastHeight += item.getHeight() + gap;
         }
 
-        if (this.isMouseOver(mouseX, mouseY)) {
-            getChildAt(mouseX, mouseY).ifPresentOrElse(
-                widget -> {
-                    if (widget instanceof CursorWidget) {
-                        CursorScreen.Cursor cursor = ((CursorWidget) widget).getCursor();
-                        if (cursor != CursorScreen.Cursor.DEFAULT) {
-                            this.cursor = cursor;
-                        }
-                    }
-                },
-                () -> {
-                    this.cursor = CursorScreen.Cursor.DEFAULT;
-                }
-            );
+        if (isMouseOverContent(mouseX, mouseY)) {
+            updateCursor(mouseX, mouseY);
         } else {
             this.cursor = CursorScreen.Cursor.DEFAULT;
         }
@@ -132,6 +120,10 @@ public class ListWidget extends BaseParentWidget {
         if (this.lastHeight > this.height) {
             this.scrollbarRenderer.render(graphics, new WidgetRendererContext<>(this, mouseX, mouseY).setWidth(scrollWidth).setHeight(getHeight() - scrollbarGap * 2).setY(getY() + scrollbarGap).setX(this.getX() + this.getWidth() - scrollWidth - scrollbarGap), partialTicks);
         }
+    }
+
+    public boolean isMouseOverContent(double mouseX, double mouseY) {
+        return mouseX >= this.getX() && mouseX <= this.getX() + this.getWidth() - scrollWidth - scrollbarGap * 2 && mouseY >= this.getY() && mouseY <= this.getY() + this.height;
     }
 
 

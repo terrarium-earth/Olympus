@@ -1,6 +1,7 @@
 package earth.terrarium.olympus.client.components.compound;
 
 import com.teamresourceful.resourcefullib.client.scissor.CloseableScissorStack;
+import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import com.teamresourceful.resourcefullib.client.utils.RenderUtils;
 import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.olympus.client.components.base.BaseParentWidget;
@@ -148,12 +149,25 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
         }
     }
 
+    @Override
+    public void updateCursor(int mouseX, int mouseY) {
+        if (isOverContent(mouseX, mouseY)) {
+            super.updateCursor(mouseX, mouseY);
+        } else {
+            this.cursor = CursorScreen.Cursor.DEFAULT;
+        }
+    }
+
     public boolean isOverScrollbarX(int mouseX, int mouseY) {
         return isXScrollbarVisible() && mouseX >= getX() + scrollMargin && mouseX <= getX() + getViewHeight() - scrollMargin && mouseY >= getY() + getViewHeight() + scrollMargin && mouseY <= getY() + getHeight() - scrollMargin;
     }
 
     public boolean isOverScrollbarY(int mouseX, int mouseY) {
         return isYScrollbarVisible() && mouseX >= getX() + getViewWidth() + scrollMargin && mouseX <= getX() + getWidth() - scrollMargin && mouseY >= getY() + scrollMargin && mouseY <= getY() + getViewHeight() - scrollMargin;
+    }
+
+    public boolean isOverContent(int mouseX, int mouseY) {
+        return mouseX >= getX() + contentMargin && mouseX <= getX() + contentMargin + getViewWidth() && mouseY >= getY() + contentMargin && mouseY <= getY() + contentMargin + getViewHeight();
     }
 
     @Override
