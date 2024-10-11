@@ -2,27 +2,30 @@ package earth.terrarium.olympus.client.shader;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.logging.LogUtils;
+import net.minecraft.Util;
 import org.lwjgl.opengl.GL20;
 import org.slf4j.Logger;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
-public abstract class Shader {
+public final class Shader<T extends Uniforms> {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    protected final Supplier<String> vertexShader;
-    protected final Supplier<String> fragmentShader;
+    private final Supplier<String> vertexShader;
+    private final Supplier<String> fragmentShader;
+    private final Function<Shader<T>, T> uniformsFactory;
 
-    protected final List<Uniform<?>> uniforms = new ArrayList<>();
-    protected boolean compiled = false;
-    protected int program;
+    private boolean compiled = false;
+    private T uniforms;
+    int program;
 
-    protected Shader(Supplier<String> vertexShader, Supplier<String> fragmentShader) {
+    private Shader(Supplier<String> vertexShader, Supplier<String> fragmentShader, Function<Shader<T>, T> uniformsFactory) {
         this.vertexShader = vertexShader;
         this.fragmentShader = fragmentShader;
+        this.uniformsFactory = uniformsFactory;
     }
 
     public void recompile() {
@@ -62,27 +65,24 @@ public abstract class Shader {
         GlStateManager.glDeleteShader(vertexShaderId);
         GlStateManager.glDeleteShader(fragmentShaderId);
 
-        addUniforms();
+        this.uniforms = this.uniformsFactory.apply(this);
 
         this.compiled = true;
     }
 
-    protected abstract void addUniforms();
-
-    protected <T> void addUniform(Uniform.Type type, String name, Supplier<T> value) {
-        this.uniforms.add(new Uniform<>(this, type, name, value));
+    public T uniforms() {
+        return this.uniforms;
     }
 
-    public void enable() {
+    public void use(Runnable action) {
         if (!this.compiled) throw new IllegalStateException("Shader not compiled");
         GlStateManager._glUseProgram(this.program);
-    }
-
-    public void disable() {
+        this.uniforms.upload();
+        action.run();
         GlStateManager._glUseProgram(0);
     }
 
-    public void uploadUniforms() {
-        this.uniforms.forEach(Uniform::upload);
+    public static <T extends Uniforms> Shader<T> make(Supplier<String> vertexShader, Supplier<String> fragmentShader, Function<Shader<T>, T> uniformsFactory) {
+        return Util.make(new Shader<>(vertexShader, fragmentShader, uniformsFactory), Shader::compile);
     }
 }

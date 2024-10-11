@@ -4,20 +4,17 @@ import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import earth.terrarium.olympus.client.shader.Shader;
-import earth.terrarium.olympus.client.shader.Uniform;
-import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.ApiStatus;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 import java.util.function.Supplier;
 
-public class RoundedTextureShader extends Shader {
+public class RoundedTextureShader {
 
     private static final Supplier<String> VERTEX = () -> """
     #version 150
@@ -70,60 +67,14 @@ public class RoundedTextureShader extends Shader {
         if (distance > 0.0) {
             discard;
         }
-        
+    
         fragColor = color;
     }
     """;
 
-    private static final RoundedTextureShader INSTANCE = Util.make(new RoundedTextureShader(), Shader::compile);
+    public static final Shader<RoundedTextureUniform> SHADER = Shader.make(VERTEX, FRAGMENT, RoundedTextureUniform::new);
 
-    private Matrix4f modelViewMat;
-    private Matrix4f projectionMat;
-
-    private Vector4f radius;
-    private Vector2f size;
-    private Vector2f center;
-    private float scaleFactor;
-    private ResourceLocation texture;
-
-    protected RoundedTextureShader() {
-        super(VERTEX, FRAGMENT);
-    }
-
-    @Override
-    protected void addUniforms() {
-        addUniform(Uniform.Type.MAT4, "modelViewMat", () -> modelViewMat);
-        addUniform(Uniform.Type.MAT4, "projMat", () -> projectionMat);
-        addUniform(Uniform.Type.VEC4, "radius", () -> radius);
-        addUniform(Uniform.Type.VEC2, "size", () -> size);
-        addUniform(Uniform.Type.VEC2, "center", () -> center);
-        addUniform(Uniform.Type.FLOAT, "scaleFactor", () -> scaleFactor);
-        addUniform(Uniform.Type.TEXTURE0, "sampler0", () -> texture);
-    }
-
-    public static boolean use(
-            Matrix4f modelViewMat, Matrix4f projectionMat,
-            ResourceLocation texture, Vector4f radius,
-            Vector2f size, Vector2f center, float scaleFactor
-    ) {
-        if (!INSTANCE.compiled) return false;
-        INSTANCE.modelViewMat = modelViewMat;
-        INSTANCE.projectionMat = projectionMat;
-        INSTANCE.radius = radius;
-        INSTANCE.size = size;
-        INSTANCE.center = center;
-        INSTANCE.scaleFactor = scaleFactor;
-        INSTANCE.texture = texture;
-        INSTANCE.enable();
-        INSTANCE.uploadUniforms();
-        return true;
-    }
-
-    public static void unuse() {
-        INSTANCE.disable();
-    }
-
-    public static boolean blit(
+    public static void blit(
             GuiGraphics graphics,
             int x, int y, int width, int height,
             ResourceLocation texture,
@@ -139,39 +90,30 @@ public class RoundedTextureShader extends Shader {
 
         float yOffset = (window.getScreenHeight() - scaledHeight) - (scaledY * 2f);
 
-        boolean used = use(
-                new Matrix4f(RenderSystem.getModelViewMatrix()),
-                new Matrix4f(RenderSystem.getProjectionMatrix()),
-                texture,
-                new Vector4f(radius, radius, radius, radius),
-                new Vector2f(scaledWidth, scaledHeight),
-                new Vector2f(scaledX + scaledWidth / 2f, scaledY + scaledHeight / 2f + yOffset),
-                scale
-        );
+        var uniforms = SHADER.uniforms();
+        uniforms.modelViewMat.set(new Matrix4f(RenderSystem.getModelViewMatrix()));
+        uniforms.projMat.set(new Matrix4f(RenderSystem.getProjectionMatrix()));
+        uniforms.radius.set(new Vector4f(radius, radius, radius, radius));
+        uniforms.size.set(new Vector2f(scaledWidth, scaledHeight));
+        uniforms.center.set(new Vector2f(scaledX + scaledWidth / 2f, scaledY + scaledHeight / 2f + yOffset));
+        uniforms.scaleFactor.set(scale);
+        uniforms.texture.set(texture);
 
-        if (!used) return false;
+        SHADER.use(() -> {
+            RenderSystem.enableBlend();
 
-        RenderSystem.enableBlend();
+            AbstractTexture textureObj = Minecraft.getInstance().getTextureManager().getTexture(texture);
+            RenderSystem.bindTexture(textureObj.getId());
 
-        AbstractTexture textureObj = Minecraft.getInstance().getTextureManager().getTexture(texture);
-        RenderSystem.bindTexture(textureObj.getId());
+            Matrix4f matrix = graphics.pose().last().pose();
+            BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+            buffer.addVertex(matrix, x, y, 0f).setUv(u0, v0);
+            buffer.addVertex(matrix, x, y + height, 0f).setUv(u0, v1);
+            buffer.addVertex(matrix, x + width, y + height, 0f).setUv(u1, v1);
+            buffer.addVertex(matrix, x + width, y, 0f).setUv(u1, v0);
+            BufferUploader.draw(buffer.buildOrThrow());
 
-        Matrix4f matrix = graphics.pose().last().pose();
-        BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        buffer.addVertex(matrix, x, y, 0f).setUv(u0, v0);
-        buffer.addVertex(matrix, x, y + height, 0f).setUv(u0, v1);
-        buffer.addVertex(matrix, x + width, y + height, 0f).setUv(u1, v1);
-        buffer.addVertex(matrix, x + width, y, 0f).setUv(u1, v0);
-        BufferUploader.draw(buffer.buildOrThrow());
-
-        RenderSystem.disableBlend();
-
-        unuse();
-        return true;
-    }
-
-    @ApiStatus.Internal
-    public static void recompileShader() {
-        INSTANCE.recompile();
+            RenderSystem.disableBlend();
+        });
     }
 }

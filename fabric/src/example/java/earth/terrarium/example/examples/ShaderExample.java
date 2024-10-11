@@ -22,8 +22,8 @@ public class ShaderExample extends ExampleScreen {
                         .withSize(100, 20)
                         .withRenderer(WidgetRenderers.text(Component.literal("Recompile Shaders")))
                         .withCallback(() -> {
-                            RoundedRectShader.recompileShader();
-                            RoundedTextureShader.recompileShader();
+                            RoundedRectShader.SHADER.recompile();
+                            RoundedTextureShader.SHADER.recompile();
                         })
                 )
                 .withPosition(this.width / 2 - 50, this.height - 30)

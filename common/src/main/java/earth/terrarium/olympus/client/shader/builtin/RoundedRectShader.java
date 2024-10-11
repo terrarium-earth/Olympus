@@ -4,18 +4,15 @@ import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import earth.terrarium.olympus.client.shader.Shader;
-import earth.terrarium.olympus.client.shader.Uniform;
-import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import org.jetbrains.annotations.ApiStatus;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 import java.util.function.Supplier;
 
-public class RoundedRectShader extends Shader {
+public final class RoundedRectShader {
 
     private static final Supplier<String> VERTEX = () -> """
             #version 150
@@ -63,7 +60,7 @@ public class RoundedRectShader extends Shader {
                 float distance = sdRoundedBox(gl_FragCoord.xy - center, halfSize, borderRadius * scaleFactor);
                 float smoothed = min(1.0 - distance, color.a);
                 float border = min(1.0 - smoothstep(borderWidth, borderWidth, abs(distance)), borderColor.a);
-                
+            
                 if (border > 0.0) {
                     fragColor = borderColor * vec4(1.0, 1.0, 1.0, border);
                 } else {
@@ -72,62 +69,9 @@ public class RoundedRectShader extends Shader {
             }
             """;
 
-    private static final RoundedRectShader INSTANCE = Util.make(new RoundedRectShader(), Shader::compile);
+    public static final Shader<RoundedRectUniform> SHADER = Shader.make(VERTEX, FRAGMENT, RoundedRectUniform::new);
 
-    private Matrix4f modelViewMat;
-    private Matrix4f projectionMat;
-
-    private Vector4f backgroundColor;
-    private Vector4f borderColor;
-    private Vector4f borderRadius;
-    private float borderWidth;
-    private Vector2f size;
-    private Vector2f center;
-    private float scaleFactor;
-
-    protected RoundedRectShader() {
-        super(VERTEX, FRAGMENT);
-    }
-
-    @Override
-    protected void addUniforms() {
-        addUniform(Uniform.Type.MAT4, "modelViewMat", () -> modelViewMat);
-        addUniform(Uniform.Type.MAT4, "projMat", () -> projectionMat);
-        addUniform(Uniform.Type.VEC4, "backgroundColor", () -> backgroundColor);
-        addUniform(Uniform.Type.VEC4, "borderColor", () -> borderColor);
-        addUniform(Uniform.Type.VEC4, "borderRadius", () -> borderRadius);
-        addUniform(Uniform.Type.FLOAT, "borderWidth", () -> borderWidth);
-        addUniform(Uniform.Type.VEC2, "size", () -> size);
-        addUniform(Uniform.Type.VEC2, "center", () -> center);
-        addUniform(Uniform.Type.FLOAT, "scaleFactor", () -> scaleFactor);
-    }
-
-    public static boolean use(
-            Matrix4f modelViewMat, Matrix4f projectionMat,
-            Vector4f backgroundColor, Vector4f borderColor,
-            Vector4f borderRadius, float borderWidth,
-            Vector2f size, Vector2f center, float scaleFactor
-    ) {
-        if (!INSTANCE.compiled) return false;
-        INSTANCE.modelViewMat = modelViewMat;
-        INSTANCE.projectionMat = projectionMat;
-        INSTANCE.backgroundColor = backgroundColor;
-        INSTANCE.borderColor = borderColor;
-        INSTANCE.borderRadius = borderRadius;
-        INSTANCE.borderWidth = borderWidth;
-        INSTANCE.size = size;
-        INSTANCE.center = center;
-        INSTANCE.scaleFactor = scaleFactor;
-        INSTANCE.enable();
-        INSTANCE.uploadUniforms();
-        return true;
-    }
-
-    public static void unuse() {
-        INSTANCE.disable();
-    }
-
-    public static boolean fill(
+    public static void fill(
             GuiGraphics graphics,
             int x, int y, int width, int height,
             int backgroundColor, int borderColor,
@@ -142,48 +86,40 @@ public class RoundedRectShader extends Shader {
 
         float yOffset = (window.getScreenHeight() - scaledHeight) - (scaledY * 2f);
 
-        boolean used = use(
-                new Matrix4f(RenderSystem.getModelViewMatrix()),
-                new Matrix4f(RenderSystem.getProjectionMatrix()),
-                new Vector4f(
-                        (backgroundColor >> 16 & 0xFF) / 255f,
-                        (backgroundColor >> 8 & 0xFF) / 255f,
-                        (backgroundColor & 0xFF) / 255f,
-                        (backgroundColor >> 24 & 0xFF) / 255f
-                ),
-                new Vector4f(
-                        (borderColor >> 16 & 0xFF) / 255f,
-                        (borderColor >> 8 & 0xFF) / 255f,
-                        (borderColor & 0xFF) / 255f,
-                        (borderColor >> 24 & 0xFF) / 255f
-                ),
-                new Vector4f(borderRadius, borderRadius, borderRadius, borderRadius),
-                borderWidth,
-                new Vector2f(scaledWidth - (borderWidth * 2f * scale), scaledHeight - (borderWidth * 2f * scale)),
-                new Vector2f(scaledX + scaledWidth / 2f, scaledY + scaledHeight / 2f + yOffset),
-                scale
-        );
+        var uniforms = SHADER.uniforms();
+        uniforms.modelViewMat.set(new Matrix4f(RenderSystem.getModelViewMatrix()));
+        uniforms.projMat.set(new Matrix4f(RenderSystem.getProjectionMatrix()));
+        uniforms.backgroundColor.set(new Vector4f(
+                (backgroundColor >> 16 & 0xFF) / 255f,
+                (backgroundColor >> 8 & 0xFF) / 255f,
+                (backgroundColor & 0xFF) / 255f,
+                (backgroundColor >> 24 & 0xFF) / 255f
+        ));
+        uniforms.borderColor.set(new Vector4f(
+                (borderColor >> 16 & 0xFF) / 255f,
+                (borderColor >> 8 & 0xFF) / 255f,
+                (borderColor & 0xFF) / 255f,
+                (borderColor >> 24 & 0xFF) / 255f
+        ));
+        uniforms.borderRadius.set(new Vector4f(borderRadius, borderRadius, borderRadius, borderRadius));
+        uniforms.borderWidth.set((float) borderWidth);
+        uniforms.size.set(new Vector2f(scaledWidth - (borderWidth * 2f * scale), scaledHeight - (borderWidth * 2f * scale)));
+        uniforms.center.set(new Vector2f(scaledX + scaledWidth / 2f, scaledY + scaledHeight / 2f + yOffset));
+        uniforms.scaleFactor.set(scale);
 
-        if (!used) return false;
+        SHADER.use(() -> {
+            RenderSystem.enableBlend();
 
-        RenderSystem.enableBlend();
+            Matrix4f matrix = graphics.pose().last().pose();
+            BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
+            buffer.addVertex(matrix, x, y, 0f);
+            buffer.addVertex(matrix, x, y + height, 0f);
+            buffer.addVertex(matrix, x + width, y + height, 0f);
+            buffer.addVertex(matrix, x + width, y, 0f);
+            BufferUploader.draw(buffer.buildOrThrow());
 
-        Matrix4f matrix = graphics.pose().last().pose();
-        BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
-        buffer.addVertex(matrix, x, y, 0f);
-        buffer.addVertex(matrix, x, y + height, 0f);
-        buffer.addVertex(matrix, x + width, y + height, 0f);
-        buffer.addVertex(matrix, x + width, y, 0f);
-        BufferUploader.draw(buffer.buildOrThrow());
-
-        RenderSystem.disableBlend();
-
-        unuse();
-        return true;
+            RenderSystem.disableBlend();
+        });
     }
 
-    @ApiStatus.Internal
-    public static void recompileShader() {
-        INSTANCE.recompile();
-    }
 }
