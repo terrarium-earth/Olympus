@@ -26,16 +26,17 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Predicate;
 
 public class TextBox extends BaseWidget {
-
     private static final WidgetSprites SPRITES = new WidgetSprites(
         UIConstants.id("textbox/normal"),
         UIConstants.id("textbox/hovered"),
         UIConstants.id("textbox/focused")
     );
+
+    protected static final int PADDING = 4;
     protected Color textColor = MinecraftColors.GRAY;
     protected Color errorColor = MinecraftColors.RED;
     protected Color placeholderColor = MinecraftColors.DARK_GRAY;
-    protected static final int PADDING = 4;
+    protected WidgetSprites sprites = SPRITES;
 
     protected final Font font = Minecraft.getInstance().font;
     private final State<String> state;
@@ -83,6 +84,11 @@ public class TextBox extends BaseWidget {
 
     public TextBox withPlaceholderColor(Color color) {
         this.placeholderColor = color;
+        return this;
+    }
+
+    public TextBox withTexture(WidgetSprites sprites) {
+        this.sprites = sprites;
         return this;
     }
 
