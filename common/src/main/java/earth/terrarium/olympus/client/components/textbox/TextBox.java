@@ -25,18 +25,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
 
+@SuppressWarnings("unused")
 public class TextBox extends BaseWidget {
-    private static final WidgetSprites SPRITES = new WidgetSprites(
-        UIConstants.id("textbox/normal"),
-        UIConstants.id("textbox/hovered"),
-        UIConstants.id("textbox/focused")
-    );
-
     protected static final int PADDING = 4;
     protected Color textColor = MinecraftColors.GRAY;
     protected Color errorColor = MinecraftColors.RED;
     protected Color placeholderColor = MinecraftColors.DARK_GRAY;
-    protected WidgetSprites sprites = SPRITES;
+    protected WidgetSprites sprites = UIConstants.TEXTBOX;
 
     protected final Font font = Minecraft.getInstance().font;
     private final State<String> state;
@@ -307,7 +302,7 @@ public class TextBox extends BaseWidget {
         if (this.isVisible()) {
             String value = this.state.get().isEmpty() && !this.placeholder.isEmpty() ? this.placeholder : this.state.get();
 
-            ResourceLocation texture = SPRITES.get(this.isHoveredOrFocused(), !this.isActive());
+            ResourceLocation texture = sprites.get(this.isHoveredOrFocused(), !this.isActive());
 
             graphics.blitSprite(texture, this.getX(), this.getY(), this.width, this.height);
 
