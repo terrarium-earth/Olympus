@@ -3,6 +3,7 @@ package earth.terrarium.olympus.client.components.color.type;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import earth.terrarium.olympus.client.components.base.BaseWidget;
 import earth.terrarium.olympus.client.components.color.ColorPresetType;
+import earth.terrarium.olympus.client.constants.MinecraftColors;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.Minecraft;
@@ -17,29 +18,16 @@ import java.util.List;
 import java.util.Locale;
 
 public class PresetsSelector extends BaseWidget {
-
-    private static final List<HsbColor> MINECRAFT_COLORS = List.of(
-            HsbColor.fromRgb(0xFFff5555), HsbColor.fromRgb(0xFFffaa00),
-            HsbColor.fromRgb(0xFFffff55), HsbColor.fromRgb(0xFF55ff55),
-            HsbColor.fromRgb(0x55ffff), HsbColor.fromRgb(0xFF5555ff),
-            HsbColor.fromRgb(0xFFff55ff), HsbColor.fromRgb(0xFFffffff),
-            HsbColor.fromRgb(0xFFaaaaaa), HsbColor.fromRgb(0xFFaa0000),
-            HsbColor.fromRgb(0xFF00aa00), HsbColor.fromRgb(0xFF00aaaa),
-            HsbColor.fromRgb(0xFF0000aa), HsbColor.fromRgb(0xFFaa00aa),
-            HsbColor.fromRgb(0xFF555555), HsbColor.fromRgb(0xFF000000)
-    );
-
     private final Color[] presets;
     private final State<ColorPresetType> type;
-    private final HsbState state;
+    private final State<Color> state;
     private final boolean withAlpha;
+    private final ResourceLocation background;
 
-    private Collection<HsbColor> colors = new ArrayList<>();
+    private Collection<Color> colors = new ArrayList<>();
     private ColorPresetType lastType;
 
-    private ResourceLocation background;
-
-    public PresetsSelector(int width, Color[] presets, State<ColorPresetType> type, HsbState state, boolean withAlpha, ResourceLocation background) {
+    public PresetsSelector(int width, Color[] presets, State<ColorPresetType> type, State<Color> state, boolean withAlpha, ResourceLocation background) {
         super(width, (width / 8 * 2) + 6);
         this.presets = presets;
         this.type = type;
@@ -49,19 +37,19 @@ public class PresetsSelector extends BaseWidget {
         this.background = background;
     }
 
-    private Collection<HsbColor> getColors() {
+    private Collection<Color> getColors() {
         if (this.lastType != this.type.get()) {
             this.colors = switch (this.type.get()) {
                 case DEFAULTS -> {
-                    List<HsbColor> colors = new ArrayList<>();
+                    List<Color> colors = new ArrayList<>();
                     for (Color preset : this.presets) {
                         int color = withAlpha ? preset.getValue() : preset.getValue() | 0xFF000000;
-                        colors.add(HsbColor.fromRgb(color));
+                        colors.add(new Color(color));
                     }
                     yield colors;
                 }
                 case RECENTS -> RecentColorStorage.getRecentColors(this.withAlpha);
-                case MC_COLORS -> MINECRAFT_COLORS;
+                case MC_COLORS -> List.of(MinecraftColors.COLORS);
             };
             this.lastType = this.type.get();
         }
@@ -70,17 +58,18 @@ public class PresetsSelector extends BaseWidget {
 
     @Override
     protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        graphics.blitSprite(UIConstants.MODAL_INSET, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        graphics.blitSprite(background, this.getX(), this.getY(), this.getWidth(), this.getHeight());
         int size = (this.getWidth() - 18) / 8;
 
         int i = 0;
-        for (HsbColor color : getColors()) {
+        for (Color color : getColors()) {
             if (i >= 16) break; // Only render the first 16 colors 2x8 grid
             int j = i % 8;
             int k = i / 8;
             int x = this.getX() + 4 + (j * size) + (2 * j);
             int y = this.getY() + 4 + (k * size) + (2 * k);
-            int rgba = color.toRgba();
+            int rgba = color.getValue();
+            if (!withAlpha) rgba |= 0xFF000000;
             graphics.fill(x, y, x + size, y + size, rgba);
             graphics.renderOutline(x, y, size, size, 0xFFDDDDDD);
             if (mouseX >= x && mouseX <= x + size && mouseY >= y && mouseY <= y + size) {
@@ -104,7 +93,7 @@ public class PresetsSelector extends BaseWidget {
         if (button != 0) return false;
         int size = (this.getWidth() - 18) / 8;
         int i = 0;
-        for (HsbColor color : getColors()) {
+        for (Color color : getColors()) {
             if (i >= 16) break;
             int j = i % 8;
             int k = i / 8;
@@ -113,7 +102,7 @@ public class PresetsSelector extends BaseWidget {
             if (mouseX >= x && mouseX <= x + size && mouseY >= y && mouseY <= y + size) {
                 RecentColorStorage.add(this.state.get());
                 this.lastType = null;
-                this.state.set(color);
+                this.state.set(new Color(color.getValue()));
                 return true;
             }
             i++;

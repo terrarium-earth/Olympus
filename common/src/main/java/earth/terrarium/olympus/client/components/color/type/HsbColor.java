@@ -43,8 +43,12 @@ public record HsbColor(float hue, float saturation, float brightness, int alpha)
         return new HsbColor(hue, saturation, brightness, a);
     }
 
+    public int toRgba(boolean hasRgb) {
+        return Mth.hsvToArgb(hue, saturation, brightness, hasRgb ? alpha : 0);
+    }
+
     public int toRgba() {
-        return Mth.hsvToArgb(hue, saturation, brightness, alpha);
+        return toRgba(true);
     }
 
     public HsbColor withAlpha(int alpha) {

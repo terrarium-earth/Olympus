@@ -23,7 +23,7 @@ public class UIConstants {
 
     public static final WidgetSprites TEXTBOX = new WidgetSprites(
         id("textbox/normal"),
-        id("textbox/disabled"),
+        id("textbox/normal"),
         id("textbox/hovered")
     );
 

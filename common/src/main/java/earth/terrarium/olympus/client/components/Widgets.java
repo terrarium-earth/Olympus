@@ -209,12 +209,37 @@ public final class Widgets {
         return intInput(state, Consumers.nop());
     }
 
-    public static Button colorPicker(State<Color> state, Consumer<Button> factory, Consumer<ColorPickerOverlay> overlayFactory) {
+    public static TextBox colorInput(State<Color> state, Consumer<TextBox> factory) {
+        return textInput(new State<>() {
+            String temp = state.get().toString();
+
+            @Override
+            public void set(String value) {
+                state.set(Color.parse(value));
+                temp = value;
+            }
+
+            @Override
+            public String get() {
+                return temp;
+            }
+        }, factory);
+    }
+
+    public static TextBox colorInput(State<Color> state) {
+        return colorInput(state, Consumers.nop());
+    }
+
+    public static Button colorPicker(State<Color> state, boolean hasAlpha, Consumer<Button> factory, Consumer<ColorPickerOverlay> overlayFactory) {
         var button = new Button();
-        button.withRenderer(state.withRenderer((color) -> WidgetRenderers.solid().withColor(color).withPadding(2, 2, 4, 2)));
+        button.withRenderer(state.withRenderer((color) -> {
+            var renderer = WidgetRenderers.solid().withColor(color);
+            if (!hasAlpha) renderer.withoutAlpha();
+            return renderer.withPadding(2, 2, 4, 2);
+        }));
         button.withSize(16);
         button.withCallback(() -> {
-            ColorPickerOverlay overlay = new ColorPickerOverlay(button, state);
+            ColorPickerOverlay overlay = new ColorPickerOverlay(button, state, hasAlpha);
             overlayFactory.accept(overlay);
             Minecraft.getInstance().setScreen(overlay);
         });

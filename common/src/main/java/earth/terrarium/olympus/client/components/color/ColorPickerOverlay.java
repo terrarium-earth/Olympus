@@ -31,13 +31,14 @@ public class ColorPickerOverlay extends Overlay {
 
     private final AbstractWidget widget;
     private final HsbState state;
+    private final State<Color> color;
     private final DropdownState<ColorPresetType> type;
+    private final boolean hasAlpha;
 
     private int x;
     private int y;
     private int width;
     private int height;
-    private boolean hasAlpha = false;
     private Color[] presets = new Color[0];
 
     private ResourceLocation background = UIConstants.MODAL;
@@ -51,10 +52,12 @@ public class ColorPickerOverlay extends Overlay {
 
     private LinearLayout colorSelectLayout;
 
-    public ColorPickerOverlay(AbstractWidget widget, State<Color> state) {
+    public ColorPickerOverlay(AbstractWidget widget, State<Color> state, boolean hasAlpha) {
         super(Minecraft.getInstance().screen);
         this.widget = widget;
-        this.state = new HsbState(HsbColor.fromRgb(state.get().getValue()), color -> state.set(new Color(color.toRgba())));
+        this.state = new HsbState(HsbColor.fromRgb(state.get().getValue()), color -> state.set(new Color(color.toRgba(hasAlpha))));
+        this.hasAlpha = hasAlpha;
+        this.color = state;
         this.type = DropdownState.of(ColorPresetType.MC_COLORS);
     }
 
@@ -86,11 +89,6 @@ public class ColorPickerOverlay extends Overlay {
     public ColorPickerOverlay withPresets(Color... presets) {
         this.presets = presets;
         this.type.set(ColorPresetType.DEFAULTS);
-        return this;
-    }
-
-    public ColorPickerOverlay withHasAlpha(boolean hasAlpha) {
-        this.hasAlpha = hasAlpha;
         return this;
     }
 
@@ -133,7 +131,7 @@ public class ColorPickerOverlay extends Overlay {
 
         layout.addChild(presets, 1, 0);
 
-        layout.addChild(new PresetsSelector(102, this.presets, this.type, this.state, this.hasAlpha, this.inset), 2, 0);
+        layout.addChild(new PresetsSelector(102, this.presets, this.type, this.color, this.hasAlpha, this.inset), 2, 0);
 
         layout.arrangeElements();
 
@@ -159,7 +157,7 @@ public class ColorPickerOverlay extends Overlay {
     public void onClose() {
         super.onClose();
         if (!this.state.hasChanged()) return;
-        RecentColorStorage.add(this.state.get());
+        RecentColorStorage.add(this.color.get());
     }
 
     @Override

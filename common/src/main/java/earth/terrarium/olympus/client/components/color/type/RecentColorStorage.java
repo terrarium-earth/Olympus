@@ -1,30 +1,25 @@
 package earth.terrarium.olympus.client.components.color.type;
 
+import com.teamresourceful.resourcefullib.common.color.Color;
+
 import java.util.*;
 
 public class RecentColorStorage {
 
-    private static final Set<HsbColor> nonAlpha = new LinkedHashSet<>();
-    private static final Map<HsbColor, HsbColor> alpha = new LinkedHashMap<>();
+    private static final Set<Color> colors = new LinkedHashSet<>();
 
-    public static void add(HsbColor color) {
-        if (color.alpha() == 255) {
-            nonAlpha.remove(color);
-            nonAlpha.add(color);
-        } else {
-            nonAlpha.remove(color.withAlpha(255));
-            alpha.put(color.withAlpha(255), color);
-        }
+    public static void add(Color color) {
+        colors.remove(color);
+        colors.add(color);
     }
 
-    public static Collection<HsbColor> getRecentColors(boolean withAlpha) {
-        List<HsbColor> colors = new ArrayList<>(nonAlpha);
-        if (withAlpha) colors.addAll(alpha.values());
+    public static Collection<Color> getRecentColors(boolean withAlpha) {
+        List<Color> colors = new ArrayList<>();
         Collections.reverse(colors);
         return colors;
     }
 
     public static boolean hasValues() {
-        return !nonAlpha.isEmpty() || !alpha.isEmpty();
+        return !colors.isEmpty();
     }
 }
