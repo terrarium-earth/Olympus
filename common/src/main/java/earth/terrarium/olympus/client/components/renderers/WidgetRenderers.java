@@ -74,6 +74,10 @@ public class WidgetRenderers {
         return textWithChevron(CommonComponents.ELLIPSIS, open);
     }
 
+    public static <T extends AbstractWidget> BoxWidgetRenderer<T> solid() {
+        return new BoxWidgetRenderer<>();
+    }
+
     public static <T extends AbstractWidget, W extends WidgetRenderer<T> & ColorableWidget> WidgetRenderer<T> withColors(W renderer, Color disabled, Color normal, Color hover) {
         return (graphics, widget, partialTick) -> {
             if (widget.getWidget().active) {

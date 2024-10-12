@@ -1,8 +1,10 @@
 package earth.terrarium.olympus.client.components;
 
+import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.buttons.Button;
+import earth.terrarium.olympus.client.components.color.ColorPickerOverlay;
 import earth.terrarium.olympus.client.components.compound.LayoutWidget;
 import earth.terrarium.olympus.client.components.compound.radio.RadioBuilder;
 import earth.terrarium.olympus.client.components.compound.radio.RadioState;
@@ -20,6 +22,7 @@ import earth.terrarium.olympus.client.ui.UIConstants;
 import earth.terrarium.olympus.client.utils.State;
 import earth.terrarium.olympus.client.utils.StateUtils;
 import earth.terrarium.olympus.client.utils.Translatable;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.StringWidget;
@@ -204,5 +207,18 @@ public final class Widgets {
 
     public static TextBox intInput(State<Integer> state) {
         return intInput(state, Consumers.nop());
+    }
+
+    public static Button colorPicker(State<Color> state, Consumer<Button> factory, Consumer<ColorPickerOverlay> overlayFactory) {
+        var button = new Button();
+        button.withRenderer(state.withRenderer((color) -> WidgetRenderers.solid().withColor(color).withPadding(2, 2, 4, 2)));
+        button.withSize(16);
+        button.withCallback(() -> {
+            ColorPickerOverlay overlay = new ColorPickerOverlay(button, state);
+            overlayFactory.accept(overlay);
+            Minecraft.getInstance().setScreen(overlay);
+        });
+        factory.accept(button);
+        return button;
     }
 }
