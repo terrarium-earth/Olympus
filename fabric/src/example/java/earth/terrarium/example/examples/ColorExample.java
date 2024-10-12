@@ -16,7 +16,7 @@ public class ColorExample extends ExampleScreen {
 
     @Override
     protected void init() {
-        var colorPicker = Widgets.colorPicker(color, presets, true, Consumers.nop());
+        var colorPicker = Widgets.colorPicker(color, Consumers.nop(), Consumers.nop());
 
         this.addRenderableWidget(colorPicker);
         FrameLayout.alignInRectangle(colorPicker, 0, 0, this.width, this.height, 0.5f, 0f);
