@@ -302,7 +302,7 @@ public class TextBox extends BaseWidget {
         if (this.isVisible()) {
             String value = this.state.get().isEmpty() && !this.placeholder.isEmpty() ? this.placeholder : this.state.get();
 
-            ResourceLocation texture = sprites.get(this.isHoveredOrFocused(), !this.isActive());
+            ResourceLocation texture = sprites.get(this.active, this.isHoveredOrFocused());
 
             graphics.blitSprite(texture, this.getX(), this.getY(), this.width, this.height);
 
