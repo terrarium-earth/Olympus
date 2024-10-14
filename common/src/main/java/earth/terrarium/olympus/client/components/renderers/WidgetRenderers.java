@@ -81,7 +81,7 @@ public class WidgetRenderers {
     public static <T extends AbstractWidget, W extends WidgetRenderer<T> & ColorableWidget> WidgetRenderer<T> withColors(W renderer, Color disabled, Color normal, Color hover) {
         return (graphics, widget, partialTick) -> {
             if (widget.getWidget().active) {
-                if (widget.getWidget().isHovered()) {
+                if (widget.getWidget().isHoveredOrFocused()) {
                     renderer.withColor(hover);
                 } else {
                     renderer.withColor(normal);

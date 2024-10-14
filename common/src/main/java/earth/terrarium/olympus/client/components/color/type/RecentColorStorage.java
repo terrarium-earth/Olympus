@@ -14,8 +14,11 @@ public class RecentColorStorage {
     }
 
     public static Collection<Color> getRecentColors(boolean withAlpha) {
-        List<Color> colors = new ArrayList<>();
+        List<Color> colors = new ArrayList<>(RecentColorStorage.colors);
         Collections.reverse(colors);
+        if (!withAlpha) {
+            colors.stream().map(color -> color.withAlpha(0));
+        }
         return colors;
     }
 
