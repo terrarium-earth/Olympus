@@ -23,6 +23,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.function.Consumers;
 
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class ColorPickerOverlay extends Overlay {
@@ -45,8 +46,8 @@ public class ColorPickerOverlay extends Overlay {
     private ResourceLocation inset = UIConstants.MODAL_INSET;
 
     private Consumer<Button> eyedropperSettings = Consumers.nop();
-    private Consumer<Button> dropdownBtnSettings = Consumers.nop();
-    private Consumer<DropdownBuilder<ColorPresetType>> dropdownSettings = Consumers.nop();
+    private BiConsumer<Button, DropdownState<ColorPresetType>> dropdownBtnSettings = (ignored1, ignored2) -> {};
+    private BiConsumer<DropdownBuilder<ColorPresetType>, DropdownState<ColorPresetType>> dropdownSettings = (ignored1, ignored2) -> {};
 
     private OverlayAlignment alignment = OverlayAlignment.BOTTOM_LEFT;
 
@@ -76,12 +77,12 @@ public class ColorPickerOverlay extends Overlay {
         return this;
     }
 
-    public ColorPickerOverlay withDropdownButtonSettings(Consumer<Button> settings) {
+    public ColorPickerOverlay withDropdownButtonSettings(BiConsumer<Button, DropdownState<ColorPresetType>> settings) {
         this.dropdownBtnSettings = settings;
         return this;
     }
 
-    public ColorPickerOverlay withDropdownSettings(Consumer<DropdownBuilder<ColorPresetType>> settings) {
+    public ColorPickerOverlay withDropdownSettings(BiConsumer<DropdownBuilder<ColorPresetType>, DropdownState<ColorPresetType>> settings) {
         this.dropdownSettings = settings;
         return this;
     }
@@ -126,8 +127,8 @@ public class ColorPickerOverlay extends Overlay {
             button.withSize(84, 16);
             button.withTexture(null);
             button.withRenderer(type.withRenderer((value, open) -> WidgetRenderers.textWithChevron(Component.translatable(value.getTranslationKey()), open).withColor(MinecraftColors.GRAY)));
-            dropdownBtnSettings.accept(button);
-        }, dropdownSettings));
+            dropdownBtnSettings.accept(button, type);
+        }, builder -> dropdownSettings.accept(builder, type)));
 
         layout.addChild(presets, 1, 0);
 
