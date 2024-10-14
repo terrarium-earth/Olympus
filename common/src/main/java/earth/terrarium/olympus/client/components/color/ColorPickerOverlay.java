@@ -154,6 +154,8 @@ public class ColorPickerOverlay extends Overlay {
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
         graphics.blitSprite(background, this.x, this.y, this.width, this.height);
+        RenderSystem.enableBlend();
+        RenderSystem.enableDepthTest();
         graphics.blitSprite(inset, this.colorSelectLayout.getX() - 1, this.colorSelectLayout.getY() - 1, this.colorSelectLayout.getWidth() + 2, this.colorSelectLayout.getHeight() + 2);
     }
 

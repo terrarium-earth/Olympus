@@ -143,16 +143,24 @@ public final class Widgets {
         return compound;
     }
 
-    public static LayoutWidget<FrameLayout> labelled(Font font, Component label, AbstractWidget widget, Consumer<LayoutWidget<FrameLayout>> factory) {
+    public static LayoutWidget<FrameLayout> labelled(Font font, Component label, Color color, AbstractWidget widget, Consumer<LayoutWidget<FrameLayout>> factory) {
         return frame(frame -> {
             frame.withStretchToContentHeight();
             frame.withWidthCallback((frameWidget, frameLayout) -> frameLayout.setMinWidth(frameWidget.getViewWidth()));
             frame.withContents(contents -> {
-                contents.addChild(new StringWidget(label, font), LayoutSettings::alignHorizontallyLeft);
+                contents.addChild(new StringWidget(label, font).setColor(color.getValue()), LayoutSettings::alignHorizontallyLeft);
                 contents.addChild(widget, LayoutSettings::alignHorizontallyRight);
             });
             factory.accept(frame);
         });
+    }
+
+    public static LayoutWidget<FrameLayout> labelled(Font font, Component label, AbstractWidget widget, Consumer<LayoutWidget<FrameLayout>> factory) {
+        return labelled(font, label, MinecraftColors.WHITE, widget, factory);
+    }
+
+    public static LayoutWidget<FrameLayout> labelled(Font font, Component label, Color color, AbstractWidget widget) {
+        return labelled(font, label, color, widget, Consumers.nop());
     }
 
     public static LayoutWidget<FrameLayout> labelled(Font font, Component label, AbstractWidget widget) {
