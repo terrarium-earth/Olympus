@@ -62,7 +62,7 @@ public class MapWidget extends BaseWidget {
         if (mapRenderer.get() == null) {
             this.renderLoading(graphics);
         } else {
-            if (mapRenderer.get().getScale() != this.scale) {
+            if (mapRenderer.get().getScale() != this.scale * 2 + 16) {
                 this.refreshMap();
             }
 
