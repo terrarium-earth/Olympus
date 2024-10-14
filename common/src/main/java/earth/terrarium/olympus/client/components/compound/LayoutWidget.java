@@ -103,6 +103,8 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
         layoutCallbacks.forEach(callback -> callback.accept(this, layout));
         widthCallbacks.forEach(callback -> callback.accept(this, layout));
         heightCallbacks.forEach(callback -> callback.accept(this, layout));
+
+        withScroll(xScroll, yScroll);
         return this;
     }
 
@@ -187,14 +189,14 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
         if (draggingScrollbarX) {
             double scrollBarWidth = (actualWidth / ((double) layout.getWidth() + overscrollX * 2)) * actualWidth;
             double scrollBarDragX = dragX / (actualWidth - scrollBarWidth);
-            xScroll = Mth.clamp(xScroll + (int) (scrollBarDragX * (layout.getWidth() + overscrollX * 2)), -overscrollX, Math.max(0, layout.getWidth() + overscrollX - actualWidth));
+            withScrollX(xScroll + (int) (scrollBarDragX * (layout.getWidth() + overscrollX * 2)));
             return true;
         }
 
         if (draggingScrollbarY) {
             double scrollBarHeight = (actualHeight / ((double) layout.getHeight() + overscrollY * 2)) * actualHeight;
             double scrollBarDragY = dragY / (actualHeight - scrollBarHeight);
-            yScroll = Mth.clamp(yScroll + (int) (scrollBarDragY * (layout.getHeight() + overscrollY * 2)), -overscrollY, Math.max(0, layout.getHeight() + overscrollY - actualHeight));
+            withScrollY(yScroll + (int) (scrollBarDragY * (layout.getHeight() + overscrollY * 2)));
             return true;
         }
 
@@ -207,12 +209,12 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
         if (isMouseOver(mouseX, mouseY) && !contentScrolled) {
             var scrolled = false;
             if (isXScrollbarVisible()) {
-                xScroll = Mth.clamp(xScroll - (int) (scrollX * 10), -overscrollX, Math.max(0, layout.getWidth() + overscrollX - this.getViewWidth()));
+                withScrollX(xScroll - (int) (scrollX * 10));
                 scrolled = true;
             }
 
             if (isYScrollbarVisible()) {
-                yScroll = Mth.clamp(yScroll - (int) (scrollY * 10), -overscrollY, Math.max(0, layout.getHeight() + overscrollY - this.getViewHeight()));
+                withScrollY(yScroll - (int) (scrollY * 10));
                 scrolled = true;
             }
 
@@ -226,9 +228,11 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
         if (!isMouseOver(mouseX, mouseY)) return false;
         if (isOverScrollbarX((int) mouseX, (int) mouseY) && isXScrollbarVisible()) {
             draggingScrollbarX = true;
+            setDragging(true);
             return true;
         } else if (isOverScrollbarY((int) mouseX, (int) mouseY) && isYScrollbarVisible()) {
             draggingScrollbarY = true;
+            setDragging(true);
             return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);
@@ -238,6 +242,7 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
     public boolean mouseReleased(double d, double e, int i) {
         this.draggingScrollbarX = false;
         this.draggingScrollbarY = false;
+        setDragging(false);
         return super.mouseReleased(d, e, i);
     }
 
@@ -300,18 +305,18 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
     }
 
     public LayoutWidget<T> withScroll(int x, int y) {
-        this.xScroll = x;
-        this.yScroll = y;
+        withScrollX(x);
+        withScrollY(y);
         return this;
     }
 
     public LayoutWidget<T> withScrollX(int x) {
-        this.xScroll = x;
+        this.xScroll = Mth.clamp(x, -overscrollX, Math.max(0, layout.getWidth() + overscrollX - this.getViewWidth()));
         return this;
     }
 
     public LayoutWidget<T> withScrollY(int y) {
-        this.yScroll = y;
+        this.yScroll = Mth.clamp(y, -overscrollY, Math.max(0, layout.getHeight() + overscrollY - this.getViewHeight()));
         return this;
     }
 

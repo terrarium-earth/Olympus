@@ -44,7 +44,7 @@ public class LayoutsExample extends ExampleScreen {
                 gridViewLayout.withChild(Widgets.button().withTexture(UIConstants.PRIMARY_BUTTON).withSize(20, 20));
             })
             .withScrollable(TriState.TRUE, TriState.TRUE)
-            .withBackground(UIConstants.MODAL_INSET)
+            .withTexture(UIConstants.MODAL_INSET)
             .withScrollbarBackground(UIConstants.MODAL_INSET)
             .withOverscroll(4, 4)
             .withContentMargin(1)
