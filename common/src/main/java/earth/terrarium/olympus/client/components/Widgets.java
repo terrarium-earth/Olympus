@@ -1,8 +1,10 @@
 package earth.terrarium.olympus.client.components;
 
+import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.buttons.Button;
+import earth.terrarium.olympus.client.components.color.ColorPickerOverlay;
 import earth.terrarium.olympus.client.components.compound.LayoutWidget;
 import earth.terrarium.olympus.client.components.compound.radio.RadioBuilder;
 import earth.terrarium.olympus.client.components.compound.radio.RadioState;
@@ -20,6 +22,7 @@ import earth.terrarium.olympus.client.ui.UIConstants;
 import earth.terrarium.olympus.client.utils.State;
 import earth.terrarium.olympus.client.utils.StateUtils;
 import earth.terrarium.olympus.client.utils.Translatable;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.StringWidget;
@@ -140,16 +143,24 @@ public final class Widgets {
         return compound;
     }
 
-    public static LayoutWidget<FrameLayout> labelled(Font font, Component label, AbstractWidget widget, Consumer<LayoutWidget<FrameLayout>> factory) {
+    public static LayoutWidget<FrameLayout> labelled(Font font, Component label, Color color, AbstractWidget widget, Consumer<LayoutWidget<FrameLayout>> factory) {
         return frame(frame -> {
             frame.withStretchToContentHeight();
             frame.withWidthCallback((frameWidget, frameLayout) -> frameLayout.setMinWidth(frameWidget.getViewWidth()));
             frame.withContents(contents -> {
-                contents.addChild(new StringWidget(label, font), LayoutSettings::alignHorizontallyLeft);
+                contents.addChild(new StringWidget(label, font).setColor(color.getValue()), LayoutSettings::alignHorizontallyLeft);
                 contents.addChild(widget, LayoutSettings::alignHorizontallyRight);
             });
             factory.accept(frame);
         });
+    }
+
+    public static LayoutWidget<FrameLayout> labelled(Font font, Component label, AbstractWidget widget, Consumer<LayoutWidget<FrameLayout>> factory) {
+        return labelled(font, label, MinecraftColors.WHITE, widget, factory);
+    }
+
+    public static LayoutWidget<FrameLayout> labelled(Font font, Component label, Color color, AbstractWidget widget) {
+        return labelled(font, label, color, widget, Consumers.nop());
     }
 
     public static LayoutWidget<FrameLayout> labelled(Font font, Component label, AbstractWidget widget) {
@@ -204,5 +215,43 @@ public final class Widgets {
 
     public static TextBox intInput(State<Integer> state) {
         return intInput(state, Consumers.nop());
+    }
+
+    public static TextBox colorInput(State<Color> state, Consumer<TextBox> factory) {
+        return textInput(new State<>() {
+            String temp = state.get().toString();
+
+            @Override
+            public void set(String value) {
+                state.set(Color.parse(value));
+                temp = value;
+            }
+
+            @Override
+            public String get() {
+                return temp;
+            }
+        }, factory);
+    }
+
+    public static TextBox colorInput(State<Color> state) {
+        return colorInput(state, Consumers.nop());
+    }
+
+    public static Button colorPicker(State<Color> state, boolean hasAlpha, Consumer<Button> factory, Consumer<ColorPickerOverlay> overlayFactory) {
+        var button = new Button();
+        button.withRenderer(state.withRenderer((color) -> {
+            var renderer = WidgetRenderers.solid().withColor(color);
+            if (!hasAlpha) renderer.withoutAlpha();
+            return renderer.withPadding(2, 2, 4, 2);
+        }));
+        button.withSize(16);
+        button.withCallback(() -> {
+            ColorPickerOverlay overlay = new ColorPickerOverlay(button, state, hasAlpha);
+            overlayFactory.accept(overlay);
+            Minecraft.getInstance().setScreen(overlay);
+        });
+        factory.accept(button);
+        return button;
     }
 }

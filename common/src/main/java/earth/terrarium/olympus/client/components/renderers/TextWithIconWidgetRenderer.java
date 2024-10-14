@@ -7,7 +7,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 
-public class TextWithIconWidgetRenderer<T extends AbstractWidget> implements WidgetRenderer<T> {
+public class TextWithIconWidgetRenderer<T extends AbstractWidget> implements WidgetRenderer<T>, ColorableWidget {
     private int gap = 4;
     private final TextWidgetRenderer<T> textRenderer;
     private final IconWidgetRenderer<T> iconRenderer;

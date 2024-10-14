@@ -13,7 +13,7 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 
-public class TextWidgetRenderer<T extends AbstractWidget> implements WidgetRenderer<T> {
+public class TextWidgetRenderer<T extends AbstractWidget> implements WidgetRenderer<T>, ColorableWidget {
 
     private final Component text;
     private Font font = Minecraft.getInstance().font;

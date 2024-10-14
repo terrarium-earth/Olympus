@@ -4,6 +4,7 @@ import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
+@SuppressWarnings("unused")
 public class UIConstants {
     
     public static final String MOD_ID = "olympus";
@@ -19,6 +20,12 @@ public class UIConstants {
     public static final ResourceLocation LIST_BG = id("lists/background");
 
     public static final ResourceLocation CONTEXT_DIVIDER = id("context/divider");
+
+    public static final WidgetSprites TEXTBOX = new WidgetSprites(
+        id("textbox/normal"),
+        id("textbox/disabled"),
+        id("textbox/hovered")
+    );
 
     public static final WidgetSprites LIST_ENTRY = new WidgetSprites(
         id("lists/entry/normal"),

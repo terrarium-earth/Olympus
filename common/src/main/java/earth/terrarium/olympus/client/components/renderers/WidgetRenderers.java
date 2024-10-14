@@ -1,5 +1,6 @@
 package earth.terrarium.olympus.client.components.renderers;
 
+import com.teamresourceful.resourcefullib.common.color.Color;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;
 import earth.terrarium.olympus.client.ui.UIIcons;
@@ -71,5 +72,24 @@ public class WidgetRenderers {
 
     public static <T extends AbstractWidget> TextWithIconWidgetRenderer<T> ellpsisWithChevron(boolean open) {
         return textWithChevron(CommonComponents.ELLIPSIS, open);
+    }
+
+    public static <T extends AbstractWidget> SolidColorWidgetRenderer<T> solid() {
+        return new SolidColorWidgetRenderer<>();
+    }
+
+    public static <T extends AbstractWidget, W extends WidgetRenderer<T> & ColorableWidget> WidgetRenderer<T> withColors(W renderer, Color disabled, Color normal, Color hover) {
+        return (graphics, widget, partialTick) -> {
+            if (widget.getWidget().active) {
+                if (widget.getWidget().isHoveredOrFocused()) {
+                    renderer.withColor(hover);
+                } else {
+                    renderer.withColor(normal);
+                }
+            } else {
+                renderer.withColor(disabled);
+            }
+            renderer.render(graphics, widget, partialTick);
+        };
     }
 }

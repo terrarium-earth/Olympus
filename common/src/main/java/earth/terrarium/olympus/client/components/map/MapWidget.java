@@ -1,5 +1,6 @@
 package earth.terrarium.olympus.client.components.map;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.math.Axis;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import earth.terrarium.olympus.client.components.base.BaseWidget;
@@ -49,6 +50,8 @@ public class MapWidget extends BaseWidget {
 
     @Override
     protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        RenderSystem.enableBlend();
+        RenderSystem.enableDepthTest();
         graphics.blitSprite(this.texture, this.getX(), this.getY(), this.getWidth(), this.getHeight());
 
         if (!initialized) {
@@ -59,7 +62,7 @@ public class MapWidget extends BaseWidget {
         if (mapRenderer.get() == null) {
             this.renderLoading(graphics);
         } else {
-            if (mapRenderer.get().getScale() != this.scale) {
+            if (mapRenderer.get().getScale() != this.scale * 2 + 16) {
                 this.refreshMap();
             }
 

@@ -9,7 +9,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.resources.ResourceLocation;
 
-public class IconWidgetRenderer<T extends AbstractWidget> implements WidgetRenderer<T> {
+public class IconWidgetRenderer<T extends AbstractWidget> implements WidgetRenderer<T>, ColorableWidget {
 
     private final ResourceLocation icon;
     private Color color = MinecraftColors.DARK_GRAY;

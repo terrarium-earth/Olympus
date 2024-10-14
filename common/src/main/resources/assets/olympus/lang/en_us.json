@@ -7,5 +7,9 @@
 
     "olympus.ui.tristate.true": "True",
     "olympus.ui.tristate.false": "False",
-    "olympus.ui.tristate.undefined": "Undefined"
+    "olympus.ui.tristate.undefined": "Undefined",
+
+    "olympus.color.preset.recents": "Recents",
+    "olympus.color.preset.defaults": "Defaults",
+    "olympus.color.preset.mc_colors": "Chat Colors"
 }

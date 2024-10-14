@@ -18,4 +18,9 @@ public class MapExample extends ExampleScreen {
         FrameLayout.centerInRectangle(map, 0, 0, this.width, this.height);
         this.addRenderableWidget(map);
     }
+
+    @Override
+    public boolean isPauseScreen() {
+        return false;
+    }
 }
