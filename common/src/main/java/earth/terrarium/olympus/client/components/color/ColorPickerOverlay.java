@@ -1,5 +1,6 @@
 package earth.terrarium.olympus.client.components.color;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import earth.terrarium.olympus.client.components.Widgets;
 import earth.terrarium.olympus.client.components.buttons.Button;
@@ -136,7 +137,7 @@ public class ColorPickerOverlay extends Overlay {
 
         layout.arrangeElements();
 
-        this.width = layout.getWidth() + PADDING * 2;
+        this.width = 102 + PADDING * 2;
         this.height = layout.getHeight() + PADDING * 2;
 
         var pos = this.alignment.getPos(this.widget, this.width, this.height);
@@ -150,6 +151,8 @@ public class ColorPickerOverlay extends Overlay {
     @Override
     public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         super.renderBackground(graphics, mouseX, mouseY, partialTicks);
+        RenderSystem.enableBlend();
+        RenderSystem.enableDepthTest();
         graphics.blitSprite(background, this.x, this.y, this.width, this.height);
         graphics.blitSprite(inset, this.colorSelectLayout.getX() - 1, this.colorSelectLayout.getY() - 1, this.colorSelectLayout.getWidth() + 2, this.colorSelectLayout.getHeight() + 2);
     }
