@@ -112,10 +112,10 @@ public final class RoundedRectShader {
 
             Matrix4f matrix = graphics.pose().last().pose();
             BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
-            buffer.addVertex(matrix, 0, 0, 0f);
-            buffer.addVertex(matrix, 0, 2000, 0f);
-            buffer.addVertex(matrix, 2000, 2000, 0f);
-            buffer.addVertex(matrix, 2000, 0, 0f);
+            buffer.addVertex(matrix, x, y, 0f);
+            buffer.addVertex(matrix, x, y + height, 0f);
+            buffer.addVertex(matrix, x + width, y + height, 0f);
+            buffer.addVertex(matrix, x + width, y, 0f);
             BufferUploader.draw(buffer.buildOrThrow());
 
             RenderSystem.disableBlend();
