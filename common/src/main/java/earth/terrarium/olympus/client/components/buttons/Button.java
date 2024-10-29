@@ -20,6 +20,7 @@ public class Button extends BaseWidget implements CursorWidget {
     private WidgetRenderer<? super Button> renderer = WidgetRenderer.empty();
     private Runnable onPress = () -> {};
     private WidgetSprites sprites = UIConstants.BUTTON;
+    private ButtonShape shape = ButtonShapes.RECTANGLE;
 
     public Button() {
         super();
@@ -27,6 +28,8 @@ public class Button extends BaseWidget implements CursorWidget {
 
     @Override
     protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        this.isHovered = graphics.containsPointInScissor(mouseX, mouseY) && isMouseOver(mouseX, mouseY);
+
         graphics.setColor(1.0F, 1.0F, 1.0F, this.alpha);
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
@@ -69,6 +72,22 @@ public class Button extends BaseWidget implements CursorWidget {
     public <T> DropdownBuilder<T> withDropdown(DropdownState<T> state) {
         state.setButton(this);
         return new DropdownBuilder<>(state);
+    }
+
+    public Button withShape(ButtonShape shape) {
+        this.shape = shape;
+        return this;
+    }
+
+    @Override
+    protected boolean clicked(double mouseX, double mouseY) {
+        return this.isMouseOver(mouseX, mouseY);
+    }
+
+    @Override
+    public boolean isMouseOver(double mouseX, double mouseY) {
+        if (!this.active || !this.visible) return false;
+        return this.shape.isInside(mouseX - this.getX(), mouseY - this.getY(), this.getWidth(), this.getHeight());
     }
 
     @Override
