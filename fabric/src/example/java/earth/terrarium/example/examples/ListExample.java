@@ -1,5 +1,6 @@
 package earth.terrarium.example.examples;
 
+import com.teamresourceful.resourcefullib.common.color.Color;
 import earth.terrarium.example.base.ExampleScreen;
 import earth.terrarium.example.base.OlympusExample;
 import earth.terrarium.olympus.client.components.Widgets;
@@ -22,6 +23,24 @@ public class ListExample extends ExampleScreen {
                 button.withRenderer(WidgetRenderers.text(Component.literal("Button")));
             }));
         }
+
+        Color.initRainbow();
+
+        list.add(Widgets.text(Component.literal("middle")));
+
+        list.add(Widgets.text(Component.literal("left"), (text) -> {
+            text.withColor(Color.RAINBOW);
+            text.withLeftAlignment();
+        }));
+
+        list.add(Widgets.text(Component.literal("right"), (text) -> {
+            text.withColor(Color.RAINBOW);
+            text.withRightAlignment();
+        }));
+
+        list.add(Widgets.text(Component.literal("middle"), (text) -> {
+            text.withColor(Color.RAINBOW).withShadow();
+        }));
 
         addRenderableWidget(list);
 

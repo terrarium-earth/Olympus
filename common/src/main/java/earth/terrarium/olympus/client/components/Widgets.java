@@ -14,6 +14,7 @@ import earth.terrarium.olympus.client.components.map.MapRenderer;
 import earth.terrarium.olympus.client.components.map.MapWidget;
 import earth.terrarium.olympus.client.components.renderers.TristateRenderers;
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
+import earth.terrarium.olympus.client.components.string.TextWidget;
 import earth.terrarium.olympus.client.components.textbox.TextBox;
 import earth.terrarium.olympus.client.constants.MinecraftColors;
 import earth.terrarium.olympus.client.layouts.Layouts;
@@ -253,5 +254,15 @@ public final class Widgets {
         });
         factory.accept(button);
         return button;
+    }
+
+    public static TextWidget text(Component text) {
+        return new TextWidget(text);
+    }
+
+    public static TextWidget text(Component text, Consumer<TextWidget> factory) {
+        TextWidget widget = text(text);
+        factory.accept(widget);
+        return widget;
     }
 }
