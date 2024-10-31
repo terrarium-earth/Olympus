@@ -7,10 +7,12 @@ import earth.terrarium.olympus.client.components.base.BaseParentWidget;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;
 import earth.terrarium.olympus.client.ui.UIConstants;
+import earth.terrarium.olympus.client.utils.Orientation;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.layouts.Layout;
+import net.minecraft.client.gui.layouts.LayoutElement;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.apache.commons.lang3.function.Consumers;
@@ -268,6 +270,26 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
 
     public LayoutWidget<T> withContentFill() {
         return withContentFillWidth().withContentFillHeight();
+    }
+
+    public LayoutWidget<T> withEqualSpacing(Orientation orientation) {
+        return withLayoutCallback((widget, layout) -> {
+            List<LayoutElement> elements = new ArrayList<>();
+            layout.visitWidgets(elements::add);
+            if (elements.isEmpty()) return;
+
+            var widgetSize = orientation.getValue(widget.getViewWidth(), widget.getViewHeight());
+            if (elements.size() == 1) {
+                orientation.setPos(elements.getFirst(), widgetSize / 2 - orientation.getSize(elements.getFirst()) / 2);
+            } else {
+                int spacing = (widgetSize - elements.stream().mapToInt(orientation::getSize).sum()) / (elements.size() - 1);
+                int value = orientation.getValue(widget.getX(), widget.getY());
+                for (LayoutElement element : elements) {
+                    orientation.setPos(element, value);
+                    value += orientation.getSize(element) + spacing;
+                }
+            }
+        });
     }
 
     public LayoutWidget<T> withLayoutCallback(BiConsumer<LayoutWidget<T>, T> callback) {

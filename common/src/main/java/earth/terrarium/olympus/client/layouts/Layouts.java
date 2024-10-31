@@ -1,5 +1,6 @@
 package earth.terrarium.olympus.client.layouts;
 
+import earth.terrarium.olympus.client.utils.Orientation;
 import net.minecraft.client.gui.layouts.LinearLayout;
 
 public final class Layouts {
@@ -9,11 +10,11 @@ public final class Layouts {
     }
 
     public static LinearViewLayout row() {
-        return new LinearViewLayout(LinearLayout.Orientation.HORIZONTAL);
+        return new LinearViewLayout(Orientation.HORIZONTAL);
     }
 
     public static LinearViewLayout column() {
-        return new LinearViewLayout(LinearLayout.Orientation.VERTICAL);
+        return new LinearViewLayout(Orientation.VERTICAL);
     }
 
     public static GridViewLayout rows(int amount) {

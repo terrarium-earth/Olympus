@@ -1,5 +1,6 @@
 package earth.terrarium.olympus.client.layouts;
 
+import earth.terrarium.olympus.client.utils.Orientation;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.layouts.LayoutElement;
 import net.minecraft.client.gui.layouts.LinearLayout;
@@ -8,8 +9,8 @@ import java.util.function.Consumer;
 
 public class LinearViewLayout extends BaseLayout<LinearLayout> {
 
-    LinearViewLayout(LinearLayout.Orientation orientation) {
-        super(orientation == LinearLayout.Orientation.HORIZONTAL ? LinearLayout.horizontal() : LinearLayout.vertical());
+    LinearViewLayout(Orientation orientation) {
+        super(orientation == Orientation.HORIZONTAL ? LinearLayout.horizontal() : LinearLayout.vertical());
     }
 
     public LinearViewLayout withGap(int gap) {
