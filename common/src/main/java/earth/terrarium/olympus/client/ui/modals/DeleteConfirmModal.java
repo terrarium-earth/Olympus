@@ -11,7 +11,13 @@ import net.minecraft.client.gui.layouts.GridLayout;
 import net.minecraft.client.gui.layouts.LayoutSettings;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.ApiStatus;
 
+/**
+ * @deprecated Use {@link Modals#delete(Component, Component, Runnable)} instead.
+ */
+@Deprecated
+@ApiStatus.ScheduledForRemoval(inVersion = "1.21.4")
 public class DeleteConfirmModal extends BaseModal {
 
     private static final int WIDTH = 150;
