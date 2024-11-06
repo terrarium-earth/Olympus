@@ -2,7 +2,12 @@ package earth.terrarium.olympus.client.ui;
 
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UIIcons {
+
+    public static final List<ResourceLocation> ICONS = new ArrayList<>();
 
     public static final ResourceLocation BATTERY_EMPTY = create("battery_empty");
     public static final ResourceLocation BATTERY = BATTERY_EMPTY;
@@ -160,10 +165,16 @@ public class UIIcons {
     public static final ResourceLocation MUTE = VOLUME_OFF;
 
     // These 2 icons are special and are size 10x10 instead of the normal 12x12
-    public static final ResourceLocation CHEVRON_DOWN = create("chevron_down");
-    public static final ResourceLocation CHEVRON_UP = create("chevron_up");
+    public static final ResourceLocation CHEVRON_DOWN = UIConstants.id("icons/chevron_down");
+    public static final ResourceLocation CHEVRON_UP = UIConstants.id("icons/chevron_up");
 
     private static ResourceLocation create(String name) {
-        return UIConstants.id("icons/%s".formatted(name));
+        ResourceLocation icon = UIConstants.id("icons/%s".formatted(name));
+        ICONS.add(icon);
+        return icon;
+    }
+
+    public static List<ResourceLocation> getIcons() {
+        return ICONS;
     }
 }
