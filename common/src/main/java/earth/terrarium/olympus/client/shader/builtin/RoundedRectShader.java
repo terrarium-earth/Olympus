@@ -84,7 +84,7 @@ public final class RoundedRectShader {
         float scaledWidth = width * scale;
         float scaledHeight = height * scale;
 
-        float yOffset = (window.getScreenHeight() - scaledHeight) - (scaledY * 2f);
+        float yOffset = (window.getHeight() - scaledHeight) - (scaledY * 2f);
 
         var uniforms = SHADER.uniforms();
         uniforms.modelViewMat.set(new Matrix4f(RenderSystem.getModelViewMatrix()));
