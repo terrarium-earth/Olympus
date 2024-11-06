@@ -127,9 +127,13 @@ public final class Widgets {
     }
 
     public static LayoutWidget<FrameLayout> frame(Consumer<LayoutWidget<FrameLayout>> factory) {
-        var compound = new LayoutWidget<>(new FrameLayout());
+        var compound = frame();
         factory.accept(compound);
         return compound;
+    }
+
+    public static LayoutWidget<FrameLayout> frame() {
+        return new LayoutWidget<>(new FrameLayout());
     }
 
     public static LayoutWidget<LinearViewLayout> list(Consumer<LayoutWidget<LinearViewLayout>> factory) {

@@ -13,6 +13,7 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.layouts.Layout;
 import net.minecraft.client.gui.layouts.LayoutElement;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.apache.commons.lang3.function.Consumers;
@@ -248,6 +249,7 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
         return super.mouseReleased(d, e, i);
     }
 
+    // region Builder methods
     public LayoutWidget<T> withStretchToContentSize() {
         return withLayoutCallback((widget, layout) -> widget.setSize(layout.getWidth(), layout.getHeight()));
     }
@@ -321,15 +323,11 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
     }
 
     public LayoutWidget<T> withScrollable(TriState scrollableX, TriState scrollableY) {
-        this.scrollableX = scrollableX;
-        this.scrollableY = scrollableY;
-        return this;
+        return withScrollableX(scrollableX).withScrollableY(scrollableY);
     }
 
     public LayoutWidget<T> withScroll(int x, int y) {
-        withScrollX(x);
-        withScrollY(y);
-        return this;
+        return withScrollX(x).withScrollY(y);
     }
 
     public LayoutWidget<T> withScrollX(int x) {
@@ -343,9 +341,7 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
     }
 
     public LayoutWidget<T> withOverscroll(int overscrollX, int overscrollY) {
-        this.overscrollX = overscrollX;
-        this.overscrollY = overscrollY;
-        return withScroll(-overscrollX, -overscrollY);
+        return withOverscrollX(overscrollX).withOverscrollY(overscrollY);
     }
 
     public LayoutWidget<T> withOverscrollX(int overscrollX) {
@@ -402,6 +398,31 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
         this.background = texture;
         return this;
     }
+
+    @Override
+    public LayoutWidget<T> withTooltip(Component tooltip) {
+        super.withTooltip(tooltip);
+        return this;
+    }
+
+    @Override
+    public LayoutWidget<T> withSize(int width, int height) {
+        super.withSize(width, height);
+        return this;
+    }
+
+    @Override
+    public LayoutWidget<T> withSize(int size) {
+        super.withSize(size);
+        return this;
+    }
+
+    @Override
+    public LayoutWidget<T> withPosition(int x, int y) {
+        super.withPosition(x, y);
+        return this;
+    }
+    //endregion
 
     @Override
     public void setFocused(@Nullable GuiEventListener focused) {
