@@ -1,1 +1,3 @@
-- Added frame equal spacing
+- Added action modals
+- Added icons for use in renderers
+- Fixed rounded colored rectangle on MacOS - J10a1n15
