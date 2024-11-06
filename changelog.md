@@ -1,3 +1,1 @@
-- Remove unused assets
-- Added colorable interface for renderers
-- Made Textbox background configurable
+- Added frame equal spacing
