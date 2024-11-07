@@ -3,12 +3,14 @@ package earth.terrarium.example.examples;
 import earth.terrarium.example.base.ExampleScreen;
 import earth.terrarium.example.base.OlympusExample;
 import earth.terrarium.olympus.client.components.Widgets;
+import earth.terrarium.olympus.client.components.dropdown.DropdownState;
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import earth.terrarium.olympus.client.layouts.Layouts;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import earth.terrarium.olympus.client.ui.modals.ActionModal;
 import earth.terrarium.olympus.client.ui.modals.Modals;
 import earth.terrarium.olympus.client.utils.State;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.layouts.FrameLayout;
 import net.minecraft.network.chat.Component;
 
@@ -17,6 +19,7 @@ public class ModalExample extends ExampleScreen {
 
     @Override
     protected void init() {
+        DropdownState<ChatFormatting> dropdownState = DropdownState.of(ChatFormatting.RESET);
         ActionModal.Builder actionModal = Modals.action()
                 .withTitle(Component.literal("Action modal"))
                 .withContent(Component.literal(
@@ -28,6 +31,7 @@ public class ModalExample extends ExampleScreen {
                                 "Nam ut mollis nisl."
                 ))
                 .withContent(i -> Widgets.textInput(State.of("Input text")).withSize(i, 20))
+                .withContent(i -> Widgets.dropdown(dropdownState, ChatFormatting.class).withSize(i, 20))
                 .withAction(Widgets.button()
                         .withSize(50, 20)
                         .withTexture(UIConstants.PRIMARY_BUTTON)

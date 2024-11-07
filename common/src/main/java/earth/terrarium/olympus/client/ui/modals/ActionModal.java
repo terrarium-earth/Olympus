@@ -1,6 +1,7 @@
 package earth.terrarium.olympus.client.ui.modals;
 
 import earth.terrarium.olympus.client.components.Widgets;
+import earth.terrarium.olympus.client.components.base.BaseWidget;
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import earth.terrarium.olympus.client.components.string.MultilineTextWidget;
 import earth.terrarium.olympus.client.layouts.Layouts;
@@ -142,8 +143,13 @@ public class ActionModal extends Overlay {
             return this;
         }
 
+        public Builder withContent(BaseWidget widget) {
+            this.content.add(width -> widget.withSize(width, widget.getHeight()));
+            return this;
+        }
+
         public Builder withContent(Component text) {
-            this.content.add(i -> new MultilineTextWidget(i, text, Minecraft.getInstance().font));
+            this.content.add(i -> new MultilineTextWidget(i, text, Minecraft.getInstance().font).alignLeft());
             return this;
         }
 
