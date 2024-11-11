@@ -8,6 +8,7 @@ import earth.terrarium.olympus.client.utils.ListenableState;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
@@ -87,7 +88,7 @@ public class AutocompleteScreen<T> extends Overlay {
     public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.renderBackground(graphics, mouseX, mouseY, partialTick);
         if (this.filteredSuggestions.isEmpty()) return;
-        graphics.blitSprite(LIST, this.x(), this.y(), this.width(), this.height());
+        graphics.blitSprite(RenderType::guiTextured, LIST, this.x(), this.y(), this.width(), this.height());
     }
 
     public void clear() {

@@ -39,14 +39,14 @@ public class MapTopologyAlgorithm {
                         findBlockWithAirAbove(level, new BlockPos(x, player.getBlockY(), z)) :
                         chunk.getHeight(Heightmap.Types.WORLD_SURFACE, x, z) + 1;
                     BlockState state = null;
-                    if (y > level.getMinBuildHeight() + 1) {
+                    if (y > level.getMinY() + 1) {
                         do {
                             y--;
                             pos1.setY(y);
                             state = chunk.getBlockState(pos1);
-                        } while (!shouldRender(state, level, pos1) && y > level.getMinBuildHeight());
+                        } while (!shouldRender(state, level, pos1) && y > level.getMinY());
 
-                        if (y > level.getMinBuildHeight() && !state.getFluidState().isEmpty()) {
+                        if (y > level.getMinY() && !state.getFluidState().isEmpty()) {
                             int y2 = y - 1;
                             pos2.set(pos1);
 
@@ -55,7 +55,7 @@ public class MapTopologyAlgorithm {
                                 pos2.setY(y2--);
                                 blockState2 = chunk.getBlockState(pos2);
                                 ++fluidDepth;
-                            } while (y2 > level.getMinBuildHeight() && !blockState2.getFluidState().isEmpty());
+                            } while (y2 > level.getMinY() && !blockState2.getFluidState().isEmpty());
 
                             state = getCorrectStateForFluidBlock(level, state, pos1);
                         }

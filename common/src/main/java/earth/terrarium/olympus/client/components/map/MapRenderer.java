@@ -8,7 +8,7 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.CoreShaders;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.ResourceLocation;
 
@@ -30,7 +30,7 @@ public class MapRenderer {
 
         for (int i = 0; i < scale; i++) {
             for (int j = 0; j < scale; j++) {
-                nativeImage.setPixelRGBA(i, j, colors[i][j]);
+                nativeImage.setPixel(i, j, colors[i][j]);
             }
         }
 
@@ -43,7 +43,7 @@ public class MapRenderer {
 
     public void render(GuiGraphics graphics, int x, int y, int width, int height) {
         RenderSystem.setShaderTexture(0, TEXTURE);
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(CoreShaders.POSITION_TEX);
         try (var pose = new CloseablePoseStack(graphics)) {
             pose.translate(x, y, 0.01);
             var matrix4f = pose.last().pose();

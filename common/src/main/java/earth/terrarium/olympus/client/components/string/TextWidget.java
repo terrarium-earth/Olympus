@@ -7,13 +7,18 @@ import earth.terrarium.olympus.client.components.renderers.ColorableWidget;
 import earth.terrarium.olympus.client.components.renderers.TextWidgetRenderer;
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.navigation.FocusNavigationEvent;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.Nullable;
 
 public class TextWidget extends BaseWidget implements ColorableWidget {
+
     protected final Component text;
-    TextWidgetRenderer<TextWidget> renderer;
+    protected TextWidgetRenderer<TextWidget> renderer;
+
     public TextWidget(Component text) {
         super();
         this.text = text;
@@ -60,5 +65,10 @@ public class TextWidget extends BaseWidget implements ColorableWidget {
 
     public TextWidget withRightAlignment() {
         return this.withAlignment(1);
+    }
+
+    @Override
+    public @Nullable ComponentPath nextFocusPath(FocusNavigationEvent event) {
+        return null;
     }
 }

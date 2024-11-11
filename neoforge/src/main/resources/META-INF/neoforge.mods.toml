@@ -15,20 +15,20 @@ description = "Common Components library for Project Odyssey."
 [[dependencies.olympus]]
 modId = "neoforge"
 type="required"
-versionRange = "[21.0,)"
+versionRange = "[21.3,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.olympus]]
 modId = "minecraft"
 type="required"
-versionRange = "[1.21,)"
+versionRange = "[1.21.3,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.olympus]]
 modId = "resourcefullib"
 type="required"
-versionRange = "[3.0.0,)"
+versionRange = "[3.3.0,)"
 ordering = "NONE"
 side = "BOTH"

@@ -16,8 +16,8 @@
     "environment": "*",
     "depends": {
         "fabric-api": "*",
-        "minecraft": ">=1.21",
+        "minecraft": ">=1.21.3",
         "java": ">=21",
-        "resourcefullib": ">=3.0.0"
+        "resourcefullib": ">=3.3.0"
     }
 }

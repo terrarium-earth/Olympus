@@ -8,4 +8,9 @@ public abstract class ExampleScreen extends BaseCursorScreen {
     public ExampleScreen() {
         super(CommonComponents.EMPTY);
     }
+
+    @Override
+    public boolean isPauseScreen() {
+        return false;
+    }
 }

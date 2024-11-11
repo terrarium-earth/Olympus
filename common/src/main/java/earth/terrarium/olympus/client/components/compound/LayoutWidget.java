@@ -13,6 +13,7 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.layouts.Layout;
 import net.minecraft.client.gui.layouts.LayoutElement;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -57,14 +58,14 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
         int scrollWidth = (int) (context.getWidth() * (context.getWidth() / (float) widget.getContentWidth())) + (widget.getViewWidth() - context.getWidth());
         int scrollX = (int) ((widget.getXScroll() + widget.getOverscrollX()) / (float) widget.getContentWidth() * context.getWidth());
 
-        graphics.blitSprite(UIConstants.SCROLLBAR,
+        graphics.blitSprite(RenderType::guiTextured, UIConstants.SCROLLBAR,
                 context.getX(),
                 context.getY() + 2,
                 context.getWidth(),
                 context.getHeight() - 4
         );
 
-        graphics.blitSprite(UIConstants.SCROLLBAR_THUMB,
+        graphics.blitSprite(RenderType::guiTextured, UIConstants.SCROLLBAR_THUMB,
                 context.getX() + scrollX,
                 context.getY(),
                 scrollWidth,
@@ -78,14 +79,14 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
         int scrollHeight = (int) (context.getHeight() * (context.getHeight() / (float) widget.getContentHeight())) + (widget.getViewHeight() - context.getHeight());
         int scrollY = (int) ((widget.getYScroll() + widget.getOverscrollY()) / (float) widget.getContentHeight() * context.getHeight());
 
-        graphics.blitSprite(UIConstants.SCROLLBAR,
+        graphics.blitSprite(RenderType::guiTextured, UIConstants.SCROLLBAR,
                 context.getX() + 2,
                 context.getY(),
                 context.getWidth() - 4,
                 context.getHeight()
         );
 
-        graphics.blitSprite(UIConstants.SCROLLBAR_THUMB,
+        graphics.blitSprite(RenderType::guiTextured, UIConstants.SCROLLBAR_THUMB,
                 context.getX(),
                 context.getY() + scrollY,
                 context.getWidth(),
@@ -131,7 +132,7 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
         if (background != null) {
             RenderSystem.enableBlend();
             RenderSystem.enableDepthTest();
-            graphics.blitSprite(background, getX(), getY(), getViewWidth() + contentMargin * 2, getViewHeight() + contentMargin * 2);
+            graphics.blitSprite(RenderType::guiTextured, background, getX(), getY(), getViewWidth() + contentMargin * 2, getViewHeight() + contentMargin * 2);
         }
 
         graphics.enableScissor(getX() + contentMargin, getY() + contentMargin, getX() + getViewWidth() + contentMargin, getY() + getViewHeight() + contentMargin);
@@ -142,7 +143,7 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
             if (scrollbarBackground != null) {
                 RenderSystem.enableBlend();
                 RenderSystem.enableDepthTest();
-                graphics.blitSprite(scrollbarBackground, getX(), getY() + getViewHeight() + contentMargin * 2, getViewWidth() + contentMargin * 2, getHeight() - getViewHeight() - contentMargin * 2);
+                graphics.blitSprite(RenderType::guiTextured, scrollbarBackground, getX(), getY() + getViewHeight() + contentMargin * 2, getViewWidth() + contentMargin * 2, getHeight() - getViewHeight() - contentMargin * 2);
             }
             scrollbarXRenderer.render(graphics, new WidgetRendererContext<>(this, mouseX, mouseY).setHeight(scrollWidth).setWidth(getViewWidth() - scrollMargin * 2).setX(getX() + scrollMargin).setY(this.getY() + this.getViewHeight() + scrollMargin + contentMargin * 2), partialTick);
         }
@@ -151,7 +152,7 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
             if (scrollbarBackground != null) {
                 RenderSystem.enableBlend();
                 RenderSystem.enableDepthTest();
-                graphics.blitSprite(scrollbarBackground, getX() + getViewWidth() + contentMargin * 2, getY(), getWidth() - getViewWidth() - contentMargin * 2, getViewHeight() + contentMargin * 2);
+                graphics.blitSprite(RenderType::guiTextured, scrollbarBackground, getX() + getViewWidth() + contentMargin * 2, getY(), getWidth() - getViewWidth() - contentMargin * 2, getViewHeight() + contentMargin * 2);
             }
             scrollbarYRenderer.render(graphics, new WidgetRendererContext<>(this, mouseX, mouseY).setWidth(scrollWidth).setHeight(getViewHeight() - scrollMargin * 2).setX(this.getX() + this.getViewWidth() + scrollMargin + contentMargin * 2).setY(getY() + scrollMargin), partialTick);
         }
@@ -159,7 +160,7 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
         if (isYScrollbarVisible() && isXScrollbarVisible() && scrollbarBackground != null) {
             RenderSystem.enableBlend();
             RenderSystem.enableDepthTest();
-            graphics.blitSprite(scrollbarBackground, getX() + getViewWidth() + contentMargin * 2, getY() + getViewHeight() + contentMargin * 2, getWidth() - getViewWidth() - contentMargin * 2, getHeight() - getViewHeight() - contentMargin * 2);
+            graphics.blitSprite(RenderType::guiTextured, scrollbarBackground, getX() + getViewWidth() + contentMargin * 2, getY() + getViewHeight() + contentMargin * 2, getWidth() - getViewWidth() - contentMargin * 2, getHeight() - getViewHeight() - contentMargin * 2);
         }
     }
 

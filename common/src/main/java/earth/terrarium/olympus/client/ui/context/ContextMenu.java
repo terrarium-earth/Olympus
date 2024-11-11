@@ -14,6 +14,7 @@ import net.minecraft.client.MouseHandler;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -165,7 +166,7 @@ public class ContextMenu extends Overlay {
     @Override
     public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.renderBackground(graphics, mouseX, mouseY, partialTick);
-        graphics.blitSprite(this.texture, this.x, this.y, this.contextWidth, this.contextHeight);
+        graphics.blitSprite(RenderType::guiTextured, this.texture, this.x, this.y, this.contextWidth, this.contextHeight);
     }
 
     public static void open(Consumer<ContextMenu> consumer) {

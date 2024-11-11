@@ -9,6 +9,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
@@ -48,7 +49,7 @@ public class AutocompleteTextBox<T> extends BaseWidget {
         Font font = Minecraft.getInstance().font;
         ResourceLocation texture = SPRITES.get(this.isHoveredOrFocused(), !this.isActive());
 
-        graphics.blitSprite(texture, this.getX(), this.getY(), this.width, this.height);
+        graphics.blitSprite(RenderType::guiTextured, texture, this.getX(), this.getY(), this.width, this.height);
 
 
         String truncatedValue = font.plainSubstrByWidth(this.value, this.width - PADDING * 2);

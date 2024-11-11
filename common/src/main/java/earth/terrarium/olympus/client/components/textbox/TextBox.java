@@ -307,7 +307,7 @@ public class TextBox extends BaseWidget {
 
             RenderSystem.enableBlend();
             RenderSystem.enableDepthTest();
-            graphics.blitSprite(texture, this.getX(), this.getY(), this.width, this.height);
+            graphics.blitSprite(RenderType::guiTextured, texture, this.getX(), this.getY(), this.width, this.height);
 
             int displayCursorDiff = this.cursorPos - this.displayPos;
             int displayHighlightDiff = this.highlightPos - this.displayPos;

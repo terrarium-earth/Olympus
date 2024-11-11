@@ -24,8 +24,6 @@ public class ListExample extends ExampleScreen {
             }));
         }
 
-        Color.initRainbow();
-
         list.add(Widgets.text(Component.literal("middle")));
 
         list.add(Widgets.text(Component.literal("left"), (text) -> {

@@ -19,6 +19,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.layouts.GridLayout;
 import net.minecraft.client.gui.layouts.LinearLayout;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.function.Consumers;
@@ -153,10 +154,10 @@ public class ColorPickerOverlay extends Overlay {
         super.renderBackground(graphics, mouseX, mouseY, partialTicks);
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
-        graphics.blitSprite(background, this.x, this.y, this.width, this.height);
+        graphics.blitSprite(RenderType::guiTextured, background, this.x, this.y, this.width, this.height);
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
-        graphics.blitSprite(inset, this.colorSelectLayout.getX() - 1, this.colorSelectLayout.getY() - 1, this.colorSelectLayout.getWidth() + 2, this.colorSelectLayout.getHeight() + 2);
+        graphics.blitSprite(RenderType::guiTextured, inset, this.colorSelectLayout.getX() - 1, this.colorSelectLayout.getY() - 1, this.colorSelectLayout.getWidth() + 2, this.colorSelectLayout.getHeight() + 2);
     }
 
     @Override

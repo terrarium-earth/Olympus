@@ -7,6 +7,7 @@ import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererCon
 import earth.terrarium.olympus.client.constants.MinecraftColors;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 
 public class IconWidgetRenderer<T extends AbstractWidget> implements WidgetRenderer<T>, ColorableWidget {
@@ -29,11 +30,11 @@ public class IconWidgetRenderer<T extends AbstractWidget> implements WidgetRende
 
         if (drawShadow) {
             RenderSystem.setShaderColor(red / 3f, green / 3f, blue / 3f, alpha);
-            graphics.blitSprite(icon, context.getX() + 1, context.getY() + 1, context.getWidth(), context.getHeight());
+            graphics.blitSprite(RenderType::guiTextured, icon, context.getX() + 1, context.getY() + 1, context.getWidth(), context.getHeight());
         }
 
         RenderSystem.setShaderColor(red, green, blue, alpha);
-        graphics.blitSprite(icon, context.getX(), context.getY(), context.getWidth(), context.getHeight());
+        graphics.blitSprite(RenderType::guiTextured, icon, context.getX(), context.getY(), context.getWidth(), context.getHeight());
 
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
     }

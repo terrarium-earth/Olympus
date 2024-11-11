@@ -4,11 +4,11 @@ import com.teamresourceful.resourcefullib.common.color.Color;
 import earth.terrarium.olympus.client.components.base.BaseWidget;
 import earth.terrarium.olympus.client.components.color.ColorPresetType;
 import earth.terrarium.olympus.client.constants.MinecraftColors;
-import earth.terrarium.olympus.client.ui.UIConstants;
 import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -58,7 +58,7 @@ public class PresetsSelector extends BaseWidget {
 
     @Override
     protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        graphics.blitSprite(background, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        graphics.blitSprite(RenderType::guiTextured, background, this.getX(), this.getY(), this.getWidth(), this.getHeight());
         int size = (this.getWidth() - 18) / 8;
 
         int i = 0;

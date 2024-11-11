@@ -10,6 +10,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.layouts.GridLayout;
 import net.minecraft.client.gui.layouts.LayoutSettings;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -98,6 +99,7 @@ public class DeleteConfirmModal extends BaseModal {
     public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.renderBackground(graphics, mouseX, mouseY, partialTick);
         graphics.blitSprite(
+                RenderType::guiTextured,
                 UIConstants.MODAL_FOOTER,
                 this.left + 1, this.top + this.modalHeight - this.buttonsHeight - INNER_PADDING * 2,
                 this.modalWidth - 2, this.buttonsHeight + INNER_PADDING * 2 - 1

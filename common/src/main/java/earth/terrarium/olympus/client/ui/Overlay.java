@@ -57,7 +57,7 @@ public abstract class Overlay extends BaseCursorScreen {
         if (this.background == null) return;
         this.background.render(graphics, -1, -1, partialTick);
         graphics.flush();
-        RenderSystem.clear(256, Minecraft.ON_OSX);
+        RenderSystem.clear(256);
     }
 
     @Override

@@ -6,7 +6,6 @@ import net.minecraft.Util;
 import org.lwjgl.opengl.GL20;
 import org.slf4j.Logger;
 
-import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -38,7 +37,7 @@ public final class Shader<T extends Uniforms> {
         if (this.vertexShader.get().isEmpty() || this.fragmentShader.get().isEmpty()) return;
 
         int vertexShaderId = GlStateManager.glCreateShader(GL20.GL_VERTEX_SHADER);
-        GlStateManager.glShaderSource(vertexShaderId, List.of(this.vertexShader.get()));
+        GlStateManager.glShaderSource(vertexShaderId, this.vertexShader.get());
         GlStateManager.glCompileShader(vertexShaderId);
         if (GlStateManager.glGetShaderi(vertexShaderId, GL20.GL_COMPILE_STATUS) == 0) {
             LOGGER.error("Failed to compile vertex shader: {}", GL20.glGetShaderInfoLog(vertexShaderId));
@@ -46,7 +45,7 @@ public final class Shader<T extends Uniforms> {
         }
 
         int fragmentShaderId = GlStateManager.glCreateShader(GL20.GL_FRAGMENT_SHADER);
-        GlStateManager.glShaderSource(fragmentShaderId, List.of(this.fragmentShader.get()));
+        GlStateManager.glShaderSource(fragmentShaderId, this.fragmentShader.get());
         GlStateManager.glCompileShader(fragmentShaderId);
         if (GlStateManager.glGetShaderi(fragmentShaderId, GL20.GL_COMPILE_STATUS) == 0) {
             LOGGER.error("Failed to compile fragment shader: {}", GL20.glGetShaderInfoLog(fragmentShaderId));

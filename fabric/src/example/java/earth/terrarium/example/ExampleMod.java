@@ -34,6 +34,6 @@ public class ExampleMod implements ClientModInitializer {
     }
 
     public static void showScreen(Screen screen) {
-        Minecraft.getInstance().tell(() -> Minecraft.getInstance().setScreen(screen));
+        Minecraft.getInstance().schedule(() -> Minecraft.getInstance().setScreen(screen));
     }
 }

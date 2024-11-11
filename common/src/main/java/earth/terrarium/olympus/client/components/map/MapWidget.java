@@ -9,6 +9,7 @@ import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.concurrent.CompletableFuture;
@@ -52,7 +53,7 @@ public class MapWidget extends BaseWidget {
     protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
-        graphics.blitSprite(this.texture, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        graphics.blitSprite(RenderType::guiTextured, this.texture, this.getX(), this.getY(), this.getWidth(), this.getHeight());
 
         if (!initialized) {
             this.refreshMap();
@@ -114,7 +115,7 @@ public class MapWidget extends BaseWidget {
             pose.translate(this.getX() + left + x, this.getY() + top + y, 0.0);
             pose.mulPose(Axis.ZP.rotationDegrees(player.getYRot()));
             pose.translate(-4f, -4f, 0f);
-            graphics.blit(MAP_ICONS, 0, 0, 0f, 0f, 8, 8, 8, 8);
+            graphics.blit(RenderType::guiTextured, MAP_ICONS, 0, 0, 0f, 0f, 8, 8, 8, 8);
         }
     }
 }

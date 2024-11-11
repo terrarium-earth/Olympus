@@ -7,6 +7,7 @@ import earth.terrarium.olympus.client.ui.UIConstants;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +37,9 @@ public class ListWidget extends BaseParentWidget {
         int scrollBarHeight = (int) ((widget.getHeight() / (double) widget.getContentHeight()) * widget.getHeight());
         int scrollBarY = context.getY() + Math.round(((float) widget.getScroll() / (float) widget.getContentHeight()) * context.getHeight());
 
-        graphics.blitSprite(SCROLLBAR,
+        graphics.blitSprite(
+            RenderType::guiTextured,
+            SCROLLBAR,
             context.getX() + (context.getWidth() - 2) / 2,
             context.getY(),
             context.getWidth() - 4,
@@ -44,6 +47,7 @@ public class ListWidget extends BaseParentWidget {
         );
 
         graphics.blitSprite(
+            RenderType::guiTextured,
             SCROLLBAR_THUMB,
             context.getX(),
             scrollBarY,

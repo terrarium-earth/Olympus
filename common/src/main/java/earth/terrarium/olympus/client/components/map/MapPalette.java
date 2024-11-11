@@ -1,5 +1,6 @@
 package earth.terrarium.olympus.client.components.map;
 
+import net.minecraft.util.ARGB;
 import net.minecraft.world.level.material.MapColor;
 
 public class MapPalette {
@@ -69,15 +70,12 @@ public class MapPalette {
         {0x789D88, 0x6D8F7E, 0x5B7469, 0x495B56}, // Glow Lichen
     };
 
-    // Add alpha to all the colors after since they are RGB and need to be converted to ABGR
+    // Add alpha to all the colors after
     static {
         for (int i = 0; i < COLORS.length; i++) {
             for (int j = 0; j < COLORS[i].length; j++) {
                 int color = COLORS[i][j];
-                int r = (color >> 16) & 0xFF;
-                int g = (color >> 8) & 0xFF;
-                int b = color & 0xFF;
-                COLORS[i][j] = (0xFF << 24) | (b << 16) | (g << 8) | r;
+                COLORS[i][j] = ARGB.color(0xFF, color);
             }
         }
     }

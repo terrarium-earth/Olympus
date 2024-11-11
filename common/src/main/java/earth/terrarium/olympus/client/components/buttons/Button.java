@@ -13,6 +13,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.navigation.CommonInputs;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.util.ARGB;
 import org.jetbrains.annotations.Nullable;
 
 public class Button extends BaseWidget implements CursorWidget {
@@ -30,11 +32,18 @@ public class Button extends BaseWidget implements CursorWidget {
     protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         this.isHovered = graphics.containsPointInScissor(mouseX, mouseY) && isMouseOver(mouseX, mouseY);
 
-        graphics.setColor(1.0F, 1.0F, 1.0F, this.alpha);
+        int color = ARGB.color(0xFF, 0xFF, 0xFF, (int) (this.alpha * 255f));
+
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
         if (this.sprites != null) {
-            graphics.blitSprite(this.sprites.get(this.active, this.isHoveredOrFocused()), this.getX(), this.getY(), this.getWidth(), this.getHeight());
+            graphics.blitSprite(
+                    RenderType::guiTextured,
+                    this.sprites.get(this.active, this.isHoveredOrFocused()),
+                    this.getX(), this.getY(),
+                    this.getWidth(), this.getHeight(),
+                    color
+            );
         }
         this.renderer.render(graphics, new WidgetRendererContext<>(this, mouseX, mouseY), partialTick);
     }
