@@ -45,14 +45,17 @@ public class ActionModal extends Overlay {
 
         var actions = this.builder.actions;
         int actionsHeight = actions.stream().mapToInt(AbstractWidget::getHeight).max().orElse(20);
-        int actionsWidth = actions.stream().mapToInt(AbstractWidget::getWidth).sum() + actions.size() * BUTTON_GAP;
+        int actionsWidth = Math.max(
+                actions.stream().mapToInt(AbstractWidget::getWidth).sum() + (actions.size() - 1) * BUTTON_GAP,
+                this.builder.minWidth
+        );
 
         var content = this.builder.content.stream().map(f -> f.apply(actionsWidth)).toList();
         int minContentHeight = this.builder.minHeight - HEADER_HEIGHT - actionsHeight - PADDING * 4;
         int contentHeight = content.stream().mapToInt(AbstractWidget::getHeight).sum() + content.size() * CONTENT_GAP;
         int contentWidth = content.stream().mapToInt(AbstractWidget::getWidth).max().orElse(10);
 
-        int modalWidth = Math.max(this.builder.minWidth, Math.max(contentWidth, actionsWidth)) + PADDING * 2;
+        int modalWidth = Math.max(contentWidth, actionsWidth) + PADDING * 2;
 
         var closeButton = Widgets.button()
                 .withTexture(null)
