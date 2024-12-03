@@ -7,6 +7,7 @@ import earth.terrarium.olympus.client.components.string.MultilineTextWidget;
 import earth.terrarium.olympus.client.layouts.Layouts;
 import earth.terrarium.olympus.client.ui.Overlay;
 import earth.terrarium.olympus.client.ui.UIConstants;
+import earth.terrarium.olympus.client.ui.UITexts;
 import earth.terrarium.olympus.client.utils.Orientation;
 import it.unimi.dsi.fastutil.ints.Int2ObjectFunction;
 import net.minecraft.client.Minecraft;
@@ -61,7 +62,7 @@ public class ActionModal extends Overlay {
                 .withTexture(null)
                 .withRenderer(WidgetRenderers.sprite(UIConstants.MODAL_CLOSE))
                 .withCallback(this::onClose)
-                .withTooltip(UIConstants.BACK)
+                .withTooltip(UITexts.BACK)
                 .withSize(11, 11);
 
         var contentLayout = Layouts.column().withGap(CONTENT_GAP);

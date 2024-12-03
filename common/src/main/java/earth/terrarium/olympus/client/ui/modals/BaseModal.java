@@ -2,6 +2,7 @@ package earth.terrarium.olympus.client.ui.modals;
 
 import earth.terrarium.olympus.client.ui.Overlay;
 import earth.terrarium.olympus.client.ui.UIConstants;
+import earth.terrarium.olympus.client.ui.UITexts;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
@@ -58,9 +59,9 @@ public abstract class BaseModal extends Overlay {
         GridLayout layout = new GridLayout().columnSpacing(INNER_PADDING);
 
         layout.addChild(
-            new ImageButton(11, 11, UIConstants.MODAL_CLOSE, b -> this.onClose(), UIConstants.BACK),
+            new ImageButton(11, 11, UIConstants.MODAL_CLOSE, b -> this.onClose(), UITexts.BACK),
             0, position
-        ).setTooltip(Tooltip.create(UIConstants.BACK));
+        ).setTooltip(Tooltip.create(UITexts.BACK));
         return layout;
     }
 

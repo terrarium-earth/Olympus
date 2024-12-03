@@ -110,11 +110,12 @@ public class UIConstants {
             id("lists/buttons/down/hovered")
     );
 
-    public static final Component BACK = Component.translatable("olympus.ui.back");
-    public static final Component CANCEL = Component.translatable("olympus.ui.cancel");
-    public static final Component DELETE = Component.translatable("olympus.ui.delete");
-    public static final Component REFRESH = Component.translatable("olympus.ui.refresh");
-    public static final Component LOADING = Component.translatable("olympus.ui.loading");
+    // Use UITexts.<the component>
+    @Deprecated public static final Component BACK = UITexts.BACK;
+    @Deprecated public static final Component CANCEL = UITexts.CANCEL;
+    @Deprecated public static final Component DELETE = UITexts.DELETE;
+    @Deprecated public static final Component REFRESH = UITexts.REFRESH;
+    @Deprecated public static final Component LOADING = UITexts.LOADING;
 
     public static ResourceLocation id(String path) {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
