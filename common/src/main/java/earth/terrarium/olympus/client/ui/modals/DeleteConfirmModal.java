@@ -5,6 +5,7 @@ import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import earth.terrarium.olympus.client.components.string.MultilineTextWidget;
 import earth.terrarium.olympus.client.constants.MinecraftColors;
 import earth.terrarium.olympus.client.ui.UIConstants;
+import earth.terrarium.olympus.client.ui.UITexts;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.layouts.GridLayout;
@@ -44,7 +45,7 @@ public class DeleteConfirmModal extends BaseModal {
     }
 
     public DeleteConfirmModal(Component title, Component description, Runnable action, Screen background) {
-        this(title, description, UIConstants.DELETE, action, background);
+        this(title, description, UITexts.DELETE, action, background);
     }
 
     @Override
@@ -67,7 +68,7 @@ public class DeleteConfirmModal extends BaseModal {
 
         content.addChild(Widgets.button()
                 .withCallback(this::onClose)
-                .withRenderer(WidgetRenderers.text(UIConstants.CANCEL))
+                .withRenderer(WidgetRenderers.text(UITexts.CANCEL))
                 .withSize(buttonWidth, WIDGET_HEIGHT)
         );
 
@@ -107,7 +108,7 @@ public class DeleteConfirmModal extends BaseModal {
     }
 
     public static void open(Component title, Component description, Runnable action) {
-        open(title, description, UIConstants.DELETE, action);
+        open(title, description, UITexts.DELETE, action);
     }
 
     public static void open(Component title, Component description, Component confirm, Runnable action) {

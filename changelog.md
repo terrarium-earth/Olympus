@@ -1,1 +1,1 @@
-- Update to 1.21.3
+- Fix icon colors being broken in 1.21.3
