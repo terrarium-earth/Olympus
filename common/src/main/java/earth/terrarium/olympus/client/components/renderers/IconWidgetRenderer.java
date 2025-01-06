@@ -1,6 +1,5 @@
 package earth.terrarium.olympus.client.components.renderers;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;
@@ -9,6 +8,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ARGB;
 
 public class IconWidgetRenderer<T extends AbstractWidget> implements WidgetRenderer<T>, ColorableWidget {
 
@@ -29,14 +29,22 @@ public class IconWidgetRenderer<T extends AbstractWidget> implements WidgetRende
         if (alpha == 0f) alpha = 1f;
 
         if (drawShadow) {
-            RenderSystem.setShaderColor(red / 3f, green / 3f, blue / 3f, alpha);
-            graphics.blitSprite(RenderType::guiTextured, icon, context.getX() + 1, context.getY() + 1, context.getWidth(), context.getHeight());
+            graphics.blitSprite(
+                    RenderType::guiTextured,
+                    icon,
+                    context.getX() + 1, context.getY() + 1,
+                    context.getWidth(), context.getHeight(),
+                    ARGB.colorFromFloat(alpha, red / 3f, green / 3f, blue / 3f)
+            );
         }
 
-        RenderSystem.setShaderColor(red, green, blue, alpha);
-        graphics.blitSprite(RenderType::guiTextured, icon, context.getX(), context.getY(), context.getWidth(), context.getHeight());
-
-        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+        graphics.blitSprite(
+                RenderType::guiTextured,
+                icon,
+                context.getX(), context.getY(),
+                context.getWidth(), context.getHeight(),
+                ARGB.colorFromFloat(alpha, red, green, blue)
+        );
     }
 
     public IconWidgetRenderer<T> withShadow() {

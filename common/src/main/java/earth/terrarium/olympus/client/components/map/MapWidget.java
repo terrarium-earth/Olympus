@@ -5,6 +5,7 @@ import com.mojang.math.Axis;
 import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import earth.terrarium.olympus.client.components.base.BaseWidget;
 import earth.terrarium.olympus.client.ui.UIConstants;
+import earth.terrarium.olympus.client.ui.UITexts;
 import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -30,7 +31,7 @@ public class MapWidget extends BaseWidget {
 
     private void renderLoading(GuiGraphics graphics) {
         var font = Minecraft.getInstance().font;
-        graphics.drawCenteredString(font, UIConstants.LOADING, (int) (getX() + getWidth() / 2f), (int) (getY() + getHeight() / 2f), 0xFFFFFF);
+        graphics.drawCenteredString(font, UITexts.LOADING, (int) (getX() + getWidth() / 2f), (int) (getY() + getHeight() / 2f), 0xFFFFFF);
     }
 
     public MapWidget withTexture(ResourceLocation texture) {

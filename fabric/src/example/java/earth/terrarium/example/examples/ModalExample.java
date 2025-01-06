@@ -54,6 +54,8 @@ public class ModalExample extends ExampleScreen {
                 () -> System.out.println("Item deleted")
         );
 
+        ActionModal.Builder linkModal = Modals.link("https://github.com/terrarium-earth/olympus");
+
         FrameLayout.centerInRectangle(
                 Layouts.layout()
                         .withGap(10)
@@ -65,6 +67,10 @@ public class ModalExample extends ExampleScreen {
                                 Widgets.button()
                                         .withCallback(deleteModal::open)
                                         .withRenderer(WidgetRenderers.text(Component.literal("Open Delete modal")))
+                                        .withSize(100, 20),
+                                Widgets.button()
+                                        .withCallback(linkModal::open)
+                                        .withRenderer(WidgetRenderers.text(Component.literal("Open Link modal")))
                                         .withSize(100, 20)
                         )
                         .build(this::addRenderableWidget),
