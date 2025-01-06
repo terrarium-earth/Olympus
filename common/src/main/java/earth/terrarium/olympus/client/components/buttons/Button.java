@@ -89,11 +89,6 @@ public class Button extends BaseWidget implements CursorWidget {
     }
 
     @Override
-    protected boolean clicked(double mouseX, double mouseY) {
-        return this.isMouseOver(mouseX, mouseY);
-    }
-
-    @Override
     public boolean isMouseOver(double mouseX, double mouseY) {
         if (!this.active || !this.visible) return false;
         return this.shape.isInside(mouseX - this.getX(), mouseY - this.getY(), this.getWidth(), this.getHeight());

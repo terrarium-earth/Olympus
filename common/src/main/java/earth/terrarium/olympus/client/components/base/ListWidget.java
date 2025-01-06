@@ -161,7 +161,6 @@ public class ListWidget extends BaseParentWidget {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (!clicked(mouseX, mouseY)) return false;
         if (isMouseOverScrollBar(mouseX, mouseY)) {
             this.scrolling = true;
             return true;

@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -143,7 +144,18 @@ public abstract class BaseParentWidget extends BaseWidget implements ContainerEv
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        return ContainerEventHandler.super.mouseClicked(mouseX, mouseY, button);
+        Optional<GuiEventListener> optional = this.getChildAt(mouseX, mouseY);
+        if (optional.isPresent()) {
+            GuiEventListener guiEventListener = optional.get();
+            if (guiEventListener.mouseClicked(mouseX, mouseY, button)) {
+                this.setFocused(guiEventListener);
+                if (button == 0) {
+                    this.setDragging(true);
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

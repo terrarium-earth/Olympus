@@ -4,7 +4,6 @@ import earth.terrarium.example.base.ExampleScreen;
 import earth.terrarium.example.base.OlympusExample;
 import earth.terrarium.olympus.client.components.Widgets;
 import earth.terrarium.olympus.client.components.map.MapRenderer;
-import earth.terrarium.olympus.client.components.map.MapWidget;
 import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.gui.layouts.FrameLayout;
 

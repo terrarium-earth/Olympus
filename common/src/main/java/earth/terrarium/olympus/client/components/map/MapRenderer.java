@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.ResourceLocation;
 
 public class MapRenderer {
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("olympus","claimmaptextures");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("olympus","dynamic_map");
     private final int scale;
 
     public MapRenderer(int[][] colors, int scale) {
