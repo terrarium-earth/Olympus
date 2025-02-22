@@ -8,10 +8,14 @@ import earth.terrarium.olympus.client.utils.ListenableState;
 import net.minecraft.client.gui.layouts.FrameLayout;
 import net.minecraft.network.chat.Component;
 
+import java.util.Locale;
+import java.util.stream.Stream;
+
 @OlympusExample(id = "text_input", description = "A simple text input example")
 public class TextInputExample extends ExampleScreen {
     private final ListenableState<String> text = ListenableState.of("Hello, World!");
     private final ListenableState<Integer> number = ListenableState.of(0);
+    private final ListenableState<String> autocomplete = ListenableState.of("Red");
 
     public TextInputExample() {
         text.registerListener(newValue -> System.out.println("Text changed to: " + newValue));
@@ -34,6 +38,17 @@ public class TextInputExample extends ExampleScreen {
         layout.withChild(Widgets.intInput(number, textBox -> {
             textBox.withSize(200, 20);
             textBox.withTooltip(Component.literal("This is a number input widget"));
+        }));
+
+        // Add a autocomplete widget
+        layout.withChild(Widgets.<String>autocomplete(autocomplete, textBox -> {
+            textBox.withSize(200, 20);
+            textBox.withTooltip(Component.literal("This is a autocomplete widget"));
+            textBox.withSuggestions(value ->
+                    Stream.of("Red", "Green", "Blue")
+                            .filter(s -> s.toLowerCase(Locale.ROOT).startsWith(value.toLowerCase(Locale.ROOT)))
+                            .toList()
+            );
         }));
 
         layout.build(this::addRenderableWidget);

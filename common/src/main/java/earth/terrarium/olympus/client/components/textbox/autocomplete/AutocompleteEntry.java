@@ -8,10 +8,10 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-public class AutocompleteEntry<T> extends BaseWidget {
+public class AutocompleteEntry extends BaseWidget {
 
-    private static final ResourceLocation ENTRY = UIConstants.id("textbox/entry");
-    private static final ResourceLocation ENTRY_HOVERED = UIConstants.id("textbox/entry_hovered");
+    private static final ResourceLocation ENTRY = UIConstants.id("lists/entry/normal");
+    private static final ResourceLocation ENTRY_HOVERED = UIConstants.id("lists/entry/hovered");
 
     protected final String value;
     protected final Runnable action;

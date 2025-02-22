@@ -21,9 +21,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.StringUtil;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 @SuppressWarnings("unused")
@@ -35,9 +37,10 @@ public class TextBox extends BaseWidget {
     protected WidgetSprites sprites = UIConstants.TEXTBOX;
 
     protected final Font font = Minecraft.getInstance().font;
-    private final State<String> state;
+    protected final State<String> state;
 
     private Predicate<String> filter = s -> true;
+    private Consumer<String> onEnter = s -> {};
     protected String placeholder = "";
     private boolean shiftPressed;
     private int maxLength = Short.MAX_VALUE;
@@ -45,12 +48,26 @@ public class TextBox extends BaseWidget {
     private int cursorPos;
     private int highlightPos;
 
+
     public TextBox(State<@NotNull String> state) {
         this.state = state;
 
         this.setCursorPosition(this.state.get().length());
         this.setHighlightPos(this.cursorPos);
         this.displayPos = 0;
+    }
+
+    @ApiStatus.Internal
+    public TextBox copyOptionsFrom(TextBox other) {
+        this.filter = other.filter;
+        this.onEnter = other.onEnter;
+        this.placeholder = other.placeholder;
+        this.maxLength = other.maxLength;
+        this.textColor = other.textColor;
+        this.errorColor = other.errorColor;
+        this.placeholderColor = other.placeholderColor;
+        this.sprites = other.sprites;
+        return this;
     }
 
     public TextBox withPlaceholder(String placeholder) {
@@ -65,6 +82,11 @@ public class TextBox extends BaseWidget {
 
     public TextBox withFilter(Predicate<String> filter) {
         this.filter = filter;
+        return this;
+    }
+
+    public TextBox withEnterCallback(Consumer<String> onEnter) {
+        this.onEnter = onEnter;
         return this;
     }
 
@@ -262,6 +284,10 @@ public class TextBox extends BaseWidget {
                 }
                 case InputConstants.KEY_END -> {
                     this.moveCursorTo(this.state.get().length());
+                    yield true;
+                }
+                case InputConstants.KEY_RETURN -> {
+                    this.onEnter.accept(this.state.get());
                     yield true;
                 }
                 default -> false;

@@ -16,6 +16,7 @@ import earth.terrarium.olympus.client.components.renderers.TristateRenderers;
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import earth.terrarium.olympus.client.components.string.TextWidget;
 import earth.terrarium.olympus.client.components.textbox.TextBox;
+import earth.terrarium.olympus.client.components.textbox.autocomplete.AutocompleteTextBox;
 import earth.terrarium.olympus.client.constants.MinecraftColors;
 import earth.terrarium.olympus.client.layouts.Layouts;
 import earth.terrarium.olympus.client.layouts.LinearViewLayout;
@@ -23,6 +24,7 @@ import earth.terrarium.olympus.client.ui.UIConstants;
 import earth.terrarium.olympus.client.utils.State;
 import earth.terrarium.olympus.client.utils.StateUtils;
 import earth.terrarium.olympus.client.utils.Translatable;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -39,9 +41,7 @@ import java.util.function.Function;
 public final class Widgets {
 
     public static Button button(Consumer<Button> factory) {
-        Button button = new Button();
-        factory.accept(button);
-        return button;
+        return Util.make(new Button(), factory);
     }
 
     public static Button button() {
@@ -90,23 +90,21 @@ public final class Widgets {
     }
 
     public static MapWidget map(State<MapRenderer> state, Consumer<MapWidget> factory) {
-        var map = new MapWidget(state).withRenderDistanceScale();
-        factory.accept(map);
-        return map;
+        return Util.make(new MapWidget(state).withRenderDistanceScale(), factory);
     }
 
     public static MapWidget map(State<MapRenderer> state) {
         return map(state, Consumers.nop());
     }
 
-    public static <T> LayoutWidget radio(RadioState<T> state, Consumer<RadioBuilder<T>> builder, Consumer<LayoutWidget> factory) {
+    public static <T> LayoutWidget<LinearViewLayout> radio(RadioState<T> state, Consumer<RadioBuilder<T>> builder, Consumer<LayoutWidget<LinearViewLayout>> factory) {
         RadioBuilder<T> radioBuilder = new RadioBuilder<>(state);
         builder.accept(radioBuilder);
         factory.accept(radioBuilder.build());
         return radioBuilder.build();
     }
 
-    public static LayoutWidget<LinearViewLayout> tristate(RadioState<TriState> state, Consumer<RadioBuilder<TriState>> builder, Consumer<LayoutWidget> factory) {
+    public static LayoutWidget<LinearViewLayout> tristate(RadioState<TriState> state, Consumer<RadioBuilder<TriState>> builder, Consumer<LayoutWidget<LinearViewLayout>> factory) {
         RadioBuilder<TriState> radioBuilder = new RadioBuilder<>(state);
         radioBuilder.withoutEntrySprites()
                 .withRenderer((triState, depressed) -> WidgetRenderers.layered(
@@ -127,25 +125,19 @@ public final class Widgets {
     }
 
     public static LayoutWidget<FrameLayout> frame(Consumer<LayoutWidget<FrameLayout>> factory) {
-        var compound = frame();
-        factory.accept(compound);
-        return compound;
+        return Util.make(new LayoutWidget<>(new FrameLayout()), factory);
     }
 
     public static LayoutWidget<FrameLayout> frame() {
-        return new LayoutWidget<>(new FrameLayout());
+        return frame(Consumers.nop());
     }
 
     public static LayoutWidget<LinearViewLayout> list(Consumer<LayoutWidget<LinearViewLayout>> factory) {
-        var compound = new LayoutWidget<>(Layouts.column());
-        factory.accept(compound);
-        return compound;
+        return Util.make(new LayoutWidget<>(Layouts.column()), factory);
     }
 
     public static LayoutWidget<LinearViewLayout> carousel(Consumer<LayoutWidget<LinearViewLayout>> factory) {
-        var compound = new LayoutWidget<>(Layouts.row());
-        factory.accept(compound);
-        return compound;
+        return Util.make(new LayoutWidget<>(Layouts.row()), factory);
     }
 
     public static LayoutWidget<FrameLayout> labelled(Font font, Component label, Color color, AbstractWidget widget, Consumer<LayoutWidget<FrameLayout>> factory) {
@@ -173,9 +165,7 @@ public final class Widgets {
     }
 
     public static TextBox textInput(State<String> state, Consumer<TextBox> factory) {
-        var textBox = new TextBox(state);
-        factory.accept(textBox);
-        return textBox;
+        return Util.make(new TextBox(state), factory);
     }
 
     public static TextBox textInput(State<String> state) {
@@ -241,6 +231,14 @@ public final class Widgets {
 
     public static TextBox colorInput(State<Color> state) {
         return colorInput(state, Consumers.nop());
+    }
+
+    public static <T> AutocompleteTextBox<T> autocomplete(State<String> state, Consumer<AutocompleteTextBox<T>> factory) {
+        return Util.make(new AutocompleteTextBox<>(state), factory);
+    }
+
+    public static <T> AutocompleteTextBox<T> autocomplete(State<String> state) {
+        return autocomplete(state, Consumers.nop());
     }
 
     public static Button colorPicker(State<Color> state, boolean hasAlpha, Consumer<Button> factory, Consumer<ColorPickerOverlay> overlayFactory) {

@@ -1,99 +1,42 @@
 package earth.terrarium.olympus.client.components.textbox.autocomplete;
 
-import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
-import earth.terrarium.olympus.client.components.base.BaseWidget;
-import earth.terrarium.olympus.client.ui.UIConstants;
-import net.minecraft.Optionull;
+import earth.terrarium.olympus.client.components.textbox.TextBox;
+import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.WidgetSprites;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
-import java.util.function.BiPredicate;
 import java.util.function.Function;
 
-public class AutocompleteTextBox<T> extends BaseWidget {
+public class AutocompleteTextBox<T> extends TextBox {
 
-    private static final WidgetSprites SPRITES = new WidgetSprites(
-        UIConstants.id("textbox/normal"),
-        UIConstants.id("textbox/hovered"),
-        UIConstants.id("textbox/focused")
-    );
-    private static final int TEXT_COLOR = 0xe0e0e0;
-    private static final int PADDING = 4;
+    protected Function<String, List<T>> suggestions = s -> List.of();
+    protected Function<T, String> mapper = Object::toString;
 
-    protected final List<T> suggestions;
-    protected final BiPredicate<String, T> filter;
-    protected final Function<T, String> mapper;
+    public AutocompleteTextBox(State<String> state) {
+        super(state);
+    }
 
-    protected AutocompleteScreen<T> screen;
-    protected String value;
-
-    public AutocompleteTextBox(AutocompleteTextBox<T> box, String value, int width, int height, List<T> suggestions, BiPredicate<String, T> filter, Function<T, String> mapper) {
-        super(width, height);
-        this.screen = box != null ? box.screen : null;
+    public AutocompleteTextBox<T> withSuggestions(Function<String, List<T>> suggestions) {
         this.suggestions = suggestions;
-        this.filter = filter;
+        return this;
+    }
+
+    public AutocompleteTextBox<T> withMapper(Function<T, String> mapper) {
         this.mapper = mapper;
-        this.value = value;
+        return this;
+    }
+
+    protected State<String> state() {
+        return this.state;
     }
 
     @Override
-    protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        this.value = Optionull.mapOrDefault(this.screen, AutocompleteScreen::text, this.value);
-
-        Font font = Minecraft.getInstance().font;
-        ResourceLocation texture = SPRITES.get(this.isHoveredOrFocused(), !this.isActive());
-
-        graphics.blitSprite(RenderType::guiTextured, texture, this.getX(), this.getY(), this.width, this.height);
-
-
-        String truncatedValue = font.plainSubstrByWidth(this.value, this.width - PADDING * 2);
-        if (!truncatedValue.isEmpty()) {
-            graphics.drawString(font, truncatedValue, this.getX() + PADDING, this.getY() + (this.height - PADDING * 2) / 2, TEXT_COLOR);
-        }
+    public boolean isFocused() {
+        return false;
     }
 
     @Override
     public void onClick(double mouseX, double mouseY) {
-        Screen screen = Minecraft.getInstance().screen;
-        this.screen = new AutocompleteScreen<>(screen, this);
-        Minecraft.getInstance().setScreen(this.screen);
-    }
-
-    @Override
-    public CursorScreen.Cursor getCursor() {
-        return CursorScreen.Cursor.TEXT;
-    }
-
-    public T value() {
-        if (this.screen != null) {
-            return this.screen.value();
-        }
-        for (T suggestion : this.suggestions) {
-            if (this.mapper.apply(suggestion).equals(this.value)) {
-                return suggestion;
-            }
-        }
-        return null;
-    }
-
-    public String getRawValue() {
-        if (this.screen != null) {
-            return this.screen.text();
-        }
-        return this.value;
-    }
-
-    public void clear() {
-        if (this.screen != null) {
-            this.screen.clear();
-            return;
-        }
-        this.value = "";
+        Minecraft.getInstance().setScreen(new AutocompleteScreen<>(this));
     }
 }
