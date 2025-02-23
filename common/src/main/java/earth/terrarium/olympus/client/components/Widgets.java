@@ -267,4 +267,14 @@ public final class Widgets {
         factory.accept(widget);
         return widget;
     }
+
+    public static TextWidget text(String text) {
+        return new TextWidget(Component.literal(text));
+    }
+
+    public static TextWidget text(String text, Consumer<TextWidget> factory) {
+        TextWidget widget = text(Component.literal(text));
+        factory.accept(widget);
+        return widget;
+    }
 }
