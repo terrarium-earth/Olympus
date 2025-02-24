@@ -1,1 +1,4 @@
-- Update to 1.21.4
+- Add onEnter to text boxes
+- Clean up auto complete text boxes to be inalign with normal text boxes
+- Fix that the textures of auto complete were moved so therefore they didnt display
+- Add support for using raw strings in text widgets (j10a1n15)
