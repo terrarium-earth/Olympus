@@ -15,11 +15,13 @@ import java.util.stream.Stream;
 public class TextInputExample extends ExampleScreen {
     private final ListenableState<String> text = ListenableState.of("Hello, World!");
     private final ListenableState<Integer> number = ListenableState.of(0);
+    private final ListenableState<Double> doubleNumber = ListenableState.of(0.0);
     private final ListenableState<String> autocomplete = ListenableState.of("Red");
 
     public TextInputExample() {
         text.registerListener(newValue -> System.out.println("Text changed to: " + newValue));
         number.registerListener(newValue -> System.out.println("Number changed to: " + newValue));
+        doubleNumber.registerListener(newValue -> System.out.println("Double changed to: " + newValue));
     }
 
     @Override
@@ -38,6 +40,12 @@ public class TextInputExample extends ExampleScreen {
         layout.withChild(Widgets.intInput(number, textBox -> {
             textBox.withSize(200, 20);
             textBox.withTooltip(Component.literal("This is a number input widget"));
+        }));
+
+        // Add a decimal input widget
+        layout.withChild(Widgets.doubleInput(doubleNumber, textBox -> {
+            textBox.withSize(200, 20);
+            textBox.withTooltip(Component.literal("This is a double number input widget"));
         }));
 
         // Add a autocomplete widget

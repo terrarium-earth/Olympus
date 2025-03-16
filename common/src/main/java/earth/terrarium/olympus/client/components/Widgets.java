@@ -34,6 +34,7 @@ import net.minecraft.client.gui.layouts.LayoutSettings;
 import net.minecraft.network.chat.Component;
 import org.apache.commons.lang3.function.Consumers;
 
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -172,21 +173,21 @@ public final class Widgets {
         return textInput(state, Consumers.nop());
     }
 
-    public static TextBox intInput(State<Integer> state, Consumer<TextBox> factory) {
+    public static TextBox doubleInput(State<Double> state, Consumer<TextBox> factory) {
         var textBox = new TextBox(new State<>() {
-            String temp = state.get().toString();
+            String temp = NumberFormat.getInstance().format(state.get());
 
             @Override
             public void set(String value) {
                 value = value.trim();
                 if (value.isEmpty() || value.equals("-")) {
-                    state.set(0);
+                    state.set(0.0);
                     temp = value;
                 } else try {
-                    state.set(Integer.parseInt(value));
+                    state.set(Double.parseDouble(value));
                     temp = value;
                 } catch (NumberFormatException e) {
-                    state.set(0);
+                    state.set(0.0);
                     temp = "";
                 }
             }
@@ -198,14 +199,23 @@ public final class Widgets {
         }).withFilter(s -> {
             if (s.isEmpty() || s.equals("-")) return true;
             try {
-                Integer.parseInt(s);
+                Double.parseDouble(s);
                 return true;
             } catch (NumberFormatException e) {
                 return false;
             }
         });
+
         factory.accept(textBox);
         return textBox;
+    }
+
+    public static TextBox doubleInput(State<Double> state) {
+        return doubleInput(state, Consumers.nop());
+    }
+
+    public static TextBox intInput(State<Integer> state, Consumer<TextBox> factory) {
+        return doubleInput(state.map(Integer::doubleValue, Double::intValue), factory);
     }
 
     public static TextBox intInput(State<Integer> state) {
