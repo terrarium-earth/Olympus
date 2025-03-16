@@ -212,6 +212,55 @@ public final class Widgets {
         return intInput(state, Consumers.nop());
     }
 
+    public static TextBox doubleInput(State<Double> state, Consumer<TextBox> factory) {
+        var textBox = new TextBox(new State<>() {
+            String temp = state.get().toString();
+
+            @Override
+            public void set(String value) {
+                value = value.trim();
+                if (value.isEmpty() || value.equals("-")) {
+                    state.set(0.0);
+                    temp = value;
+                } else {
+                    if (isValidDouble(value)) {
+                        try {
+                            state.set(Double.parseDouble(value));
+                            temp = value;
+                        } catch (NumberFormatException e) {
+                            state.set(0.0);
+                            temp = "";
+                        }
+                    } else {
+                        state.set(0.0);
+                        temp = "";
+                    }
+                }
+            }
+
+            @Override
+            public String get() {
+                return temp;
+            }
+        }).withFilter(s -> {
+            if (s.isEmpty() || s.equals("-")) return true;
+            return isValidDouble(s); // Validate input before allowing it
+        });
+
+        factory.accept(textBox);
+        return textBox;
+    }
+
+    public static TextBox doubleInput(State<Double> state) {
+        return doubleInput(state, Consumers.nop());
+    }
+
+    private static boolean isValidDouble(String value) {
+        // Regular expression to match valid doubles, allowing a single decimal point
+        String regex = "^-?\\d*(\\.\\d*)?$"; // Matches numbers like "12", "-12", "12.34", "-12.34", "1.", "-1.", etc.
+        return value.matches(regex);
+    }
+
     public static TextBox colorInput(State<Color> state, Consumer<TextBox> factory) {
         return textInput(new State<>() {
             String temp = state.get().toString();
