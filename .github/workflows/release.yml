@@ -57,7 +57,7 @@ jobs:
 
       - name: Generate Discord Embed
         run: ./gradlew injectEmbed
-        with:
+        env:
           VERSION: ${{ github.event.inputs.version }}
           CHANGELOG: ${{ github.event.inputs.changelog }}
 
