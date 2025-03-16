@@ -73,7 +73,7 @@ subprojects {
     tasks.processResources {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         filesMatching(listOf("META-INF/neoforge.mods.toml", "fabric.mod.json")) {
-            expand("version" to project.version)
+            expand("version" to System.getenv("VERSION"))
         }
     }
 
@@ -144,14 +144,12 @@ resourcefulGradle {
     templates {
         register("embed") {
             val minecraftVersion: String by project
-            val version: String by project
-            val changelog: String = file("changelog.md").readText(Charsets.UTF_8)
 
             source.set(file("templates/embed.json.template"))
             injectedValues.set(mapOf(
                     "minecraft" to minecraftVersion,
-                    "version" to version,
-                    "changelog" to StringEscapeUtils.escapeJava(changelog),
+                    "version" to System.getenv("VERSION"),
+                    "changelog" to StringEscapeUtils.escapeJava(System.getenv("CHANGELOG")),
             ))
         }
     }
