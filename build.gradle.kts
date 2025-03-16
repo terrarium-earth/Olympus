@@ -108,6 +108,7 @@ subprojects {
         publications {
             create<MavenPublication>("maven") {
                 artifactId = "$modId-$modLoader-$minecraftVersion"
+                version = System.getenv("VERSION")
                 from(components["java"])
 
                 pom {
