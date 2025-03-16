@@ -48,6 +48,8 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ github.event.inputs.version }}
+          body: " ${{ github.event.inputs.changelog }}"
           files: |
             ./neoforge/build/libs/!(*-@(dev|sources|dev-shadow)).jar
             ./fabric/build/libs/!(*-@(dev|sources|dev-shadow)).jar
