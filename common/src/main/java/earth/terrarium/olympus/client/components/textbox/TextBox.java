@@ -1,7 +1,6 @@
 package earth.terrarium.olympus.client.components.textbox;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import earth.terrarium.olympus.client.components.base.BaseWidget;
@@ -331,9 +330,7 @@ public class TextBox extends BaseWidget {
 
             ResourceLocation texture = sprites.get(this.active, this.isHoveredOrFocused());
 
-            RenderSystem.enableBlend();
-            RenderSystem.enableDepthTest();
-            graphics.blitSprite(RenderType::guiTextured, texture, this.getX(), this.getY(), this.width, this.height);
+            graphics.blitSprite(RenderType::guiOpaqueTexturedBackground, texture, this.getX(), this.getY(), this.width, this.height);
 
             int displayCursorDiff = this.cursorPos - this.displayPos;
             int displayHighlightDiff = this.highlightPos - this.displayPos;

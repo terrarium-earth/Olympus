@@ -2,13 +2,9 @@ package earth.terrarium.example.examples;
 
 import earth.terrarium.example.base.ExampleScreen;
 import earth.terrarium.example.base.OlympusExample;
-import earth.terrarium.olympus.client.components.Widgets;
-import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
-import earth.terrarium.olympus.client.layouts.Layouts;
-import earth.terrarium.olympus.client.shader.builtin.RoundedRectShader;
-import earth.terrarium.olympus.client.shader.builtin.RoundedTextureShader;
+import earth.terrarium.olympus.client.pipelines.RoundedRectanage;
+import earth.terrarium.olympus.client.pipelines.RoundedTexture;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,25 +12,10 @@ import org.jetbrains.annotations.NotNull;
 public class ShaderExample extends ExampleScreen {
 
     @Override
-    protected void init() {
-        Layouts.row()
-                .withChild(Widgets.button()
-                        .withSize(100, 20)
-                        .withRenderer(WidgetRenderers.text(Component.literal("Recompile Shaders")))
-                        .withCallback(() -> {
-                            RoundedRectShader.SHADER.recompile();
-                            RoundedTextureShader.SHADER.recompile();
-                        })
-                )
-                .withPosition(this.width / 2 - 50, this.height - 30)
-                .build(this::addRenderableWidget);
-    }
-
-    @Override
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float f) {
         super.render(graphics, mouseX, mouseY, f);
 
-        RoundedRectShader.fill(
+        RoundedRectanage.draw(
                 graphics,
                 this.width / 2 - 150, 50,
                 100, 100,
@@ -42,7 +23,7 @@ public class ShaderExample extends ExampleScreen {
                 15f, 5
         );
 
-        RoundedTextureShader.blit(
+        RoundedTexture.draw(
                 graphics,
                 this.width / 2 + 50, 50,
                 100, 100,

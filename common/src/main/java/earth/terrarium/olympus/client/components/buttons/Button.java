@@ -1,6 +1,5 @@
 package earth.terrarium.olympus.client.components.buttons;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.teamresourceful.resourcefullib.client.components.CursorWidget;
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import earth.terrarium.olympus.client.components.base.BaseWidget;
@@ -34,11 +33,9 @@ public class Button extends BaseWidget implements CursorWidget {
 
         int color = ARGB.color(0xFF, 0xFF, 0xFF, (int) (this.alpha * 255f));
 
-        RenderSystem.enableBlend();
-        RenderSystem.enableDepthTest();
         if (this.sprites != null) {
             graphics.blitSprite(
-                    RenderType::guiTextured,
+                    RenderType::guiOpaqueTexturedBackground,
                     this.sprites.get(this.active, this.isHoveredOrFocused()),
                     this.getX(), this.getY(),
                     this.getWidth(), this.getHeight(),

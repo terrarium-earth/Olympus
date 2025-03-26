@@ -1,12 +1,13 @@
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-rootProject.name = "olympus"
+rootProject.name = "Olympus"
 
 pluginManagement {
     repositories {
-        maven(url = "https://maven.architectury.dev/")
-        maven(url = "https://maven.neoforged.net/releases/")
-        maven(url = "https://maven.teamresourceful.com/repository/maven-public/")
+        maven("https://maven.teamresourceful.com/repository/maven-private/") // TODO remove when arch stops breaking 1.21.5
+        maven("https://maven.fabricmc.net/")
+        maven("https://maven.architectury.dev/")
+        maven("https://maven.teamresourceful.com/repository/maven-public/")
         gradlePluginPortal()
     }
 }

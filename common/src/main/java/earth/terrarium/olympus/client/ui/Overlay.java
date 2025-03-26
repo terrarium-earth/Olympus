@@ -57,7 +57,9 @@ public abstract class Overlay extends BaseCursorScreen {
         if (this.background == null) return;
         this.background.render(graphics, -1, -1, partialTick);
         graphics.flush();
-        RenderSystem.clear(256);
+        var depth = Minecraft.getInstance().getMainRenderTarget().getDepthTexture();
+        if (depth == null) return;
+        RenderSystem.getDevice().createCommandEncoder().clearDepthTexture(depth, 1f);
     }
 
     @Override

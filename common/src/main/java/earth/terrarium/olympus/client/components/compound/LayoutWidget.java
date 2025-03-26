@@ -1,6 +1,5 @@
 package earth.terrarium.olympus.client.components.compound;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.olympus.client.components.base.BaseParentWidget;
@@ -130,9 +129,7 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
         layout.setPosition(getX() - xScroll + contentMargin, getY() - yScroll + contentMargin);
 
         if (background != null) {
-            RenderSystem.enableBlend();
-            RenderSystem.enableDepthTest();
-            graphics.blitSprite(RenderType::guiTextured, background, getX(), getY(), getViewWidth() + contentMargin * 2, getViewHeight() + contentMargin * 2);
+            graphics.blitSprite(RenderType::guiOpaqueTexturedBackground, background, getX(), getY(), getViewWidth() + contentMargin * 2, getViewHeight() + contentMargin * 2);
         }
 
         graphics.enableScissor(getX() + contentMargin, getY() + contentMargin, getX() + getViewWidth() + contentMargin, getY() + getViewHeight() + contentMargin);
@@ -141,26 +138,20 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
 
         if (isXScrollbarVisible()) {
             if (scrollbarBackground != null) {
-                RenderSystem.enableBlend();
-                RenderSystem.enableDepthTest();
-                graphics.blitSprite(RenderType::guiTextured, scrollbarBackground, getX(), getY() + getViewHeight() + contentMargin * 2, getViewWidth() + contentMargin * 2, getHeight() - getViewHeight() - contentMargin * 2);
+                graphics.blitSprite(RenderType::guiOpaqueTexturedBackground, scrollbarBackground, getX(), getY() + getViewHeight() + contentMargin * 2, getViewWidth() + contentMargin * 2, getHeight() - getViewHeight() - contentMargin * 2);
             }
             scrollbarXRenderer.render(graphics, new WidgetRendererContext<>(this, mouseX, mouseY).setHeight(scrollWidth).setWidth(getViewWidth() - scrollMargin * 2).setX(getX() + scrollMargin).setY(this.getY() + this.getViewHeight() + scrollMargin + contentMargin * 2), partialTick);
         }
 
         if (isYScrollbarVisible()) {
             if (scrollbarBackground != null) {
-                RenderSystem.enableBlend();
-                RenderSystem.enableDepthTest();
-                graphics.blitSprite(RenderType::guiTextured, scrollbarBackground, getX() + getViewWidth() + contentMargin * 2, getY(), getWidth() - getViewWidth() - contentMargin * 2, getViewHeight() + contentMargin * 2);
+                graphics.blitSprite(RenderType::guiOpaqueTexturedBackground, scrollbarBackground, getX() + getViewWidth() + contentMargin * 2, getY(), getWidth() - getViewWidth() - contentMargin * 2, getViewHeight() + contentMargin * 2);
             }
             scrollbarYRenderer.render(graphics, new WidgetRendererContext<>(this, mouseX, mouseY).setWidth(scrollWidth).setHeight(getViewHeight() - scrollMargin * 2).setX(this.getX() + this.getViewWidth() + scrollMargin + contentMargin * 2).setY(getY() + scrollMargin), partialTick);
         }
 
         if (isYScrollbarVisible() && isXScrollbarVisible() && scrollbarBackground != null) {
-            RenderSystem.enableBlend();
-            RenderSystem.enableDepthTest();
-            graphics.blitSprite(RenderType::guiTextured, scrollbarBackground, getX() + getViewWidth() + contentMargin * 2, getY() + getViewHeight() + contentMargin * 2, getWidth() - getViewWidth() - contentMargin * 2, getHeight() - getViewHeight() - contentMargin * 2);
+            graphics.blitSprite(RenderType::guiOpaqueTexturedBackground, scrollbarBackground, getX() + getViewWidth() + contentMargin * 2, getY() + getViewHeight() + contentMargin * 2, getWidth() - getViewWidth() - contentMargin * 2, getHeight() - getViewHeight() - contentMargin * 2);
         }
     }
 
