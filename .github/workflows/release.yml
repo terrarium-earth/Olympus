@@ -24,13 +24,6 @@ jobs:
       - name: Setup Gradle Wrapper
         run: chmod +x gradlew
 
-      - name: Get Version and Platform
-        id: properties
-        uses: christian-draeger/read-properties@1.1.1
-        with:
-          path: "./gradle.properties"
-          properties: "version enabledPlatforms minecraftVersion"
-
       - name: Publish Release
         run: ./gradlew publish
         env:
@@ -38,7 +31,7 @@ jobs:
           MAVEN_PASS: ${{ secrets.MAVEN_PASSWORD }}
 
       - name: Generate Discord Embed
-        run: ./gradlew injectEmbed
+        run: ./gradlew injectDiscord
 
       - name: Upload Discord Embed
         uses: tsickert/discord-webhook@v5.3.0
