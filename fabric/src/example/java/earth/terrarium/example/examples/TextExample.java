@@ -30,14 +30,14 @@ public class TextExample extends ExampleScreen {
             textWidget.withColor(Color.RAINBOW);
         }));
 
-        entries.withChild(Widgets.multilineText(Component.literal(text), 100));
-
         // rainbow, right aligned, width 100
         entries.withChild(Widgets.text(Component.literal("Hello, World!"), textWidget -> {
             textWidget.withColor(Color.RAINBOW);
             textWidget.withRightAlignment();
             textWidget.setWidth(100);
         }));
+
+        entries.withChild(Widgets.multilineText(Component.literal(text), 100));
 
         entries.withChild(Widgets.multilineText(Component.literal(text), 100, widget -> {
             widget.scale(0.8f);
