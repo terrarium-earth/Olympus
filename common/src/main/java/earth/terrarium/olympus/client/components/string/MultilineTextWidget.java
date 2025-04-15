@@ -1,5 +1,7 @@
 package earth.terrarium.olympus.client.components.string;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefullib.client.components.CursorWidget;
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import net.minecraft.client.Minecraft;
@@ -16,9 +18,10 @@ public class MultilineTextWidget extends AbstractStringWidget implements CursorW
 
 	protected float alignX = 0.5f;
 	protected boolean shadow;
+	protected float scale = 1.0f;
 
-	protected final List<FormattedCharSequence> lines;
-	protected final int maxLineWidth;
+	protected List<FormattedCharSequence> lines;
+	protected int maxLineWidth;
 
 	public MultilineTextWidget(int width, Component component, Font font) {
 		super(0, 0, width, 0, component, font);
@@ -26,6 +29,10 @@ public class MultilineTextWidget extends AbstractStringWidget implements CursorW
 		this.lines = font.split(component, width);
 		this.height = font.lineHeight * this.lines.size();
 		this.maxLineWidth = this.lines.stream().mapToInt(font::width).max().orElse(0);
+	}
+
+	public MultilineTextWidget(Component text, int width) {
+		this(width, text, Minecraft.getInstance().font);
 	}
 
 	public static MultilineTextWidget create(int width, Component text) {
@@ -57,6 +64,16 @@ public class MultilineTextWidget extends AbstractStringWidget implements CursorW
 		return this;
 	}
 
+	public @NotNull MultilineTextWidget scale(float scale) {
+		this.scale = scale;
+		var inverseScale = 1.0f / this.scale;
+
+		this.lines = this.getFont().split(this.getMessage(), (int) Math.ceil(width * inverseScale));
+		this.height = (int) Math.ceil(getFont().lineHeight * this.lines.size() * scale);
+		this.maxLineWidth = this.lines.stream().mapToInt(it -> (int)  Math.ceil(getFont().width(it) * scale)).max().orElse(0);
+		return this;
+	}
+
 	@Override
 	public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
 		Font font = this.getFont();
@@ -64,10 +81,19 @@ public class MultilineTextWidget extends AbstractStringWidget implements CursorW
 		int x = this.getX() + Math.round(this.alignX * (float)(this.getWidth() - maxLineWidth));
 		int y = this.getY();
 
+		PoseStack pose = graphics.pose();
+		pose.pushPose();
+		pose.translate(x, y, 0);
+		pose.scale(this.scale, this.scale, 1f);
+
+		y = 0;
+
 		for (FormattedCharSequence line : this.lines) {
-			graphics.drawString(font, line, x, y, this.getColor(), this.shadow);
+			graphics.drawString(font, line, 0, y, this.getColor(), this.shadow);
 			y += font.lineHeight;
 		}
+
+		pose.popPose();
 	}
 
 	@Override
