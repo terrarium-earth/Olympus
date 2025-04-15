@@ -14,6 +14,7 @@ import earth.terrarium.olympus.client.components.map.MapRenderer;
 import earth.terrarium.olympus.client.components.map.MapWidget;
 import earth.terrarium.olympus.client.components.renderers.TristateRenderers;
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
+import earth.terrarium.olympus.client.components.string.MultilineTextWidget;
 import earth.terrarium.olympus.client.components.string.TextWidget;
 import earth.terrarium.olympus.client.components.textbox.TextBox;
 import earth.terrarium.olympus.client.components.textbox.autocomplete.AutocompleteTextBox;
@@ -286,5 +287,15 @@ public final class Widgets {
         TextWidget widget = text(Component.literal(text));
         factory.accept(widget);
         return widget;
+    }
+
+    public static MultilineTextWidget textarea(Component text, int width, Consumer<MultilineTextWidget> factory) {
+        MultilineTextWidget widget = new MultilineTextWidget(text, width);
+        factory.accept(widget);
+        return widget;
+    }
+
+    public static MultilineTextWidget textarea(Component text, int width) {
+        return textarea(text, width, Consumers.nop());
     }
 }
