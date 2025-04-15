@@ -281,13 +281,13 @@ public final class Widgets {
         return widget;
     }
 
-    public static MultilineTextWidget multilineText(Component text, int width, Consumer<MultilineTextWidget> factory) {
+    public static MultilineTextWidget textarea(Component text, int width, Consumer<MultilineTextWidget> factory) {
         MultilineTextWidget widget = new MultilineTextWidget(text, width);
         factory.accept(widget);
         return widget;
     }
 
-    public static MultilineTextWidget multilineText(Component text, int width) {
-        return multilineText(text, width, Consumers.nop());
+    public static MultilineTextWidget textarea(Component text, int width) {
+        return textarea(text, width, Consumers.nop());
     }
 }

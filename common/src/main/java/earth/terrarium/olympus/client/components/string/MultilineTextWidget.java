@@ -84,7 +84,7 @@ public class MultilineTextWidget extends AbstractStringWidget implements CursorW
 		PoseStack pose = graphics.pose();
 		pose.pushPose();
 		pose.translate(x, y, 0);
-		pose.scale(this.scale, this.scale, this.scale);
+		pose.scale(this.scale, this.scale, 1f);
 
 		y = 0;
 

@@ -37,14 +37,14 @@ public class TextExample extends ExampleScreen {
             textWidget.setWidth(100);
         }));
 
-        entries.withChild(Widgets.multilineText(Component.literal(text), 100));
+        entries.withChild(Widgets.textarea(Component.literal(text), 100));
 
-        entries.withChild(Widgets.multilineText(Component.literal(text), 100, widget -> {
+        entries.withChild(Widgets.textarea(Component.literal(text), 100, widget -> {
             widget.scale(0.8f);
         }));
 
 
-        entries.withChild(Widgets.multilineText(Component.literal(text), 100, widget -> {
+        entries.withChild(Widgets.textarea(Component.literal(text), 100, widget -> {
             widget.scale(0.5f);
         }));
 
