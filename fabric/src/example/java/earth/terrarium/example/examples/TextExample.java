@@ -41,11 +41,13 @@ public class TextExample extends ExampleScreen {
 
         entries.withChild(Widgets.textarea(Component.literal(text), 100, widget -> {
             widget.scale(0.8f);
+            widget.textAlignRight();
         }));
 
 
         entries.withChild(Widgets.textarea(Component.literal(text), 100, widget -> {
             widget.scale(0.5f);
+            widget.textAlignCenter();
         }));
 
         entries.build(this::addRenderableWidget);
