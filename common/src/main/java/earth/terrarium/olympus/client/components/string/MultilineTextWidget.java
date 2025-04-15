@@ -17,6 +17,7 @@ import java.util.List;
 public class MultilineTextWidget extends AbstractStringWidget implements CursorWidget {
 
 	protected float alignX = 0.5f;
+	protected float textAlign = 0f;
 	protected boolean shadow;
 	protected float scale = 1.0f;
 
@@ -59,6 +60,21 @@ public class MultilineTextWidget extends AbstractStringWidget implements CursorW
 		return this;
 	}
 
+	public @NotNull MultilineTextWidget textAlignLeft() {
+		this.textAlign = 0.0F;
+		return this;
+	}
+
+	public @NotNull MultilineTextWidget textAlignCenter() {
+		this.textAlign = 0.5F;
+		return this;
+	}
+
+	public @NotNull MultilineTextWidget textAlignRight() {
+		this.textAlign = 1.0F;
+		return this;
+	}
+
 	public @NotNull MultilineTextWidget shadow() {
 		this.shadow = true;
 		return this;
@@ -88,8 +104,12 @@ public class MultilineTextWidget extends AbstractStringWidget implements CursorW
 
 		y = 0;
 
+		var invertedScale = 1.0f / this.scale;
+		var adjustedMaxLineWidth = (int) Math.ceil(maxLineWidth * invertedScale);
+
 		for (FormattedCharSequence line : this.lines) {
-			graphics.drawString(font, line, 0, y, this.getColor(), this.shadow);
+			var xOffset = (int) Math.ceil((adjustedMaxLineWidth - font.width(line)) * textAlign);
+			graphics.drawString(font, line, xOffset, y, this.getColor(), this.shadow);
 			y += font.lineHeight;
 		}
 
