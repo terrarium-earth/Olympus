@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 @OlympusExample(id = "text", description = "A simple text example" )
 public class TextExample extends ExampleScreen {
     public static final String text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam";
-    public static final Component styleTest = Component.literal(text).append(Component.literal("LINK").withStyle(Style.EMPTY.withColor(0xFFFF0000).withClickEvent(new ClickEvent(ClickEvent.Action.CHANGE_PAGE, "test")))).append(text);
+    public static final Component styleTest = Component.literal(text).append(Component.literal("LINK").withStyle(Style.EMPTY.withColor(0xFFFF0000).withClickEvent(new ClickEvent.ChangePage(1)))).append(text);
 
     public static final Logger LOGGER = LogManager.getLogger();
 
@@ -64,10 +64,10 @@ public class TextExample extends ExampleScreen {
 
     @Override
     public boolean handleComponentClicked(@Nullable Style style) {
-        if (style == null || style.getClickEvent() == null) {
-            return false;
-        } else if (style.getClickEvent().getAction() == ClickEvent.Action.CHANGE_PAGE) {
-            LOGGER.info("Page changed to {}", style.getClickEvent().getValue());
+        if (style == null) return false;
+        ClickEvent event = style.getClickEvent();
+        if (event instanceof ClickEvent.ChangePage(int page)) {
+            LOGGER.info("Page changed to {}", page);
             return true;
         }
         return super.handleComponentClicked(style);
