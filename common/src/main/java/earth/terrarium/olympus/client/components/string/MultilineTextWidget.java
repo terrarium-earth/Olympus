@@ -8,14 +8,19 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractStringWidget;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class MultilineTextWidget extends AbstractStringWidget implements CursorWidget {
-
 	protected float alignX = 0.5f;
 	protected float textAlign = 0f;
 	protected boolean shadow;
@@ -23,6 +28,9 @@ public class MultilineTextWidget extends AbstractStringWidget implements CursorW
 
 	protected List<FormattedCharSequence> lines;
 	protected int maxLineWidth;
+	protected CursorScreen.Cursor lastCursor = CursorScreen.Cursor.DEFAULT;
+
+	protected List<Consumer<Style>> styleActions = new ArrayList<>();
 
 	public MultilineTextWidget(int width, Component component, Font font) {
 		super(0, 0, width, 0, component, font);
@@ -90,6 +98,11 @@ public class MultilineTextWidget extends AbstractStringWidget implements CursorW
 		return this;
 	}
 
+	public @NotNull MultilineTextWidget clickActionCallback(Consumer<Style> action) {
+		this.styleActions.add(action);
+		return this;
+	}
+
 	@Override
 	public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
 		Font font = this.getFont();
@@ -112,12 +125,49 @@ public class MultilineTextWidget extends AbstractStringWidget implements CursorW
 			graphics.drawString(font, line, xOffset, y, this.getColor(), this.shadow);
 			y += font.lineHeight;
 		}
-
 		pose.popPose();
+
+		Style style = getStyle(mouseX, mouseY);
+		if (style != null && style.getClickEvent() != null) {
+			lastCursor = CursorScreen.Cursor.POINTER;
+		} else {
+			lastCursor = CursorScreen.Cursor.DEFAULT;
+		}
+	}
+
+	@Nullable
+	public Style getStyle(double mouseX, double mouseY) {
+		if (!isMouseOver(mouseX, mouseY)) return null;
+		Font font = this.getFont();
+
+		float y = this.getY();
+		int lineIndex = 0;
+
+		while (!(mouseY >= y && mouseY <= y + font.lineHeight * scale)) {
+			y += font.lineHeight * scale;
+			lineIndex++;
+		}
+
+		float x = this.getX() + (this.alignX * (float)(this.getWidth() - maxLineWidth));
+		float lineWidth = font.width(this.lines.get(lineIndex)) * scale;
+		x += (maxLineWidth - lineWidth) * textAlign;
+		if (!(mouseX >= x && mouseX <= x + lineWidth)) return null;
+		return font.getSplitter().componentStyleAtWidth(lines.get(lineIndex), (int) ((mouseX - x) * (1f / scale)));
 	}
 
 	@Override
 	public CursorScreen.Cursor getCursor() {
-		return CursorScreen.Cursor.DEFAULT;
+		return lastCursor;
+	}
+
+	@Override
+	public void onClick(double mouseX, double mouseY) {
+		var style = getStyle(mouseX, mouseY);
+		if (style == null) return;
+		if (style.getClickEvent() != null) {
+			for (Consumer<Style> styleAction : styleActions) {
+				styleAction.accept(style);
+			}
+		}
 	}
 }
