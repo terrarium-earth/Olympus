@@ -2,7 +2,7 @@ package earth.terrarium.example.examples;
 
 import earth.terrarium.example.base.ExampleScreen;
 import earth.terrarium.example.base.OlympusExample;
-import earth.terrarium.olympus.client.pipelines.RoundedRectanage;
+import earth.terrarium.olympus.client.pipelines.RoundedRectangle;
 import earth.terrarium.olympus.client.pipelines.RoundedTexture;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
@@ -15,7 +15,7 @@ public class ShaderExample extends ExampleScreen {
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float f) {
         super.render(graphics, mouseX, mouseY, f);
 
-        RoundedRectanage.draw(
+        RoundedRectangle.draw(
                 graphics,
                 this.width / 2 - 150, 50,
                 100, 100,

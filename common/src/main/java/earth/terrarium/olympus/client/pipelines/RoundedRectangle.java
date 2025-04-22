@@ -13,7 +13,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import org.joml.Matrix4f;
 
-public class RoundedRectanage {
+public class RoundedRectangle {
 
     public static final RenderPipeline PIPELINE = RenderPipeline.builder()
             .withLocation(ResourceLocation.fromNamespaceAndPath("olympus", "rounded_rect"))
