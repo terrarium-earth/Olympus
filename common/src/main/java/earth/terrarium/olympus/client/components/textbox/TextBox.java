@@ -6,6 +6,7 @@ import com.teamresourceful.resourcefullib.common.color.Color;
 import earth.terrarium.olympus.client.components.base.BaseWidget;
 import earth.terrarium.olympus.client.constants.MinecraftColors;
 import earth.terrarium.olympus.client.ui.UIConstants;
+import earth.terrarium.olympus.client.utils.ListenableState;
 import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -39,6 +40,7 @@ public class TextBox extends BaseWidget {
     protected final State<String> state;
 
     private Predicate<String> filter = s -> true;
+    private Consumer<String> onChange = s -> {};
     private Consumer<String> onEnter = s -> {};
     protected String placeholder = "";
     private boolean shiftPressed;
@@ -49,7 +51,9 @@ public class TextBox extends BaseWidget {
 
 
     public TextBox(State<@NotNull String> state) {
-        this.state = state;
+        this.state = Util.make(ListenableState.of(state), listenable ->
+                listenable.registerListener(newData -> this.onChange.accept(newData))
+        );
 
         this.setCursorPosition(this.state.get().length());
         this.setHighlightPos(this.cursorPos);
@@ -86,6 +90,11 @@ public class TextBox extends BaseWidget {
 
     public TextBox withEnterCallback(Consumer<String> onEnter) {
         this.onEnter = onEnter;
+        return this;
+    }
+
+    public TextBox withChangeCallback(Consumer<String> onChange) {
+        this.onChange = onChange;
         return this;
     }
 
