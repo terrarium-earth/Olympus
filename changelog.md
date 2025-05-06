@@ -1,1 +1,3 @@
-- Update to 1.21.5
+- Fix typo in rounded rectangle shader, if using the version of the shader with the typo you can just switch classes to the one without.
+- Add helpers for drawing the shaders relative to the posestack translations
+- Add withChangeCallback to textbox
