@@ -57,6 +57,7 @@ public class TextInputExample extends ExampleScreen {
                             .filter(s -> s.toLowerCase(Locale.ROOT).startsWith(value.toLowerCase(Locale.ROOT)))
                             .toList()
             );
+            textBox.withAlwaysShow(true);
         }));
 
         layout.build(this::addRenderableWidget);

@@ -11,6 +11,7 @@ public class AutocompleteTextBox<T> extends TextBox {
 
     protected Function<String, List<T>> suggestions = s -> List.of();
     protected Function<T, String> mapper = Object::toString;
+    protected boolean alwaysShow = false;
 
     public AutocompleteTextBox(State<String> state) {
         super(state);
@@ -18,6 +19,11 @@ public class AutocompleteTextBox<T> extends TextBox {
 
     public AutocompleteTextBox<T> withSuggestions(Function<String, List<T>> suggestions) {
         this.suggestions = suggestions;
+        return this;
+    }
+
+    public AutocompleteTextBox<T> withAlwaysShow(boolean alwaysShow) {
+        this.alwaysShow = alwaysShow;
         return this;
     }
 

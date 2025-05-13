@@ -81,14 +81,13 @@ public class AutocompleteScreen<T> extends Overlay {
     @Override
     public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.renderBackground(graphics, mouseX, mouseY, partialTick);
-        this.renderBlurredBackground();
         if (this.filteredSuggestions.isEmpty()) return;
         graphics.blitSprite(RenderType::guiTextured, LIST, this.x(), this.y(), this.width(), this.height());
     }
 
     public void filter(String text) {
         this.filteredSuggestions.clear();
-        if (!text.isEmpty()) {
+        if (!text.isEmpty() || this.widget.alwaysShow) {
             this.widget.suggestions.apply(text)
                     .stream()
                     .map(this.widget.mapper)
