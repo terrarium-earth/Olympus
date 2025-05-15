@@ -1,4 +1,2 @@
-- Fixed blurred background being incorrectly rendered for autocomplete textboxes.
-- Fixed enter not selecting an element in autocomplete textboxes.
-- Added option to do withAlwaysShow to always show suggestions in autocomplete textboxes.
-- 
+- Made scrollbars not lag behind in lists
+- Allow you to click position on scrollbar to instantly scroll to

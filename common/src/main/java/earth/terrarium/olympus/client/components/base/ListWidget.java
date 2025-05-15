@@ -38,21 +38,21 @@ public class ListWidget extends BaseParentWidget {
         int scrollBarY = context.getY() + Math.round(((float) widget.getScroll() / (float) widget.getContentHeight()) * context.getHeight());
 
         graphics.blitSprite(
-            RenderType::guiTextured,
-            SCROLLBAR,
-            context.getX() + (context.getWidth() - 2) / 2,
-            context.getY(),
-            context.getWidth() - 4,
-            context.getHeight()
+                RenderType::guiTextured,
+                SCROLLBAR,
+                context.getX() + (context.getWidth() - 2) / 2,
+                context.getY(),
+                context.getWidth() - 4,
+                context.getHeight()
         );
 
         graphics.blitSprite(
-            RenderType::guiTextured,
-            SCROLLBAR_THUMB,
-            context.getX(),
-            scrollBarY,
+                RenderType::guiTextured,
+                SCROLLBAR_THUMB,
+                context.getX(),
+                scrollBarY,
                 context.getWidth(),
-            scrollBarHeight
+                scrollBarHeight
         );
     };
 
@@ -142,12 +142,7 @@ public class ListWidget extends BaseParentWidget {
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
         if (this.scrolling) {
-            double scrollBarHeight = (this.height / (double) this.lastHeight) * this.height;
-            double scrollBarDragY = dragY / (this.height - scrollBarHeight);
-            this.scroll = Mth.clamp(
-                    this.scroll + scrollBarDragY * this.lastHeight, 0,
-                    Math.max(0, this.lastHeight - this.height)
-            );
+            this.moveTo(mouseY);
             return true;
         }
         return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
@@ -163,6 +158,7 @@ public class ListWidget extends BaseParentWidget {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (isMouseOverScrollBar(mouseX, mouseY)) {
             this.scrolling = true;
+            this.moveTo(mouseY);
             return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);
@@ -174,6 +170,17 @@ public class ListWidget extends BaseParentWidget {
             this.scrolling = false;
         }
         return super.mouseReleased(d, e, i);
+    }
+
+    private void moveTo(double mouseY) {
+        var top = getY() + this.scrollbarGap;
+        var bottom = getY() + getHeight() - this.scrollbarGap;
+        var percent = (mouseY - top) / (bottom - top);
+
+        this.scroll = Mth.clamp(
+                (this.lastHeight - this.height) * percent,
+                0, Math.max(0, this.lastHeight - this.height)
+        );
     }
 
     private boolean isMouseOverScrollBar(double mouseX, double mouseY) {
