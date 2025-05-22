@@ -18,6 +18,7 @@ import earth.terrarium.olympus.client.components.string.MultilineTextWidget;
 import earth.terrarium.olympus.client.components.string.TextWidget;
 import earth.terrarium.olympus.client.components.textbox.TextBox;
 import earth.terrarium.olympus.client.components.textbox.autocomplete.AutocompleteTextBox;
+import earth.terrarium.olympus.client.components.textbox.multiline.MultilineTextBox;
 import earth.terrarium.olympus.client.constants.MinecraftColors;
 import earth.terrarium.olympus.client.layouts.Layouts;
 import earth.terrarium.olympus.client.layouts.LinearViewLayout;
@@ -172,6 +173,14 @@ public final class Widgets {
 
     public static TextBox textInput(State<String> state) {
         return textInput(state, Consumers.nop());
+    }
+
+    public static MultilineTextBox multilineTextInput(State<String> state, Consumer<MultilineTextBox> factory) {
+        return Util.make(new MultilineTextBox(state), factory);
+    }
+
+    public static MultilineTextBox multilineTextInput(State<String> state) {
+        return multilineTextInput(state, Consumers.nop());
     }
 
     public static TextBox doubleInput(State<Double> state, Consumer<TextBox> factory) {
