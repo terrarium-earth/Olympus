@@ -8,48 +8,6 @@ import net.minecraft.util.FormattedCharSink;
 
 class MultilineStringUtils {
 
-    private static class LineBreakFinder implements FormattedCharSink {
-        private final int maxWidth;
-        private final Font font;
-
-        private int lineBreak = -1;
-        private boolean hadNonZeroWidthChar;
-        private int width;
-        private int lastSpace = -1;
-        private int nextChar;
-
-        public LineBreakFinder(int maxWidth, Font font) {
-            this.maxWidth = Math.max(maxWidth, 1);
-            this.font = font;
-        }
-
-        @Override
-        public boolean accept(int i, Style style, int j) {
-            switch (j) {
-                case 10:
-                    this.lineBreak = i;
-                    return false;
-                case 32:
-                    this.lastSpace = i;
-                default:
-                    int width = width(this.font, Character.toString(j));
-                    this.width += width;
-                    if (!this.hadNonZeroWidthChar || !(this.width > this.maxWidth)) {
-                        this.hadNonZeroWidthChar |= width != 0.0F;
-                        this.nextChar = i + Character.charCount(j);
-                        return true;
-                    } else {
-                        this.lineBreak = this.lastSpace != -1 ? this.lastSpace : i;
-                        return false;
-                    }
-            }
-        }
-
-        public int getSplitPosition() {
-            return this.lineBreak != -1 ? this.lineBreak : this.nextChar;
-        }
-    }
-
     private static boolean feedChar(FormattedCharSink consumer, int i, char c) {
         return Character.isSurrogate(c) ? consumer.accept(i, Style.EMPTY, 65533) : consumer.accept(i, Style.EMPTY, c);
     }
@@ -102,6 +60,48 @@ class MultilineStringUtils {
             char character = text.charAt(pos);
             consumer.accept(Style.EMPTY, index, pos);
             index = character != '\n' && character != ' ' ? pos : pos + 1;
+        }
+    }
+
+    private static class LineBreakFinder implements FormattedCharSink {
+        private final int maxWidth;
+        private final Font font;
+
+        private int lineBreak = -1;
+        private boolean hadNonZeroWidthChar;
+        private int width;
+        private int lastSpace = -1;
+        private int nextChar;
+
+        public LineBreakFinder(int maxWidth, Font font) {
+            this.maxWidth = Math.max(maxWidth, 1);
+            this.font = font;
+        }
+
+        @Override
+        public boolean accept(int i, Style style, int j) {
+            switch (j) {
+                case 10:
+                    this.lineBreak = i;
+                    return false;
+                case 32:
+                    this.lastSpace = i;
+                default:
+                    int width = width(this.font, Character.toString(j));
+                    this.width += width;
+                    if (!this.hadNonZeroWidthChar || !(this.width > this.maxWidth)) {
+                        this.hadNonZeroWidthChar |= width != 0.0F;
+                        this.nextChar = i + Character.charCount(j);
+                        return true;
+                    } else {
+                        this.lineBreak = this.lastSpace != -1 ? this.lastSpace : i;
+                        return false;
+                    }
+            }
+        }
+
+        public int getSplitPosition() {
+            return this.lineBreak != -1 ? this.lineBreak : this.nextChar;
         }
     }
 }
