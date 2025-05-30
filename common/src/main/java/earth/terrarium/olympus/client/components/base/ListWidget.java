@@ -211,9 +211,12 @@ public class ListWidget extends BaseParentWidget {
         super.setFocused(focused);
 
         if (focused instanceof AbstractWidget widget) {
-            if (widget.getBottom() > this.getBottom()) {
+            var isPastBottom = widget.getBottom() > this.getBottom();
+            var isBeforeTop = widget.getY() < this.getY();
+
+            if (isPastBottom && !isBeforeTop) {
                 this.scroll = Math.min(this.scroll + widget.getBottom() - this.getBottom(), this.lastHeight - this.height);
-            } else if (widget.getY() < this.getY()) {
+            } else if (isBeforeTop && !isPastBottom) {
                 this.scroll = Math.max(this.scroll - this.getY() + widget.getY(), 0);
             }
         }
