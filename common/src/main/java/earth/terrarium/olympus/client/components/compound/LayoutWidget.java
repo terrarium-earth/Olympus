@@ -421,17 +421,23 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
         super.setFocused(focused);
         if (focused instanceof AbstractWidget widget) {
             if (isYScrollbarVisible()) {
-                if (widget.getBottom() > this.getY() + contentMargin + this.getViewHeight()) {
+                var isPastBottom = widget.getBottom() > this.getY() + contentMargin + this.getViewHeight();
+                var isPastTop = widget.getY() < this.getY() + contentMargin;
+
+                if (isPastBottom && !isPastTop) {
                     yScroll = Mth.clamp(yScroll + widget.getBottom() - (this.getY() + contentMargin + this.getViewHeight()), -overscrollY, Math.max(0, layout.getHeight() + overscrollY - this.getViewHeight()));
-                } else if (widget.getY() < this.getY() + contentMargin) {
+                } else if (isPastTop && !isPastBottom) {
                     yScroll = Mth.clamp(yScroll - (this.getY() + contentMargin - widget.getY()), -overscrollY, Math.max(0, layout.getHeight() + overscrollY - this.getViewHeight()));
                 }
             }
 
             if (isXScrollbarVisible()) {
-                if (widget.getRight() > this.getX() + contentMargin + this.getViewWidth()) {
+                var isPastRight = widget.getRight() > this.getX() + contentMargin + this.getViewWidth();
+                var isPastLeft = widget.getX() < this.getX() + contentMargin;
+
+                if (isPastRight && !isPastLeft) {
                     xScroll = Mth.clamp(xScroll + widget.getRight() - (this.getX() + contentMargin + this.getViewWidth()), -overscrollX, Math.max(0, layout.getWidth() + overscrollX - this.getViewWidth()));
-                } else if (widget.getX() < this.getX() + contentMargin) {
+                } else if (isPastLeft && !isPastRight) {
                     xScroll = Mth.clamp(xScroll - (this.getX() + contentMargin - widget.getX()), -overscrollX, Math.max(0, layout.getWidth() + overscrollX - this.getViewWidth()));
                 }
             }
