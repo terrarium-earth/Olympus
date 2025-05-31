@@ -42,6 +42,12 @@ public class ImageProvider<T> {
         }
     }
 
+    /**
+     * You must call this method periodically to get the current state of the cache.
+     * Not calling this method may result in your image being cleaned up while you are still using it.
+     * @param key the key to get the image for
+     * @return the ResourceLocation of the image, or a missing texture if the image is not available
+     */
     public ResourceLocation get(T key) {
         this.cacheAccessTimes.put(key, System.currentTimeMillis());
 
