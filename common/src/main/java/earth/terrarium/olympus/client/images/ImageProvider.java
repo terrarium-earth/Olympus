@@ -66,6 +66,8 @@ public class ImageProvider<T> {
     }
 
     protected void checkCaches() {
+        if (this.cacheTimeout < 0) return; // No cache timeout, skip cleanup.
+
         long currentTime = System.currentTimeMillis();
         this.cacheAccessTimes.object2LongEntrySet().removeIf(entry -> {
             if (currentTime - entry.getLongValue() > this.cacheTimeout) {

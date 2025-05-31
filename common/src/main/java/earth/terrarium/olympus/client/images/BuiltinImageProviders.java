@@ -2,7 +2,6 @@ package earth.terrarium.olympus.client.images;
 
 import com.google.common.hash.Hashing;
 import com.mojang.blaze3d.platform.NativeImage;
-import org.apache.commons.io.FilenameUtils;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -31,7 +30,7 @@ public final class BuiltinImageProviders {
                     }
                 });
             },
-            url -> Hashing.sha256().hashUnencodedChars(FilenameUtils.getBaseName(url.toString())),
+            url -> Hashing.sha256().hashUnencodedChars(url.toString()),
             Duration.ofMinutes(5)
     );
 }
