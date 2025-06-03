@@ -11,8 +11,12 @@
         "repo": "https://github.com/terrarium-earth/Olympus",
         "issues": "https://github.com/terrarium-earth/Olympus/issues"
     },
+    "entrypoints": {
+        "client": [
+            "earth.terrarium.olympus.client.fabric.OlympusFabricClient"
+        ]
+    },
     "license": "MIT",
-    "icon": "icon.png",
     "environment": "*",
     "depends": {
         "fabric-api": "*",
