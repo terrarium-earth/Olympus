@@ -12,7 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.navigation.CommonInputs;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.util.ARGB;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,7 +35,7 @@ public class Button extends BaseWidget implements CursorWidget {
 
         if (this.sprites != null) {
             graphics.blitSprite(
-                    RenderType::guiOpaqueTexturedBackground,
+                    RenderPipelines.GUI_OPAQUE_TEXTURED_BACKGROUND,
                     this.sprites.get(this.active, this.isHoveredOrFocused()),
                     this.getX(), this.getY(),
                     this.getWidth(), this.getHeight(),

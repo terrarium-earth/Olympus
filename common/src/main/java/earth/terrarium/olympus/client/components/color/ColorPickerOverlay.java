@@ -18,7 +18,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.layouts.GridLayout;
 import net.minecraft.client.gui.layouts.LinearLayout;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.function.Consumers;
@@ -113,7 +113,7 @@ public class ColorPickerOverlay extends Overlay {
 
         layout.addChild(colorSelectLayout, 0, 0, settings -> settings.padding(1));
 
-        LinearLayout presets = LinearLayout.horizontal().spacing(SPACING * 2);
+        LinearLayout presets = LinearLayout.horizontal().spacing(SPACING);
 
         presets.addChild(Widgets.button((btn) -> {
             btn.withRenderer(WidgetRenderers.icon(UIIcons.EYE_DROPPER).withCentered(12, 12).withPaddingBottom(2));
@@ -125,9 +125,12 @@ public class ColorPickerOverlay extends Overlay {
         presets.addChild(Widgets.dropdown(type, List.of(
                 this.presets.length == 0 ? ColorPresetType.WITHOUT_DEFAULT : ColorPresetType.VALUES
         ), (preset) -> Component.translatable(preset.getTranslationKey()), button -> {
-            button.withSize(84, 16);
-            button.withTexture(null);
-            button.withRenderer(type.withRenderer((value, open) -> WidgetRenderers.textWithChevron(Component.translatable(value.getTranslationKey()), open).withColor(MinecraftColors.GRAY)));
+            button.withSize(86, 16);
+            button.withRenderer(type.withRenderer((value, open) ->
+                    WidgetRenderers.textWithChevron(Component.translatable(value.getTranslationKey()), open)
+                            .withColor(MinecraftColors.DARK_GRAY))
+                    .withPadding(0, 4)
+            );
             dropdownBtnSettings.accept(button, type);
         }, builder -> dropdownSettings.accept(builder, type)));
 
@@ -151,8 +154,8 @@ public class ColorPickerOverlay extends Overlay {
     @Override
     public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         super.renderBackground(graphics, mouseX, mouseY, partialTicks);
-        graphics.blitSprite(RenderType::guiOpaqueTexturedBackground, background, this.x, this.y, this.width, this.height);
-        graphics.blitSprite(RenderType::guiOpaqueTexturedBackground, inset, this.colorSelectLayout.getX() - 1, this.colorSelectLayout.getY() - 1, this.colorSelectLayout.getWidth() + 2, this.colorSelectLayout.getHeight() + 2);
+        graphics.blitSprite(RenderPipelines.GUI_OPAQUE_TEXTURED_BACKGROUND, background, this.x, this.y, this.width, this.height);
+        graphics.blitSprite(RenderPipelines.GUI_OPAQUE_TEXTURED_BACKGROUND, inset, this.colorSelectLayout.getX() - 1, this.colorSelectLayout.getY() - 1, this.colorSelectLayout.getWidth() + 2, this.colorSelectLayout.getHeight() + 2);
     }
 
     @Override

@@ -1,15 +1,13 @@
 package earth.terrarium.example.examples;
 
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import earth.terrarium.example.base.ExampleScreen;
 import earth.terrarium.example.base.OlympusExample;
 import earth.terrarium.olympus.client.components.Widgets;
 import earth.terrarium.olympus.client.components.buttons.ButtonShapes;
 import net.minecraft.client.gui.layouts.FrameLayout;
 import net.minecraft.client.gui.layouts.LinearLayout;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
-import org.joml.Matrix4f;
+import net.minecraft.util.Mth;
 
 @OlympusExample(id = "buttonshape", description = "A simple button shape example")
 public class ButtonShapeExample extends ExampleScreen {
@@ -21,17 +19,16 @@ public class ButtonShapeExample extends ExampleScreen {
         horizontal.addChild(Widgets.button()
                 .withShape(ButtonShapes.ELLIPSE)
                 .withRenderer((graphics, context, partialTicks) -> {
-                    Matrix4f matrix = graphics.pose().last().pose();
-                    graphics.drawSpecial(source -> {
-                        VertexConsumer consumer = source.getBuffer(RenderType.debugLineStrip(2));
+                    var side = (int) (context.getWidth() / Mth.SQRT_OF_TWO);
 
-                        for (int i = 0; i < 360; i++) {
-                            float rad = (float) Math.toRadians(i);
-                            float x = (float) Math.cos(rad) * 10 + 10 + context.getX();
-                            float y = (float) Math.sin(rad) * 10 + 10 + context.getY();
-                            consumer.addVertex(matrix, x, y, 100).setColor(1.0F, 0.0F, 0.0F, 1.0F);
-                        }
-                    });
+                    graphics.pose().pushMatrix();
+                    graphics.pose().translate(context.getMiddleX(), context.getTop());
+                    graphics.pose().rotate((float) Math.toRadians(45));
+                    graphics.fill(0, 0, side, side, 0xFFFFFFFF);
+                    graphics.pose().rotate((float) Math.toRadians(-45));
+                    graphics.pose().translate(-side / 2f, (context.getHeight() - side) / 2f);
+                    graphics.fill(0, 0, side, side, 0xFFFFFFFF);
+                    graphics.pose().popMatrix();
                 })
                 .withTexture(null)
                 .withTooltip(Component.literal("This is a circle button"))
@@ -41,19 +38,11 @@ public class ButtonShapeExample extends ExampleScreen {
         horizontal.addChild(Widgets.button()
                 .withShape(ButtonShapes.DIAMOND)
                 .withRenderer((graphics, context, partialTicks) -> {
-                    Matrix4f matrix = graphics.pose().last().pose();
-                    graphics.drawSpecial(source -> {
-                        VertexConsumer consumer = source.getBuffer(RenderType.debugLineStrip(2));
-
-                        int halfWidth = context.getWidth() / 2;
-                        int halfHeight = context.getHeight() / 2;
-
-                        consumer.addVertex(matrix, context.getX(), context.getY() + halfHeight, 100).setColor(1.0F, 0.0F, 0.0F, 1.0F);
-                        consumer.addVertex(matrix, context.getX() + halfWidth, context.getY(), 100).setColor(1.0F, 0.0F, 0.0F, 1.0F);
-                        consumer.addVertex(matrix, context.getX() + context.getWidth(), context.getY() + halfHeight, 100).setColor(1.0F, 0.0F, 0.0F, 1.0F);
-                        consumer.addVertex(matrix, context.getX() + halfWidth, context.getY() + context.getHeight(), 100).setColor(1.0F, 0.0F, 0.0F, 1.0F);
-                        consumer.addVertex(matrix, context.getX(), context.getY() + halfHeight, 100).setColor(1.0F, 0.0F, 0.0F, 1.0F);
-                    });
+                    graphics.pose().pushMatrix();
+                    graphics.pose().translate(context.getMiddleX(), context.getTop());
+                    graphics.pose().rotate((float) Math.toRadians(45));
+                    graphics.fill(0, 0, (int) (context.getWidth() / Mth.SQRT_OF_TWO), (int) (context.getWidth() / Mth.SQRT_OF_TWO), 0xFFFFFFFF);
+                    graphics.pose().popMatrix();
                 })
                 .withTexture(null)
                 .withTooltip(Component.literal("This is a diamond button"))

@@ -8,25 +8,21 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
+import earth.terrarium.olympus.client.pipelines.renderer.PipelineRenderer;
+import earth.terrarium.olympus.client.pipelines.uniforms.RoundedRectangleUniform;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
-import org.joml.Matrix4f;
+import org.joml.Vector2f;
+import org.joml.Vector4f;
 
 public class RoundedRectangle {
 
     public static final RenderPipeline PIPELINE = RenderPipeline.builder()
             .withLocation(ResourceLocation.fromNamespaceAndPath("olympus", "rounded_rect"))
-            .withUniform("ModelViewMat", UniformType.MATRIX4X4)
-            .withUniform("ProjMat", UniformType.MATRIX4X4)
-            .withUniform("ColorModulator", UniformType.VEC4)
-            .withUniform("borderColor", UniformType.VEC4)
-            .withUniform("borderRadius", UniformType.VEC4)
-            .withUniform("borderWidth", UniformType.FLOAT)
-            .withUniform("size", UniformType.VEC2)
-            .withUniform("center", UniformType.VEC2)
-            .withUniform("scaleFactor", UniformType.FLOAT)
+            .withUniform("DynamicTransforms", UniformType.UNIFORM_BUFFER)
+            .withUniform("Projection", UniformType.UNIFORM_BUFFER)
+            .withUniform(RoundedRectangleUniform.NAME, UniformType.UNIFORM_BUFFER)
             .withBlend(BlendFunction.TRANSLUCENT)
             .withFragmentShader(ResourceLocation.fromNamespaceAndPath("olympus", "core/rounded_rect"))
             .withVertexShader(ResourceLocation.fromNamespaceAndPath("olympus", "core/rounded_rect"))
@@ -39,19 +35,18 @@ public class RoundedRectangle {
             int backgroundColor, int borderColor,
             float borderRadius, int borderWidth
     ) {
-        var xOffset = graphics.pose().last().pose().m30();
-        var yOffset = graphics.pose().last().pose().m31();
+        var pose = graphics.pose();
 
-        try (var stack = new CloseablePoseStack(graphics)) {
-            stack.translate(-xOffset, -yOffset, 0);
-            draw(
-                    graphics,
-                    (int) (x + xOffset), (int) (y + yOffset),
-                    width, height,
-                    backgroundColor, borderColor,
-                    borderRadius, borderWidth
-            );
-        }
+        pose.pushMatrix();
+
+        var xOffset = pose.m20();
+        var yOffset = pose.m21();
+
+        pose.translate(-xOffset, -yOffset);
+
+        draw(graphics, (int) (x + xOffset), (int) (y + yOffset), width, height, backgroundColor, borderColor, borderRadius, borderWidth);
+
+        pose.popMatrix();
     }
 
     public static void draw(
@@ -70,25 +65,26 @@ public class RoundedRectangle {
         float yOffset = (window.getHeight() - scaledHeight) - (scaledY * 2f);
 
 
-        Matrix4f matrix = graphics.pose().last().pose();
         BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-        buffer.addVertex(matrix, x, y, 0f).setColor(backgroundColor);
-        buffer.addVertex(matrix, x, y + height, 0f).setColor(backgroundColor);
-        buffer.addVertex(matrix, x + width, y + height, 0f).setColor(backgroundColor);
-        buffer.addVertex(matrix, x + width, y, 0f).setColor(backgroundColor);
+        buffer.addVertexWith2DPose(graphics.pose(), x, y, 0f).setColor(backgroundColor);
+        buffer.addVertexWith2DPose(graphics.pose(), x, y + height, 0f).setColor(backgroundColor);
+        buffer.addVertexWith2DPose(graphics.pose(), x + width, y + height, 0f).setColor(backgroundColor);
+        buffer.addVertexWith2DPose(graphics.pose(), x + width, y, 0f).setColor(backgroundColor);
 
-        PipelineRenderer.draw(PIPELINE, buffer.buildOrThrow(), pass -> {
-            pass.setUniform("borderColor",
-                    (borderColor >> 16 & 0xFF) / 255f,
-                    (borderColor >> 8 & 0xFF) / 255f,
-                    (borderColor & 0xFF) / 255f,
-                    (borderColor >> 24 & 0xFF) / 255f
-            );
-            pass.setUniform("borderRadius", borderRadius, borderRadius, borderRadius, borderRadius);
-            pass.setUniform("borderWidth", (float) borderWidth);
-            pass.setUniform("size", scaledWidth - (borderWidth * 2f * scale), scaledHeight - (borderWidth * 2f * scale));
-            pass.setUniform("center", scaledX + scaledWidth / 2f, scaledY + scaledHeight / 2f + yOffset);
-            pass.setUniform("scaleFactor", scale);
-        });
+        PipelineRenderer.builder(PIPELINE, buffer.buildOrThrow())
+                .uniform(RoundedRectangleUniform.STORAGE, RoundedRectangleUniform.of(
+                        new Vector4f(
+                                (borderColor >> 16 & 0xFF) / 255f,
+                                (borderColor >> 8 & 0xFF) / 255f,
+                                (borderColor & 0xFF) / 255f,
+                                (borderColor >> 24 & 0xFF) / 255f
+                        ),
+                        new Vector4f(borderRadius),
+                        (float) borderWidth,
+                        new Vector2f(scaledWidth - (borderWidth * 2f * scale), scaledHeight - (borderWidth * 2f * scale)),
+                        new Vector2f(scaledX + scaledWidth / 2f, scaledY + scaledHeight / 2f + yOffset),
+                        scale
+                ))
+                .draw();
     }
 }

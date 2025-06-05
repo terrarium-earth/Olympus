@@ -1,6 +1,5 @@
 package earth.terrarium.olympus.client.ui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.teamresourceful.resourcefullib.client.screens.BaseCursorScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -55,11 +54,8 @@ public abstract class Overlay extends BaseCursorScreen {
 
     public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         if (this.background == null) return;
-        this.background.render(graphics, -1, -1, partialTick);
-        graphics.flush();
-        var depth = Minecraft.getInstance().getMainRenderTarget().getDepthTexture();
-        if (depth == null) return;
-        RenderSystem.getDevice().createCommandEncoder().clearDepthTexture(depth, 1f);
+        this.background.renderWithTooltip(graphics, -1, -1, partialTick);
+        graphics.nextStratum();
     }
 
     @Override

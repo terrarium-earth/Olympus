@@ -2,6 +2,7 @@ import com.teamresourceful.publishing.GitHubPom
 import com.teamresourceful.publishing.javaPublishing
 import com.teamresourceful.utils.getPlatform
 import groovy.json.StringEscapeUtils
+import net.fabricmc.loom.api.LoomGradleExtensionAPI
 
 plugins {
     java
@@ -16,12 +17,21 @@ subprojects {
     val platform = getPlatform()
     val mcVersion = rootProject.libs.versions.minecraft.get()
 
+    configure<LoomGradleExtensionAPI> {
+        val accesswidenerFile = project.file("src/main/resources/olympus.accesswidener")
+        if (accesswidenerFile.exists()) {
+            accessWidenerPath = accesswidenerFile
+        } else {
+            accessWidenerPath = project(":common").extensions.getByName<LoomGradleExtensionAPI>("loom").accessWidenerPath
+        }
+    }
+
     dependencies {
         if (platform == com.teamresourceful.utils.Platform.COMMON) {
             "modCompileOnly"(group = "tech.thatgravyboat", name = "commonats", version = "4.0")
         }
 
-        "modApi"(group = "com.teamresourceful.resourcefullib", name = "resourcefullib-${platform.id}-$mcVersion", version = "3.5.0")
+        "modApi"(group = "com.teamresourceful.resourcefullib", name = "resourcefullib-${platform.id}-$mcVersion", version = "3.6.0-beta.1")
     }
 
     javaPublishing {

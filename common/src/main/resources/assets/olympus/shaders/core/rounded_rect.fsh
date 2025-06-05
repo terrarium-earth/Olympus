@@ -1,8 +1,9 @@
 #version 150
 
-in vec4 vertexColor;
+#moj_import <minecraft:dynamictransforms.glsl>
+#moj_import <minecraft:projection.glsl>
 
-uniform vec4 ColorModulator;
+in vec4 vertexColor;
 
 uniform vec4 borderColor;
 uniform vec4 borderRadius;

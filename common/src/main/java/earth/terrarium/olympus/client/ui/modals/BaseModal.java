@@ -8,7 +8,7 @@ import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.layouts.GridLayout;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
@@ -68,10 +68,10 @@ public abstract class BaseModal extends Overlay {
     @Override
     public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.renderBackground(graphics, mouseX, mouseY, partialTick);
-        this.renderBlurredBackground();
+        this.renderBlurredBackground(graphics);
         this.renderMenuBackground(graphics);
-        graphics.blitSprite(RenderType::guiTextured, UIConstants.MODAL, this.left, this.top, this.modalWidth, this.modalHeight);
-        graphics.blitSprite(RenderType::guiTextured, UIConstants.MODAL_HEADER, this.left + 1, this.top + 1, this.modalWidth - 2, TITLE_BAR_HEIGHT);
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, UIConstants.MODAL, this.left, this.top, this.modalWidth, this.modalHeight);
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, UIConstants.MODAL_HEADER, this.left + 1, this.top + 1, this.modalWidth - 2, TITLE_BAR_HEIGHT);
     }
 
     @Override

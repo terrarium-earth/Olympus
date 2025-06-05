@@ -17,7 +17,7 @@ import net.minecraft.client.gui.layouts.FrameLayout;
 import net.minecraft.client.gui.layouts.Layout;
 import net.minecraft.client.gui.layouts.SpacerElement;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
@@ -104,10 +104,10 @@ public class ActionModal extends Overlay {
     @Override
     public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.renderBackground(graphics, mouseX, mouseY, partialTick);
-        this.renderBlurredBackground();
+        this.renderTransparentBackground(graphics);
 
         graphics.blitSprite(
-                RenderType::guiTextured,
+                RenderPipelines.GUI_TEXTURED,
                 UIConstants.MODAL,
                 this.layout.getX() - 1, this.layout.getY() - 1,
                 this.layout.getWidth() + 2, this.layout.getHeight() + 2

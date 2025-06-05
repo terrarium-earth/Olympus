@@ -1,6 +1,7 @@
 #version 150
 
-uniform vec4 ColorModulator;
+#moj_import <minecraft:dynamictransforms.glsl>
+#moj_import <minecraft:projection.glsl>
 
 uniform sampler2D Sampler0;
 

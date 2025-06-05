@@ -59,6 +59,9 @@ public class ExampleGatherer {
     public static List<Pair<OlympusExample, Supplier<Screen>>> getExamples() {
         List<Pair<OlympusExample, Supplier<Screen>>> examples = new ArrayList<>();
         walkClasses("earth.terrarium.example.examples", clazz -> {
+            if (clazz.isMemberClass()) return;
+
+
             OlympusExample example = Objects.requireNonNull(clazz.getAnnotation(OlympusExample.class), "Example class must be annotated with @OlympusExample");
             assert clazz.isAssignableFrom(Screen.class) : "Example class must extend Screen";
             Constructor<? extends Screen> constructor = (Constructor<? extends Screen>) clazz.getDeclaredConstructor();

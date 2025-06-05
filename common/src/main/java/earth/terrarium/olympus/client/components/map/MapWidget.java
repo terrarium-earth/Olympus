@@ -1,7 +1,5 @@
 package earth.terrarium.olympus.client.components.map;
 
-import com.mojang.math.Axis;
-import com.teamresourceful.resourcefullib.client.CloseablePoseStack;
 import earth.terrarium.olympus.client.components.base.BaseWidget;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import earth.terrarium.olympus.client.ui.UITexts;
@@ -9,7 +7,7 @@ import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.concurrent.CompletableFuture;
@@ -51,7 +49,7 @@ public class MapWidget extends BaseWidget {
 
     @Override
     protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        graphics.blitSprite(RenderType::guiOpaqueTexturedBackground, this.texture, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        graphics.blitSprite(RenderPipelines.GUI_OPAQUE_TEXTURED_BACKGROUND, this.texture, this.getX(), this.getY(), this.getWidth(), this.getHeight());
 
         if (!initialized) {
             this.refreshMap();
@@ -69,11 +67,7 @@ public class MapWidget extends BaseWidget {
             if (player == null) return;
 
             mapRenderer.get().render(graphics, this.getX() + 1, this.getY() + 1, this.getWidth() - 2, this.getHeight() - 2);
-
-            try (var pose = new CloseablePoseStack(graphics)) {
-                pose.translate(0f, 0f, 2f);
-                this.renderPlayerAvatar(player, graphics);
-            }
+            this.renderPlayerAvatar(player, graphics);
         }
     }
 
@@ -109,11 +103,14 @@ public class MapWidget extends BaseWidget {
         x *= this.getWidth() / 144.0;
         y *= this.getHeight() / 144.0;
 
-        try (var pose = new CloseablePoseStack(graphics)) {
-            pose.translate(this.getX() + left + x, this.getY() + top + y, 0.0);
-            pose.mulPose(Axis.ZP.rotationDegrees(player.getYRot()));
-            pose.translate(-4f, -4f, 0f);
-            graphics.blit(RenderType::guiTextured, MAP_ICONS, 0, 0, 0f, 0f, 8, 8, 8, 8);
-        }
+        var pose = graphics.pose();
+        pose.pushMatrix();
+        pose.translate((float) (this.getX() + left + x), (float) (this.getY() + top + y));
+        pose.rotate((float) Math.toRadians(player.getYRot()));
+        pose.translate(-4f, -4f);
+
+        graphics.blit(RenderPipelines.GUI_TEXTURED, MAP_ICONS, 0, 0, 0f, 0f, 8, 8, 8, 8);
+
+        pose.popMatrix();
     }
 }

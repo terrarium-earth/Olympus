@@ -6,7 +6,7 @@ import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererCon
 import earth.terrarium.olympus.client.ui.UIIcons;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.WidgetSprites;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -39,7 +39,7 @@ public class WidgetRenderers {
 
     public static <T extends AbstractWidget> WidgetRenderer<T> sprite(WidgetSprites sprites) {
         return (graphics, context, partialTick) -> graphics.blitSprite(
-                RenderType::guiTextured,
+                RenderPipelines.GUI_TEXTURED,
                 sprites.get(context.getWidget().isActive(), context.getWidget().isHoveredOrFocused()),
                 context.getX(), context.getY(),
                 context.getWidth(), context.getHeight()
