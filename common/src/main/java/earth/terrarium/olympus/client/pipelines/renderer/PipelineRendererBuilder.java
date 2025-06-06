@@ -3,6 +3,7 @@ package earth.terrarium.olympus.client.pipelines.renderer;
 import com.mojang.blaze3d.buffers.GpuBufferSlice;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.vertex.MeshData;
+import com.mojang.datafixers.util.Pair;
 import earth.terrarium.olympus.client.pipelines.uniforms.RenderPipelineUniforms;
 import net.minecraft.client.renderer.DynamicUniformStorage;
 
@@ -34,9 +35,13 @@ public class PipelineRendererBuilder {
     }
 
     public void draw() {
+        List<Pair<String, GpuBufferSlice>> dynamicUniforms = new ArrayList<>();
+        for (UniformEntry<?> entry : this.uniforms) {
+            dynamicUniforms.add(Pair.of(entry.uniform.name(), entry.write()));
+        }
         PipelineRenderer.draw(this.pipeline, this.mesh, this.color, pass -> {
-            for (UniformEntry<?> entry : this.uniforms) {
-                pass.setUniform(entry.uniform.name(), entry.write());
+            for (var entry : dynamicUniforms) {
+                pass.setUniform(entry.getFirst(), entry.getSecond());
             }
         });
     }

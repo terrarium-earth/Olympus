@@ -43,6 +43,7 @@ public record RoundedRectangleUniform(
                 .putFloat(borderWidth)
                 .putVec2(size)
                 .putVec2(center)
-                .putFloat(scaleFactor);
+                .putFloat(scaleFactor)
+                .get();
     }
 }

@@ -6,6 +6,7 @@ import earth.terrarium.olympus.client.pipelines.RoundedRectangle;
 import earth.terrarium.olympus.client.pipelines.RoundedTexture;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 
 @OlympusExample(id = "shader", description = "Shader Example")
@@ -15,12 +16,15 @@ public class ShaderExample extends ExampleScreen {
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float f) {
         super.render(graphics, mouseX, mouseY, f);
 
+        graphics.pose().pushMatrix();
+        graphics.pose().translate(Mth.cos(((System.currentTimeMillis() % 60000) / 1000f)) * 30f, 0);
+
         RoundedRectangle.draw(
                 graphics,
                 this.width / 2 - 150, 50,
                 100, 100,
                 0x80000000, 0xFF0000FF,
-                15f, 5
+                15f, 2
         );
 
         RoundedTexture.draw(
@@ -31,5 +35,7 @@ public class ShaderExample extends ExampleScreen {
                 0f, 0f, 1f, 1f,
                 15f
         );
+
+        graphics.pose().popMatrix();
     }
 }

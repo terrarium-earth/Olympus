@@ -3,15 +3,16 @@
 #moj_import <minecraft:dynamictransforms.glsl>
 #moj_import <minecraft:projection.glsl>
 
+layout(std140) uniform RoundedRectangleUniform {
+    vec4 borderColor;
+    vec4 borderRadius;
+    float borderWidth;
+    vec2 size;
+    vec2 center;
+    float scaleFactor;
+};
+
 in vec4 vertexColor;
-
-uniform vec4 borderColor;
-uniform vec4 borderRadius;
-uniform float borderWidth;
-uniform vec2 size;
-uniform vec2 center;
-uniform float scaleFactor;
-
 out vec4 fragColor;
 
 // From: https://iquilezles.org/articles/distfunctions2d/

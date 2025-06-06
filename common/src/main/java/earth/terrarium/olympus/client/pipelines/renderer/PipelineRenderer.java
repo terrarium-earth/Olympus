@@ -12,6 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.ARGB;
 import org.joml.Vector4f;
 
+import java.util.Objects;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.function.Consumer;
@@ -62,9 +63,9 @@ public class PipelineRenderer {
 
         try (mesh; var pass = device.createCommandEncoder().createRenderPass(
                 () -> "Olympus Pipeline Render Pass for: " + pipeline.getLocation(),
-                target.getColorTextureView(),
+                Objects.requireNonNullElse(RenderSystem.outputColorTextureOverride, target.getColorTextureView()),
                 OptionalInt.empty(),
-                target.useDepth ? target.getDepthTextureView() : null,
+                target.useDepth ? Objects.requireNonNullElse(RenderSystem.outputDepthTextureOverride, target.getDepthTextureView()) : null,
                 OptionalDouble.empty()
         )) {
             pass.setPipeline(pipeline);

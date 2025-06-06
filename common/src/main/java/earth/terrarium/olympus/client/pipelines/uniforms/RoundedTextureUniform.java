@@ -39,6 +39,7 @@ public record RoundedTextureUniform(
                 .putVec4(radius)
                 .putVec2(size)
                 .putVec2(center)
-                .putFloat(scaleFactor);
+                .putFloat(scaleFactor)
+                .get();
     }
 }
