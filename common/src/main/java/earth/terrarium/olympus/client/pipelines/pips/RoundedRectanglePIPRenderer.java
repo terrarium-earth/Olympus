@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import earth.terrarium.olympus.client.pipelines.RoundedRectangle;
 import earth.terrarium.olympus.client.pipelines.renderer.PipelineRenderer;
 import earth.terrarium.olympus.client.pipelines.uniforms.RoundedRectangleUniform;
+import earth.terrarium.olympus.client.utils.GuiGraphicsHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
@@ -90,8 +91,8 @@ public class RoundedRectanglePIPRenderer extends PictureInPictureRenderer<Rounde
             this(
                     x, y, x + width, y + height,
                     color, borderColor, borderRadius, borderWidth,
-                    new Matrix3x2f(graphics.pose()), graphics.scissorStack.peek(),
-                    PictureInPictureRenderState.getBounds(x, y, x + width, y + height, graphics.scissorStack.peek())
+                    new Matrix3x2f(graphics.pose()), GuiGraphicsHelper.getLastScissor(graphics),
+                    PictureInPictureRenderState.getBounds(x, y, x + width, y + height, GuiGraphicsHelper.getLastScissor(graphics))
             );
         }
 

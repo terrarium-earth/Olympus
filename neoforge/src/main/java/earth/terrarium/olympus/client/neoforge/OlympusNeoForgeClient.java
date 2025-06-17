@@ -1,4 +1,4 @@
-package earth.terrarium.olympus.neoforge;
+package earth.terrarium.olympus.client.neoforge;
 
 import earth.terrarium.olympus.client.images.ImageProviders;
 import earth.terrarium.olympus.client.pipelines.pips.RoundedRectanglePIPRenderer;

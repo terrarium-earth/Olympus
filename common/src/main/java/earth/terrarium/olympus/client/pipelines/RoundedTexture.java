@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import earth.terrarium.olympus.client.pipelines.pips.RoundedTexturePIPRenderer;
 import earth.terrarium.olympus.client.pipelines.uniforms.RoundedTextureUniform;
+import earth.terrarium.olympus.client.utils.GuiGraphicsHelper;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 
@@ -41,7 +42,7 @@ public class RoundedTexture {
             float u0, float v0, float u1, float v1,
             float radius, int color
     ) {
-        graphics.guiRenderState.submitPicturesInPictureState(new RoundedTexturePIPRenderer.State(
+        GuiGraphicsHelper.submitPip(graphics, new RoundedTexturePIPRenderer.State(
                 graphics,
                 x, y, width,height,
                 u0, v0, u1, v1,

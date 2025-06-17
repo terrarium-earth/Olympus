@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import earth.terrarium.olympus.client.pipelines.pips.RoundedRectanglePIPRenderer;
 import earth.terrarium.olympus.client.pipelines.uniforms.RoundedRectangleUniform;
+import earth.terrarium.olympus.client.utils.GuiGraphicsHelper;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 
@@ -29,7 +30,7 @@ public class RoundedRectangle {
             int backgroundColor, int borderColor,
             float borderRadius, int borderWidth
     ) {
-        graphics.guiRenderState.submitPicturesInPictureState(new RoundedRectanglePIPRenderer.State(
+        GuiGraphicsHelper.submitPip(graphics, new RoundedRectanglePIPRenderer.State(
                 graphics,
                 x, y, width, height,
                 backgroundColor, borderColor, (int) borderRadius, borderWidth

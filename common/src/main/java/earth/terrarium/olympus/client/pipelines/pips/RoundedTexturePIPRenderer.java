@@ -8,6 +8,7 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import earth.terrarium.olympus.client.pipelines.RoundedTexture;
 import earth.terrarium.olympus.client.pipelines.renderer.PipelineRenderer;
 import earth.terrarium.olympus.client.pipelines.uniforms.RoundedTextureUniform;
+import earth.terrarium.olympus.client.utils.GuiGraphicsHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
@@ -90,8 +91,8 @@ public class RoundedTexturePIPRenderer extends PictureInPictureRenderer<RoundedT
                     x, y, x + width, y + height,
                     u0, v0, u1, v1,
                     texture, color, borderRadius,
-                    new Matrix3x2f(graphics.pose()), graphics.scissorStack.peek(),
-                    PictureInPictureRenderState.getBounds(x, y, x + width, y + height, graphics.scissorStack.peek())
+                    new Matrix3x2f(graphics.pose()), GuiGraphicsHelper.getLastScissor(graphics),
+                    PictureInPictureRenderState.getBounds(x, y, x + width, y + height, GuiGraphicsHelper.getLastScissor(graphics))
             );
         }
 

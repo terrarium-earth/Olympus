@@ -2,6 +2,7 @@ package earth.terrarium.olympus.client.elements;
 
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import earth.terrarium.olympus.client.utils.GuiGraphicsHelper;
 import net.minecraft.Optionull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -67,13 +68,13 @@ public abstract class BaseGuiElement implements GuiElementRenderState {
 
     public void submit(@NotNull GuiGraphics graphics, int x, int y, int width, int height) {
         this.pose = new Matrix3x2f(graphics.pose());
-        this.scissor = graphics.scissorStack.peek();
+        this.scissor = GuiGraphicsHelper.getLastScissor(graphics);
         this.bounds = Optionull.mapOrElse(
                 this.scissor,
                 rect -> rect.intersection(new ScreenRectangle(x, y, width, height).transformMaxBounds(this.pose)),
                 () -> new ScreenRectangle(x, y, width, height).transformMaxBounds(this.pose)
         );
 
-        graphics.guiRenderState.submitGuiElement(this);
+        GuiGraphicsHelper.submitElement(graphics, this);
     }
 }

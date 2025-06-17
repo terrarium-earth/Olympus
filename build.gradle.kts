@@ -18,15 +18,6 @@ subprojects {
     val mcVersion = rootProject.libs.versions.minecraft.get()
     val rlibversion = rootProject.libs.versions.rlib.get()
 
-    configure<LoomGradleExtensionAPI> {
-        val accesswidenerFile = project.file("src/main/resources/olympus.accesswidener")
-        if (accesswidenerFile.exists()) {
-            accessWidenerPath = accesswidenerFile
-        } else {
-            accessWidenerPath = project(":common").extensions.getByName<LoomGradleExtensionAPI>("loom").accessWidenerPath
-        }
-    }
-
     dependencies {
         if (platform == com.teamresourceful.utils.Platform.COMMON) {
             "modCompileOnly"(group = "tech.thatgravyboat", name = "commonats", version = "4.0")
