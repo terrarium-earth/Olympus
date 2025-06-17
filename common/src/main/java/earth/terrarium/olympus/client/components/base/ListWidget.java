@@ -32,6 +32,8 @@ public class ListWidget extends BaseParentWidget {
     protected int scrollWidth = 6;
     protected int scrollbarGap = 2;
 
+    protected boolean autoFocus = true;
+
     protected WidgetRenderer<ListWidget> scrollbarRenderer = (graphics, context, partialTick) -> {
         var widget = context.getWidget();
         int scrollBarHeight = (int) ((widget.getHeight() / (double) widget.getContentHeight()) * widget.getHeight());
@@ -210,7 +212,7 @@ public class ListWidget extends BaseParentWidget {
     public void setFocused(@Nullable GuiEventListener focused) {
         super.setFocused(focused);
 
-        if (focused instanceof AbstractWidget widget) {
+        if (focused instanceof AbstractWidget widget && this.autoFocus) {
             var isPastBottom = widget.getBottom() > this.getBottom();
             var isBeforeTop = widget.getY() < this.getY();
 
@@ -270,6 +272,11 @@ public class ListWidget extends BaseParentWidget {
 
     public ListWidget withScrollGap(int gap) {
         this.scrollbarGap = gap;
+        return this;
+    }
+
+    public ListWidget withAutoFocus(boolean autoFocus) {
+        this.autoFocus = autoFocus;
         return this;
     }
 }

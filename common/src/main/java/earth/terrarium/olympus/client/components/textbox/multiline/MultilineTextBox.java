@@ -2,6 +2,7 @@ package earth.terrarium.olympus.client.components.textbox.multiline;
 
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import earth.terrarium.olympus.client.components.base.BaseWidget;
+import earth.terrarium.olympus.client.components.textbox.utils.TextBoxStringUtils;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import earth.terrarium.olympus.client.utils.ListenableState;
 import earth.terrarium.olympus.client.utils.State;
@@ -40,14 +41,14 @@ public class MultilineTextBox extends BaseWidget {
         for (var line : lines) {
             var text = this.state.value().substring(line.start(), line.end());
 
-            graphics.drawString(this.font, MultilineStringUtils.format(text), x, y, -1);
+            graphics.drawString(this.font, TextBoxStringUtils.format(text), x, y, -1);
 
             if (this.state.hasSelection()) {
                 if (line.contains(selection.end()) || line.contains(selection.start())) {
                     var startIndex = Math.max(selection.start() - line.start(), 0);
                     var endIndex = selection.end() - line.start();
-                    var startX = MultilineStringUtils.width(this.font, text.substring(0, startIndex)) + x;
-                    var endX = endIndex > text.length() ? x + width : startX + MultilineStringUtils.width(this.font, text.substring(startIndex, endIndex));
+                    var startX = TextBoxStringUtils.width(this.font, text.substring(0, startIndex)) + x;
+                    var endX = endIndex > text.length() ? x + width : startX + TextBoxStringUtils.width(this.font, text.substring(startIndex, endIndex));
                     graphics.fill(startX, y, endX, y + this.font.lineHeight, 0x80AAAAAA);
                 } else if (selection.contains(line.start()) && selection.contains(line.end())) {
                     graphics.fill(x, y, x + width, y + this.font.lineHeight, 0x80AAAAAA);
@@ -56,7 +57,7 @@ public class MultilineTextBox extends BaseWidget {
 
             if (line.contains(cursor)) {
                 var first = text.substring(0, cursor - line.start());
-                var cursorX = MultilineStringUtils.width(this.font, first) + x;
+                var cursorX = TextBoxStringUtils.width(this.font, first) + x;
                 graphics.fill(cursorX, y, cursorX + 1, y + this.font.lineHeight, System.currentTimeMillis() % 1000 < 500 ? 0xFFFFFFFF : 0x00000000);
             }
 

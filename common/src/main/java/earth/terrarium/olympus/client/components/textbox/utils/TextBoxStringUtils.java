@@ -1,12 +1,18 @@
-package earth.terrarium.olympus.client.components.textbox.multiline;
+package earth.terrarium.olympus.client.components.textbox.utils;
 
 import net.minecraft.client.StringSplitter;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.FormattedCharSink;
+import net.minecraft.util.StringDecomposer;
+import net.minecraft.util.StringUtil;
+import org.apache.commons.lang3.mutable.MutableFloat;
+import org.apache.commons.lang3.mutable.MutableInt;
+import org.jetbrains.annotations.ApiStatus;
 
-class MultilineStringUtils {
+@ApiStatus.Internal
+public class TextBoxStringUtils {
 
     private static boolean feedChar(FormattedCharSink consumer, int i, char c) {
         return Character.isSurrogate(c) ? consumer.accept(i, Style.EMPTY, 65533) : consumer.accept(i, Style.EMPTY, c);
@@ -63,6 +69,41 @@ class MultilineStringUtils {
         }
     }
 
+    public static String plainHeadByWidth(Font font, String string, int maxWidth) {
+        var sink = new WidthLimitedCharSink(font, maxWidth);
+        iterate(string, 0, sink);
+        return string.substring(0, sink.position);
+    }
+
+    public static String plainTailByWidth(Font font, String string, int maxWidth) {
+        var totalWidth = new MutableFloat();
+        var pos = new MutableInt();
+        StringDecomposer.iterateBackwards(string, Style.EMPTY, (i, style, c) -> {
+            float width = totalWidth.addAndGet(width(font, Character.toString(c)));
+            if (width > maxWidth) {
+                return false;
+            } else {
+                pos.setValue(i);
+                return true;
+            }
+        });
+        return string.substring(pos.getValue());
+    }
+
+    public static boolean isAllowedChatCharacter(char character) {
+        return StringUtil.isAllowedChatCharacter(character) || character == '§';
+    }
+
+    public static String filterText(String text) {
+        StringBuilder builder = new StringBuilder(text.length());
+        for (char c : text.toCharArray()) {
+            if (isAllowedChatCharacter(c)) {
+                builder.append(c);
+            }
+        }
+        return builder.toString();
+    }
+
     private static class LineBreakFinder implements FormattedCharSink {
         private final int maxWidth;
         private final Font font;
@@ -102,6 +143,30 @@ class MultilineStringUtils {
 
         public int getSplitPosition() {
             return this.lineBreak != -1 ? this.lineBreak : this.nextChar;
+        }
+    }
+
+    private static class WidthLimitedCharSink implements FormattedCharSink {
+
+        private final Font font;
+
+        private float maxWidth;
+        private int position;
+
+        public WidthLimitedCharSink(Font font, float maxWidth) {
+            this.font = font;
+            this.maxWidth = maxWidth;
+        }
+
+        @Override
+        public boolean accept(int i, Style ignored, int j) {
+            this.maxWidth -= width(font, Character.toString(j));
+            if (this.maxWidth >= 0.0F) {
+                this.position = i + Character.charCount(j);
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import earth.terrarium.olympus.client.components.base.BaseWidget;
+import earth.terrarium.olympus.client.components.textbox.utils.TextBoxStringUtils;
 import earth.terrarium.olympus.client.constants.MinecraftColors;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import earth.terrarium.olympus.client.utils.ListenableState;
@@ -21,7 +22,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
-import net.minecraft.util.StringUtil;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -146,7 +146,7 @@ public class TextBox extends BaseWidget {
         int min = Math.min(this.cursorPos, this.highlightPos);
         int max = Math.max(this.cursorPos, this.highlightPos);
         int k = this.maxLength - this.state.get().length() - (min - max);
-        String string = StringUtil.filterText(textToWrite);
+        String string = TextBoxStringUtils.filterText(textToWrite);
         int l = string.length();
         if (k < l) {
             string = string.substring(0, k);
@@ -307,18 +307,16 @@ public class TextBox extends BaseWidget {
     @Override
     public boolean charTyped(char codePoint, int modifiers) {
         if (!this.isVisible() || !this.isFocused()) return false;
-        if (StringUtil.isAllowedChatCharacter(codePoint)) {
-            this.insertText(Character.toString(codePoint));
-            return true;
-        }
-        return false;
+        if (!TextBoxStringUtils.isAllowedChatCharacter(codePoint)) return false;
+        this.insertText(Character.toString(codePoint));
+        return true;
     }
 
     @Override
     public void onClick(double mouseX, double mouseY) {
         int relativeX = Mth.floor(mouseX) - this.getX() - PADDING;
-        String string = this.font.plainSubstrByWidth(this.state.get().substring(this.displayPos), this.width - PADDING * 2);
-        this.moveCursorTo(this.font.plainSubstrByWidth(string, relativeX).length() + this.displayPos);
+        String string = TextBoxStringUtils.plainHeadByWidth(this.font, this.state.get().substring(this.displayPos), this.width - PADDING * 2);
+        this.moveCursorTo(TextBoxStringUtils.plainHeadByWidth(this.font, string, relativeX).length() + this.displayPos);
     }
 
     public int getTextColor() {
@@ -344,7 +342,7 @@ public class TextBox extends BaseWidget {
 
             int displayCursorDiff = this.cursorPos - this.displayPos;
             int displayHighlightDiff = this.highlightPos - this.displayPos;
-            String truncatedValue = this.font.plainSubstrByWidth(value.substring(this.displayPos), this.width - 8);
+            String truncatedValue = TextBoxStringUtils.plainHeadByWidth(this.font, value.substring(this.displayPos), this.width - 8);
             boolean cursorVisible = displayCursorDiff >= 0 && displayCursorDiff <= truncatedValue.length();
             boolean showCursor = this.isFocused() && cursorVisible && System.currentTimeMillis() / 500 % 2 == 0;
             int l = this.getX() + 4;
@@ -356,7 +354,7 @@ public class TextBox extends BaseWidget {
 
             if (!truncatedValue.isEmpty()) {
                 String string2 = cursorVisible ? truncatedValue.substring(0, displayCursorDiff) : truncatedValue;
-                graphics.drawString(this.font, string2, l, m, getTextColor(), false);
+                graphics.drawString(this.font, TextBoxStringUtils.format(string2), l, m, getTextColor(), false);
                 n = l + this.font.width(string2) + 1;
             }
 
@@ -370,7 +368,7 @@ public class TextBox extends BaseWidget {
             }
 
             if (!truncatedValue.isEmpty() && cursorVisible && displayCursorDiff < truncatedValue.length()) {
-                graphics.drawString(this.font, truncatedValue.substring(displayCursorDiff), n, m, getTextColor(), false);
+                graphics.drawString(this.font, TextBoxStringUtils.format(truncatedValue.substring(displayCursorDiff)), n, m, getTextColor(), false);
             }
 
             if (showCursor) {
@@ -378,7 +376,7 @@ public class TextBox extends BaseWidget {
             }
 
             if (displayHighlightDiff != displayCursorDiff) {
-                int p = l + this.font.width(truncatedValue.substring(0, displayHighlightDiff));
+                int p = l + TextBoxStringUtils.width(this.font, truncatedValue.substring(0, displayHighlightDiff));
                 this.renderHighlight(graphics, o, m - 1, p - 1, m + 1 + 9);
             }
         }
@@ -415,10 +413,10 @@ public class TextBox extends BaseWidget {
         }
 
         int textWidth = this.width - PADDING * 2;
-        String string = this.font.plainSubstrByWidth(this.state.get().substring(this.displayPos), textWidth);
+        String string = TextBoxStringUtils.plainHeadByWidth(this.font, this.state.get().substring(this.displayPos), textWidth);
         int k = string.length() + this.displayPos;
         if (this.highlightPos == this.displayPos) {
-            this.displayPos -= this.font.plainSubstrByWidth(this.state.get(), textWidth, true).length();
+            this.displayPos -= TextBoxStringUtils.plainTailByWidth(this.font, this.state.get(), textWidth).length();
         }
 
         if (this.highlightPos > k) {

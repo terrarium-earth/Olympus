@@ -1,2 +1,2 @@
-- Made scrollbars not lag behind in lists
-- Allow you to click position on scrollbar to instantly scroll to
+- Allow putting section symbols in textboxes.
+- Allow for disabling autofocus in lists and layout widgets.

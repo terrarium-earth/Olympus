@@ -36,6 +36,7 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
 
     private TriState scrollableX = TriState.FALSE;
     private TriState scrollableY = TriState.FALSE;
+    private boolean autoFocus = true;
 
     private boolean draggingScrollbarX = false;
     private boolean draggingScrollbarY = false;
@@ -414,12 +415,17 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
         super.withPosition(x, y);
         return this;
     }
+
+    public LayoutWidget<T> withAutoFocus(boolean autoFocus) {
+        this.autoFocus = autoFocus;
+        return this;
+    }
     //endregion
 
     @Override
     public void setFocused(@Nullable GuiEventListener focused) {
         super.setFocused(focused);
-        if (focused instanceof AbstractWidget widget) {
+        if (focused instanceof AbstractWidget widget && this.autoFocus) {
             if (isYScrollbarVisible()) {
                 var isPastBottom = widget.getBottom() > this.getY() + contentMargin + this.getViewHeight();
                 var isPastTop = widget.getY() < this.getY() + contentMargin;
