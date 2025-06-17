@@ -6,7 +6,7 @@ import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererCon
 import earth.terrarium.olympus.client.constants.MinecraftColors;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ARGB;
 
@@ -30,7 +30,7 @@ public class IconWidgetRenderer<T extends AbstractWidget> implements WidgetRende
 
         if (drawShadow) {
             graphics.blitSprite(
-                    RenderType::guiTextured,
+                    RenderPipelines.GUI_TEXTURED,
                     icon,
                     context.getX() + 1, context.getY() + 1,
                     context.getWidth(), context.getHeight(),
@@ -39,7 +39,7 @@ public class IconWidgetRenderer<T extends AbstractWidget> implements WidgetRende
         }
 
         graphics.blitSprite(
-                RenderType::guiTextured,
+                RenderPipelines.GUI_TEXTURED,
                 icon,
                 context.getX(), context.getY(),
                 context.getWidth(), context.getHeight(),

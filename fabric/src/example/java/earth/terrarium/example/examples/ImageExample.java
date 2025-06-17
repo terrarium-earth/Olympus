@@ -9,10 +9,8 @@ import earth.terrarium.olympus.client.layouts.Layouts;
 import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.layouts.FrameLayout;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Matrix4f;
 
 import java.net.URI;
 
@@ -51,20 +49,12 @@ public class ImageExample extends ExampleScreen {
         var uri = image.get();
         if (uri == null) return;
 
-        var minx = this.width / 4f;
-        var maxx = this.width * 3f / 4f;
+        var minx = this.width / 4;
+        var maxx = this.width * 3 / 4;
 
-        var miny = 10f;
-        var maxy = this.height / 2f;
+        var miny = 10;
+        var maxy = this.height / 2;
 
-
-        Matrix4f matrix = graphics.pose().last().pose();
-        graphics.drawSpecial(source -> {
-            var buffer = source.getBuffer(RenderType.guiTextured(BuiltinImageProviders.URL.get(uri)));
-            buffer.addVertex(matrix, minx, miny, 0).setColor(-1).setUv(0, 0);
-            buffer.addVertex(matrix, minx, maxy, 0).setColor(-1).setUv(0, 1);
-            buffer.addVertex(matrix, maxx, maxy, 0).setColor(-1).setUv(1, 1);
-            buffer.addVertex(matrix, maxx, miny, 0).setColor(-1).setUv(1, 0);
-        });
+        graphics.blit(BuiltinImageProviders.URL.get(uri), minx, miny, maxx, maxy, 0f, 1f, 0f, 1f);
     }
 }

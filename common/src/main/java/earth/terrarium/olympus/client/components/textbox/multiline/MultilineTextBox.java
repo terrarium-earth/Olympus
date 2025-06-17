@@ -1,5 +1,6 @@
 package earth.terrarium.olympus.client.components.textbox.multiline;
 
+import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import earth.terrarium.olympus.client.components.base.BaseWidget;
 import earth.terrarium.olympus.client.components.textbox.utils.TextBoxStringUtils;
 import earth.terrarium.olympus.client.ui.UIConstants;
@@ -9,7 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.WidgetSprites;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.util.Mth;
 
 public class MultilineTextBox extends BaseWidget {
@@ -21,6 +22,7 @@ public class MultilineTextBox extends BaseWidget {
 
     private double scroll = - 1;
     private int lastHeight;
+    private boolean scrollbarHovered = false;
 
     public MultilineTextBox(State<String> state) {
         this.state = new MultilineTextInput(state instanceof ListenableState<String> it ? it : new ListenableState<>(state));
@@ -47,9 +49,9 @@ public class MultilineTextBox extends BaseWidget {
                     var endIndex = selection.end() - line.start();
                     var startX = TextBoxStringUtils.width(this.font, text.substring(0, startIndex)) + x;
                     var endX = endIndex > text.length() ? x + width : startX + TextBoxStringUtils.width(this.font, text.substring(startIndex, endIndex));
-                    graphics.fill(startX, y, endX, y + this.font.lineHeight, 0xFFAAAAAA);
+                    graphics.fill(startX, y, endX, y + this.font.lineHeight, 0x80AAAAAA);
                 } else if (selection.contains(line.start()) && selection.contains(line.end())) {
-                    graphics.fill(x, y, x + width, y + this.font.lineHeight, 0xFFAAAAAA);
+                    graphics.fill(x, y, x + width, y + this.font.lineHeight, 0x80AAAAAA);
                 }
             }
 
@@ -83,7 +85,7 @@ public class MultilineTextBox extends BaseWidget {
 
         var texture = this.sprites.get(this.active, this.isHoveredOrFocused());
 
-        graphics.blitSprite(RenderType::guiOpaqueTexturedBackground, texture, getX(), getY(), getWidth(), getHeight());
+        graphics.blitSprite(RenderPipelines.GUI_OPAQUE_TEXTURED_BACKGROUND, texture, getX(), getY(), getWidth(), getHeight());
 
         boolean renderScrollbar = this.lastHeight > this.height - 8;
 
@@ -91,9 +93,10 @@ public class MultilineTextBox extends BaseWidget {
         this.renderText(graphics, getX() + 6 - (renderScrollbar ? 2 : 0), (int) (getY() + 4 - scroll), getWidth() - 12);
         graphics.disableScissor();
 
+        this.scrollbarHovered = false;
         if (renderScrollbar) {
             graphics.blitSprite(
-                    RenderType::guiTextured,
+                    RenderPipelines.GUI_TEXTURED,
                     UIConstants.id("lists/scroll/bar"),
                     getX() + getWidth() - 5,
                     getY() + 4,
@@ -104,13 +107,15 @@ public class MultilineTextBox extends BaseWidget {
             var scrollBarHeight = (int) ((this.height - 8) / (double) this.lastHeight * (this.height - 8));
             var scrollBarY = (int) ((this.scroll / (double) this.lastHeight) * (this.height - 8));
             graphics.blitSprite(
-                    RenderType::guiTextured,
+                    RenderPipelines.GUI_TEXTURED,
                     UIConstants.id("lists/scroll/thumb"),
                     getX() + getWidth() - 6,
                     getY() + 4 + scrollBarY,
                     4,
                     scrollBarHeight
             );
+
+            this.scrollbarHovered = mouseX > getX() + getWidth() - 7 && mouseY > getY() + 4 && mouseY < getY() + this.height - 4;
         }
     }
 
@@ -165,5 +170,10 @@ public class MultilineTextBox extends BaseWidget {
 
     public boolean isVisible() {
         return this.visible;
+    }
+
+    @Override
+    public CursorScreen.Cursor getCursor() {
+        return this.scrollbarHovered ? CursorScreen.Cursor.POINTER : CursorScreen.Cursor.TEXT;
     }
 }

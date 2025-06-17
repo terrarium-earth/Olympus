@@ -86,6 +86,14 @@ public final class WidgetRendererContext<T extends AbstractWidget> {
         return y + height;
     }
 
+    public int getMiddleX() {
+        return x + width / 2;
+    }
+
+    public int getMiddleY() {
+        return y + height / 2;
+    }
+
     public WidgetRendererContext<T> copy() {
         return new WidgetRendererContext<>(widget, mouseX, mouseY)
                 .setWidth(width)

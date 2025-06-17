@@ -1,6 +1,7 @@
 package earth.terrarium.example;
 
 import earth.terrarium.example.base.ExampleGatherer;
+import earth.terrarium.example.renderdoc.RenderDoc;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
@@ -12,6 +13,8 @@ public class ExampleMod implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        RenderDoc.init();
+
         var examples = ExampleGatherer.getExamples();
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, access) -> {
             var command = ClientCommandManager.literal("example");

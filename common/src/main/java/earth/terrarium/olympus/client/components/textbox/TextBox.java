@@ -17,9 +17,10 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.navigation.FocusNavigationEvent;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -320,9 +321,9 @@ public class TextBox extends BaseWidget {
 
     public int getTextColor() {
         if (this.state.get().isEmpty()) {
-            return placeholderColor.getValue();
+            return ARGB.color(0xFF, placeholderColor.getValue());
         } else {
-            return this.filter.test(this.state.get()) ? textColor.getValue() : errorColor.getValue();
+            return ARGB.color(0xFF, this.filter.test(this.state.get()) ? textColor.getValue() : errorColor.getValue());
         }
     }
 
@@ -337,7 +338,7 @@ public class TextBox extends BaseWidget {
 
             ResourceLocation texture = sprites.get(this.active, this.isHoveredOrFocused());
 
-            graphics.blitSprite(RenderType::guiOpaqueTexturedBackground, texture, this.getX(), this.getY(), this.width, this.height);
+            graphics.blitSprite(RenderPipelines.GUI_OPAQUE_TEXTURED_BACKGROUND, texture, this.getX(), this.getY(), this.width, this.height);
 
             int displayCursorDiff = this.cursorPos - this.displayPos;
             int displayHighlightDiff = this.highlightPos - this.displayPos;
@@ -353,7 +354,8 @@ public class TextBox extends BaseWidget {
 
             if (!truncatedValue.isEmpty()) {
                 String string2 = cursorVisible ? truncatedValue.substring(0, displayCursorDiff) : truncatedValue;
-                n = graphics.drawString(this.font, TextBoxStringUtils.format(string2), l, m, getTextColor(), false) + 1;
+                graphics.drawString(this.font, TextBoxStringUtils.format(string2), l, m, getTextColor(), false);
+                n = l + this.font.width(string2) + 1;
             }
 
             boolean bl3 = this.cursorPos < value.length() || value.length() >= this.maxLength;
@@ -370,7 +372,7 @@ public class TextBox extends BaseWidget {
             }
 
             if (showCursor) {
-                graphics.fill(RenderType.guiOverlay(), o - 1, m - 1, o, m + 1 + 9, -3092272);
+                graphics.fill(RenderPipelines.GUI, o - 1, m - 1, o, m + 1 + 9, 0xffd0d0d0);
             }
 
             if (displayHighlightDiff != displayCursorDiff) {
@@ -385,7 +387,7 @@ public class TextBox extends BaseWidget {
         int x2 = Mth.clamp(Math.max(minX, maxX), this.getX(), this.getX() + this.width - PADDING);
         int y1 = Math.min(minY, maxY);
         int y2 = Math.max(minY, maxY);
-        graphics.fill(RenderType.guiTextHighlight(), x1, y1, x2, y2, 0xff0000ff);
+        graphics.fill(RenderPipelines.GUI_TEXT_HIGHLIGHT, x1, y1, x2, y2, 0xff0000ff);
     }
 
     @Nullable

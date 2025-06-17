@@ -1,11 +1,9 @@
 package earth.terrarium.olympus.client.components.color.type;
 
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import earth.terrarium.olympus.client.components.base.BaseWidget;
+import earth.terrarium.olympus.client.elements.GradientGuiElement;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.Mth;
-import org.joml.Matrix4f;
 
 public class SaturationBrightnessSelector extends BaseWidget {
 
@@ -32,14 +30,17 @@ public class SaturationBrightnessSelector extends BaseWidget {
             for (int dx = 0; dx < 10; dx++) {
                 float minS = dx / 10f;
                 float maxS = (dx + 1) / 10f;
-                drawGradient(
-                        graphics,
-                        getX() + dx * tileWidth, getY() + (10 - dy - 1) * tileHeight,
-                        tileWidth, tileHeight,
+
+                var element = new GradientGuiElement(
                         HsbColor.of(color.hue(), minS, maxB, 255).toRgba(),
                         HsbColor.of(color.hue(), maxS, maxB, 255).toRgba(),
                         HsbColor.of(color.hue(), minS, minB, 255).toRgba(),
                         HsbColor.of(color.hue(), maxS, minB, 255).toRgba()
+                );
+                element.submit(
+                        graphics,
+                        getX() + dx * tileWidth, getY() + (10 - dy - 1) * tileHeight,
+                        tileWidth, tileHeight
                 );
             }
         }
@@ -66,21 +67,5 @@ public class SaturationBrightnessSelector extends BaseWidget {
     @Override
     public boolean mouseDragged(double d, double e, int i, double f, double g) {
         return mouseClicked(d, e, i);
-    }
-
-    private void drawGradient(
-            GuiGraphics graphics,
-            int x, int y,
-            int width, int height,
-            int topLeft, int topRight, int bottomLeft, int bottomRight
-    ) {
-        Matrix4f matrix4f = graphics.pose().last().pose();
-        graphics.drawSpecial(source -> {
-            VertexConsumer buffer = source.getBuffer(RenderType.gui());
-            buffer.addVertex(matrix4f, x, y + height, 0).setColor(bottomLeft);
-            buffer.addVertex(matrix4f, x + width, y + height, 0).setColor(bottomRight);
-            buffer.addVertex(matrix4f, x + width, y, 0).setColor(topRight);
-            buffer.addVertex(matrix4f, x, y, 0).setColor(topLeft);
-        });
     }
 }

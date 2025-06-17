@@ -8,7 +8,7 @@ import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -58,7 +58,7 @@ public class PresetsSelector extends BaseWidget {
 
     @Override
     protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        graphics.blitSprite(RenderType::guiTextured, background, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, background, this.getX(), this.getY(), this.getWidth(), this.getHeight());
         int size = (this.getWidth() - 18) / 8;
 
         int i = 0;
@@ -81,7 +81,7 @@ public class PresetsSelector extends BaseWidget {
                             .append(Component.literal(String.format(Locale.ROOT, "#%06X", rgba)).withColor(0xFFFFFFFF))
                             .append(Component.literal("]")).withColor(rgba | 0xFF000000);
 
-                    screen.setTooltipForNextRenderPass(text);
+                    graphics.setTooltipForNextFrame(text, mouseX, mouseY);
                 }
             }
             i++;

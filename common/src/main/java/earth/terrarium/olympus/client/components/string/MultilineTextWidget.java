@@ -1,15 +1,11 @@
 package earth.terrarium.olympus.client.components.string;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamresourceful.resourcefullib.client.components.CursorWidget;
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractStringWidget;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;
@@ -110,10 +106,10 @@ public class MultilineTextWidget extends AbstractStringWidget implements CursorW
 		int x = this.getX() + Math.round(this.alignX * (float)(this.getWidth() - maxLineWidth));
 		int y = this.getY();
 
-		PoseStack pose = graphics.pose();
-		pose.pushPose();
-		pose.translate(x, y, 0);
-		pose.scale(this.scale, this.scale, 1f);
+		var pose = graphics.pose();
+		pose.pushMatrix();
+		pose.translate(x, y);
+		pose.scale(this.scale, this.scale);
 
 		y = 0;
 
@@ -125,7 +121,7 @@ public class MultilineTextWidget extends AbstractStringWidget implements CursorW
 			graphics.drawString(font, line, xOffset, y, this.getColor(), this.shadow);
 			y += font.lineHeight;
 		}
-		pose.popPose();
+		pose.popMatrix();
 
 		Style style = getStyle(mouseX, mouseY);
 		if (style != null && style.getClickEvent() != null) {

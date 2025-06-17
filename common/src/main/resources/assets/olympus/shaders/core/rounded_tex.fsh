@@ -1,16 +1,17 @@
 #version 150
 
-uniform vec4 ColorModulator;
+#moj_import <minecraft:dynamictransforms.glsl>
+#moj_import <minecraft:projection.glsl>
+
+layout(std140) uniform RoundedTextureUniform {
+    vec4 radius;
+    vec2 size;
+    vec2 center;
+    float scaleFactor;
+};
 
 uniform sampler2D Sampler0;
-
-uniform vec4 radius;
-uniform vec2 size;
-uniform vec2 center;
-uniform float scaleFactor;
-
 in vec2 texCoord0;
-
 out vec4 fragColor;
 
 // From: https://iquilezles.org/articles/distfunctions2d/
