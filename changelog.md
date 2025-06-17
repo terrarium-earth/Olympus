@@ -1,2 +1,1 @@
-- Allow putting section symbols in textboxes.
-- Allow for disabling autofocus in lists and layout widgets.
+- Update to 1.21.6

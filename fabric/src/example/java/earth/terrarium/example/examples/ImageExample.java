@@ -55,6 +55,6 @@ public class ImageExample extends ExampleScreen {
         var miny = 10;
         var maxy = this.height / 2;
 
-        graphics.blit(BuiltinImageProviders.URL.get(uri), minx, miny, maxx, maxy, 0f, 0f, 1f, 1f);
+        graphics.blit(BuiltinImageProviders.URL.get(uri), minx, miny, maxx, maxy, 0f, 1f, 0f, 1f);
     }
 }

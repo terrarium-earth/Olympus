@@ -16,6 +16,7 @@ subprojects {
 
     val platform = getPlatform()
     val mcVersion = rootProject.libs.versions.minecraft.get()
+    val rlibversion = rootProject.libs.versions.rlib.get()
 
     configure<LoomGradleExtensionAPI> {
         val accesswidenerFile = project.file("src/main/resources/olympus.accesswidener")
@@ -31,7 +32,7 @@ subprojects {
             "modCompileOnly"(group = "tech.thatgravyboat", name = "commonats", version = "4.0")
         }
 
-        "modApi"(group = "com.teamresourceful.resourcefullib", name = "resourcefullib-${platform.id}-$mcVersion", version = "3.6.0-beta.1")
+        "modApi"(group = "com.teamresourceful.resourcefullib", name = "resourcefullib-${platform.id}-$mcVersion", version = rlibversion)
     }
 
     javaPublishing {

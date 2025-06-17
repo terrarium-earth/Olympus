@@ -35,6 +35,6 @@ public class MapRenderer {
     }
 
     public void render(GuiGraphics graphics, int x, int y, int width, int height) {
-        graphics.blit(TEXTURE, x, y, width, height, 0f, 1f, 0f, 1f);
+        graphics.blit(TEXTURE, x, y, x + width, y + height, 0f, 1f, 0f, 1f);
     }
 }
