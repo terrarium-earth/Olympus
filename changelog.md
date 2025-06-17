@@ -1,5 +1,2 @@
-- Add multiline text inputs.
-- Add image providers.
-  - A system to allow for loading and usage of external image files.
-- If an element extends past the list/layout it will not try to auto scroll to it.
-  - This resulted it either scrolling to the top of the list or bottom when clicking on the element.
+- Allow putting section symbols in textboxes.
+- Allow for disabling autofocus in lists and layout widgets.
