@@ -1,5 +1,6 @@
 package earth.terrarium.olympus.client.components.textbox.multiline;
 
+import earth.terrarium.olympus.client.components.textbox.utils.TextBoxStringUtils;
 import earth.terrarium.olympus.client.utils.ListenableState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -108,7 +109,7 @@ class MultilineTextState {
 
 	protected void moveCursorY(int direction) {
 		if (direction != 0) {
-			int j = MultilineStringUtils.width(this.font, this.value.substring(this.getCursorLineView().start(), this.cursor)) + 2;
+			int j = TextBoxStringUtils.width(this.font, this.value.substring(this.getCursorLineView().start(), this.cursor)) + 2;
 			MultilineStringView stringView = this.getCursorLineView(direction);
 			int k = this.font.plainSubstrByWidth(this.value.substring(stringView.start(), stringView.end()), j).length();
 			this.seekCursor(Whence.ABSOLUTE, stringView.start() + k);
@@ -192,7 +193,7 @@ class MultilineTextState {
 				if (line.isEmpty()) {
 					this.lines.add(new MultilineStringView(index, xOffset, xOffset));
 				} else {
-					MultilineStringUtils.split(
+					TextBoxStringUtils.split(
 							this.font, line, this.lastWidth,
 							(style, start, end) -> this.lines.add(new MultilineStringView(index, xOffset + start, xOffset + end))
 					);
