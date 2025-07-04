@@ -1,2 +1,2 @@
-- Allow putting section symbols in textboxes.
-- Allow for disabling autofocus in lists and layout widgets.
+- Add widget renderer widgets.
+- Add ability to check for other mouse button clicks in buttons.

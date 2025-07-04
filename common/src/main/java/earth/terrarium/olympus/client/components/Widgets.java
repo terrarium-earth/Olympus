@@ -2,6 +2,7 @@ package earth.terrarium.olympus.client.components;
 
 import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.utils.TriState;
+import earth.terrarium.olympus.client.components.base.BaseWidget;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.buttons.Button;
 import earth.terrarium.olympus.client.components.color.ColorPickerOverlay;
@@ -12,6 +13,7 @@ import earth.terrarium.olympus.client.components.dropdown.DropdownBuilder;
 import earth.terrarium.olympus.client.components.dropdown.DropdownState;
 import earth.terrarium.olympus.client.components.map.MapRenderer;
 import earth.terrarium.olympus.client.components.map.MapWidget;
+import earth.terrarium.olympus.client.components.renderers.Renderable;
 import earth.terrarium.olympus.client.components.renderers.TristateRenderers;
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import earth.terrarium.olympus.client.components.string.MultilineTextWidget;
@@ -306,5 +308,15 @@ public final class Widgets {
 
     public static MultilineTextWidget textarea(Component text, int width) {
         return textarea(text, width, Consumers.nop());
+    }
+
+    public static BaseWidget renderable(WidgetRenderer<? super BaseWidget> renderer) {
+        return renderable(renderer, Consumers.nop());
+    }
+
+    public static BaseWidget renderable(WidgetRenderer<? super BaseWidget> renderer, Consumer<BaseWidget> factory) {
+        Renderable renderable = new Renderable(renderer);
+        factory.accept(renderable);
+        return renderable;
     }
 }
