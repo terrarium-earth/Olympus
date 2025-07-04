@@ -1,5 +1,6 @@
 package earth.terrarium.olympus.client.components.buttons;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.teamresourceful.resourcefullib.client.components.CursorWidget;
 import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
 import earth.terrarium.olympus.client.components.base.BaseWidget;
@@ -8,6 +9,8 @@ import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererCon
 import earth.terrarium.olympus.client.components.dropdown.DropdownBuilder;
 import earth.terrarium.olympus.client.components.dropdown.DropdownState;
 import earth.terrarium.olympus.client.ui.UIConstants;
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.WidgetSprites;
@@ -19,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 public class Button extends BaseWidget implements CursorWidget {
 
     private WidgetRenderer<? super Button> renderer = WidgetRenderer.empty();
-    private Runnable onPress = () -> {};
+    private final Int2ObjectMap<Runnable> actions = new Int2ObjectArrayMap<>();
     private WidgetSprites sprites = UIConstants.BUTTON;
     private ButtonShape shape = ButtonShapes.RECTANGLE;
 
@@ -46,11 +49,6 @@ public class Button extends BaseWidget implements CursorWidget {
     }
 
     @Override
-    public void onClick(double mouseX, double mouseY) {
-        this.onPress.run();
-    }
-
-    @Override
     public CursorScreen.Cursor getCursor() {
         return !this.isActive() ? CursorScreen.Cursor.DISABLED : CursorScreen.Cursor.POINTER;
     }
@@ -60,8 +58,13 @@ public class Button extends BaseWidget implements CursorWidget {
         return this;
     }
 
+    public Button withCallback(int key, Runnable onPress) {
+        this.actions.put(key, onPress);
+        return this;
+    }
+
     public Button withCallback(Runnable onPress) {
-        this.onPress = onPress;
+        this.actions.defaultReturnValue(onPress);
         return this;
     }
 
@@ -93,16 +96,27 @@ public class Button extends BaseWidget implements CursorWidget {
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (this.active && this.visible) {
-            if (CommonInputs.selected(keyCode)) {
+        if (this.active && this.visible && CommonInputs.selected(keyCode)) {
+            var action = this.actions.get(InputConstants.MOUSE_BUTTON_LEFT);
+            if (action != null) {
                 this.playDownSound(Minecraft.getInstance().getSoundManager());
-                this.onPress.run();
+                action.run();
                 return true;
-            } else {
-                return false;
             }
-        } else {
-            return false;
         }
+        return false;
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (this.active && this.visible && this.isMouseOver(mouseX, mouseY)) {
+            var action = this.actions.get(button);
+            if (action != null) {
+                this.playDownSound(Minecraft.getInstance().getSoundManager());
+                action.run();
+                return true;
+            }
+        }
+        return false;
     }
 }
