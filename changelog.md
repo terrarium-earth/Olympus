@@ -1,2 +1,2 @@
-- Add widget renderer widgets.
-- Add ability to check for other mouse button clicks in buttons.
+- Update to 1.21.7
+- Fix bug in Fabric where if 2 pips are rendered in the same frame only the data of the second one will be used.

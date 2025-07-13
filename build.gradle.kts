@@ -23,7 +23,7 @@ subprojects {
             "modCompileOnly"(group = "tech.thatgravyboat", name = "commonats", version = "4.0")
         }
 
-        "modApi"(group = "com.teamresourceful.resourcefullib", name = "resourcefullib-${platform.id}-$mcVersion", version = rlibversion)
+        "modApi"(group = "com.teamresourceful.resourcefullib", name = "resourcefullib-${platform.id}-1.21.6", version = rlibversion)
     }
 
     javaPublishing {
