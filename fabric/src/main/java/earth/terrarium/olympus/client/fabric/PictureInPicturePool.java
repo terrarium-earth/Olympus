@@ -36,29 +36,25 @@ public class PictureInPicturePool<T extends PictureInPictureRenderState> impleme
     }
 
     public static final class PoolEntry<T extends PictureInPictureRenderState> {
-        private final MutableBoolean usedThisFrame = new MutableBoolean(false);
         private final PictureInPictureRenderer<T> renderer;
+        private boolean usedThisFrame = false;
 
         public PoolEntry(PictureInPictureRenderer<T> renderer) {
             this.renderer = renderer;
         }
 
         public boolean closeIfUnused() {
-            if (!usedThisFrame.isTrue()) {
+            if (!usedThisFrame) {
                 renderer.close();
                 return true;
             }
-            usedThisFrame.setFalse();
+            usedThisFrame = false;
             return false;
         }
 
         public void prepare(T pictureInPictureRenderState, GuiRenderState guiRenderState, int scale) {
             renderer.prepare(pictureInPictureRenderState, guiRenderState, scale);
-            usedThisFrame.setTrue();
-        }
-
-        public void end() {
-            usedThisFrame.setFalse();
+            usedThisFrame = true;
         }
     }
 }
