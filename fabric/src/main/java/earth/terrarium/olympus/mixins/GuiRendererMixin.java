@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.mojang.blaze3d.buffers.GpuBufferSlice;
 import earth.terrarium.olympus.client.fabric.PictureInPictureHandler;
 import earth.terrarium.olympus.client.fabric.PictureInPicturePool;
+import earth.terrarium.olympus.client.pipelines.pips.OlympusPictureInPictureRenderState;
 import net.minecraft.client.gui.render.GuiRenderer;
 import net.minecraft.client.gui.render.state.GuiRenderState;
 import net.minecraft.client.gui.render.state.pip.PictureInPictureRenderState;
@@ -32,8 +33,8 @@ public class GuiRendererMixin {
 
     @WrapMethod(method = "preparePictureInPictureState")
     private void fixPipState(PictureInPictureRenderState state, int scale, Operation<Void> original) {
-        if (this.pipHandler != null) {
-            PictureInPicturePool<PictureInPictureRenderState> pool = this.pipHandler.getPool(state.getClass());
+        if (this.pipHandler != null && state instanceof OlympusPictureInPictureRenderState<?> olympusState) {
+            PictureInPicturePool<PictureInPictureRenderState> pool = this.pipHandler.getPool(olympusState);
             if (pool != null) {
                 pool.prepare(state, this.renderState, scale);
                 return;
