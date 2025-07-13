@@ -17,8 +17,8 @@ public class OlympusNeoForgeClient {
     public OlympusNeoForgeClient(IEventBus bus) {
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Pre ignored) -> ImageProviders.tick());
         bus.addListener((RegisterPictureInPictureRenderersEvent event) -> {
-            event.register(RoundedRectanglePIPRenderer::new);
-            event.register(RoundedTexturePIPRenderer::new);
+            event.register(RoundedRectanglePIPRenderer.State.class, RoundedRectanglePIPRenderer::new);
+            event.register(RoundedTexturePIPRenderer.State.class, RoundedTexturePIPRenderer::new);
         });
     }
 }
