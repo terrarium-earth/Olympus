@@ -3,7 +3,6 @@ package earth.terrarium.olympus.client.fabric;
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
 import net.minecraft.client.gui.render.state.GuiRenderState;
 import net.minecraft.client.gui.render.state.pip.PictureInPictureRenderState;
-import org.apache.commons.lang3.mutable.MutableBoolean;
 
 import java.io.Closeable;
 import java.util.HashMap;
