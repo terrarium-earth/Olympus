@@ -20,6 +20,8 @@ import org.joml.Matrix3x2f;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
+import java.util.function.Function;
+
 public class RoundedRectanglePIPRenderer extends PictureInPictureRenderer<RoundedRectanglePIPRenderer.State> {
 
     private State lastState;
@@ -81,7 +83,7 @@ public class RoundedRectanglePIPRenderer extends PictureInPictureRenderer<Rounde
             int color, int borderColor,
             int borderRadius, int borderWidth,
             Matrix3x2f pose, ScreenRectangle scissorArea, ScreenRectangle bounds
-    ) implements PictureInPictureRenderState {
+    ) implements OlympusPictureInPictureRenderState<State> {
 
         public State(
                 GuiGraphics graphics,
@@ -99,6 +101,11 @@ public class RoundedRectanglePIPRenderer extends PictureInPictureRenderer<Rounde
         @Override
         public float scale() {
             return 1f;
+        }
+
+        @Override
+        public Function<MultiBufferSource.BufferSource, PictureInPictureRenderer<State>> getFactory() {
+            return RoundedRectanglePIPRenderer::new;
         }
     }
 }
