@@ -31,7 +31,7 @@ public class PictureInPictureHandler implements Closeable {
     @SuppressWarnings("unchecked")
     public <T extends PictureInPictureRenderState> PictureInPicturePool<PictureInPictureRenderState> getPool(Class<T> stateClass) {
         return (PictureInPicturePool<PictureInPictureRenderState>) pool.computeIfAbsent(stateClass, it -> {
-            Function<MultiBufferSource.BufferSource, PictureInPictureRenderer<? extends PictureInPictureRenderState>> factory = RENDERER_FACTORIES.get(it);
+            var factory = RENDERER_FACTORIES.get(it);
             return factory == null ? null : new PictureInPicturePool<>(() -> factory.apply(source));
         });
     }

@@ -32,14 +32,15 @@ public class GuiRendererMixin {
 
     @WrapMethod(method = "preparePictureInPictureState")
     private void fixPipState(PictureInPictureRenderState state, int scale, Operation<Void> original) {
-        if (this.pipHandler == null) return;
-
-        PictureInPicturePool<PictureInPictureRenderState> pool = this.pipHandler.getPool(state.getClass());
-        if (pool != null) {
-            pool.prepare(state, this.renderState, scale);
-        } else {
-            original.call(state, scale);
+        if (this.pipHandler != null) {
+            PictureInPicturePool<PictureInPictureRenderState> pool = this.pipHandler.getPool(state.getClass());
+            if (pool != null) {
+                pool.prepare(state, this.renderState, scale);
+                return;
+            }
         }
+
+        original.call(state, scale);
     }
 
     @Inject(method = "render", at = @At("TAIL"))

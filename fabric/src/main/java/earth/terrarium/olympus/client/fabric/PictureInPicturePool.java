@@ -35,13 +35,12 @@ public class PictureInPicturePool<T extends PictureInPictureRenderState> impleme
         pool.clear();
     }
 
-    public record PoolEntry<T extends PictureInPictureRenderState>(
-            MutableBoolean usedThisFrame,
-            PictureInPictureRenderer<T> renderer
-    ) {
+    public static final class PoolEntry<T extends PictureInPictureRenderState> {
+        private final MutableBoolean usedThisFrame = new MutableBoolean(false);
+        private final PictureInPictureRenderer<T> renderer;
 
         public PoolEntry(PictureInPictureRenderer<T> renderer) {
-            this(new MutableBoolean(false), renderer);
+            this.renderer = renderer;
         }
 
         public boolean closeIfUnused() {
