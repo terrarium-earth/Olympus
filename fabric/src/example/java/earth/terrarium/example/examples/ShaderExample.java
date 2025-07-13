@@ -27,14 +27,23 @@ public class ShaderExample extends ExampleScreen {
                 15f, 2
         );
 
-        RoundedTexture.draw(
+        RoundedRectangle.draw(
                 graphics,
                 this.width / 2 + 50, 50,
                 100, 100,
-                ResourceLocation.fromNamespaceAndPath("olympus", "textures/gui/sprites/modal/modal.png"),
-                0f, 0f, 1f, 1f,
-                15f
+                0x80FF0000, 0xFF00FF00,
+                15f, 2
         );
+
+
+//        RoundedTexture.draw(
+//                graphics,
+//                this.width / 2 + 50, 50,
+//                100, 100,
+//                ResourceLocation.fromNamespaceAndPath("olympus", "textures/gui/sprites/modal/modal.png"),
+//                0f, 0f, 1f, 1f,
+//                15f
+//        );
 
         graphics.pose().popMatrix();
     }

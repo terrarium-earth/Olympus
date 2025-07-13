@@ -16,6 +16,9 @@
             "earth.terrarium.olympus.client.fabric.OlympusFabricClient"
         ]
     },
+    "mixins": [
+        "olympus.mixins.json"
+    ],
     "license": "MIT",
     "environment": "*",
     "depends": {
