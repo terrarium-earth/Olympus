@@ -1,2 +1,1 @@
-- Update to 1.21.7
-- Fix bug in Fabric where if 2 pips are rendered in the same frame only the data of the second one will be used.
+- Fix issue where pipeline uniform buffers werent cleared at the end of a frame.

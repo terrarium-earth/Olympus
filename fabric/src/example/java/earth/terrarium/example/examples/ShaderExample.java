@@ -1,11 +1,10 @@
 package earth.terrarium.example.examples;
 
+import com.teamresourceful.resourcefullib.common.color.Color;
 import earth.terrarium.example.base.ExampleScreen;
 import earth.terrarium.example.base.OlympusExample;
 import earth.terrarium.olympus.client.pipelines.RoundedRectangle;
-import earth.terrarium.olympus.client.pipelines.RoundedTexture;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,7 +30,7 @@ public class ShaderExample extends ExampleScreen {
                 graphics,
                 this.width / 2 + 50, 50,
                 100, 100,
-                0x80FF0000, 0xFF00FF00,
+                Color.RAINBOW.withAlpha(0x80).getValue(), 0xFF00FF00,
                 15f, 2
         );
 

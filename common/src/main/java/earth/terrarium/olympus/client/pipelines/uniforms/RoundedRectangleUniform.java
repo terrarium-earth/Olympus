@@ -1,6 +1,5 @@
 package earth.terrarium.olympus.client.pipelines.uniforms;
 
-import com.google.common.base.Suppliers;
 import com.mojang.blaze3d.buffers.Std140Builder;
 import com.mojang.blaze3d.buffers.Std140SizeCalculator;
 import net.minecraft.client.renderer.DynamicUniformStorage;
@@ -20,11 +19,11 @@ public record RoundedRectangleUniform(
 ) implements RenderPipelineUniforms {
 
     public static final String NAME = "RoundedRectangleUniform";
-    public static final Supplier<DynamicUniformStorage<RoundedRectangleUniform>> STORAGE = Suppliers.memoize(() -> new DynamicUniformStorage<>(
+    public static final Supplier<DynamicUniformStorage<RoundedRectangleUniform>> STORAGE = RenderPipelineUniformsStorage.register(
             "Rounded Rectangle UBO",
-            new Std140SizeCalculator().putVec4().putVec4().putFloat().putVec2().putVec2().putFloat().get(),
-            2
-    ));
+            2,
+            new Std140SizeCalculator().putVec4().putVec4().putFloat().putVec2().putVec2().putFloat()
+    );
 
     public static RoundedRectangleUniform of(Vector4f borderColor, Vector4f radius, float borderWidth, Vector2f size, Vector2f center, float scaleFactor) {
         return new RoundedRectangleUniform(borderColor, radius, borderWidth, size, center, scaleFactor);

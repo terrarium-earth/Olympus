@@ -12,6 +12,9 @@ logoFile = "icon.png"
 authors = "ThatGravyBoat"
 description = "Common Components library for Project Odyssey."
 
+[[mixins]]
+config = "olympus.mixins.json"
+
 [[dependencies.olympus]]
 modId = "neoforge"
 type="required"
