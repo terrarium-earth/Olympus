@@ -94,7 +94,7 @@ public class RoundedRectanglePIPRenderer extends PictureInPictureRenderer<Rounde
                     x, y, x + width, y + height,
                     color, borderColor, borderRadius, borderWidth,
                     new Matrix3x2f(graphics.pose()), GuiGraphicsHelper.getLastScissor(graphics),
-                    PictureInPictureRenderState.getBounds(x, y, x + width, y + height, GuiGraphicsHelper.getLastScissor(graphics))
+                    OlympusPictureInPictureRenderState.getRelativeBounds(graphics, x, y, x + width, y + height)
             );
         }
 

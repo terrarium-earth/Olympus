@@ -1,1 +1,1 @@
-- Fix issue where pipeline uniform buffers werent cleared at the end of a frame.
+- Workaround issue where bounds arnt checked relatively in pips in vanilla

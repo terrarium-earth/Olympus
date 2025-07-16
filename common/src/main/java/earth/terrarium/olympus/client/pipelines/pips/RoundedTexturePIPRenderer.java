@@ -94,7 +94,7 @@ public class RoundedTexturePIPRenderer extends PictureInPictureRenderer<RoundedT
                     u0, v0, u1, v1,
                     texture, color, borderRadius,
                     new Matrix3x2f(graphics.pose()), GuiGraphicsHelper.getLastScissor(graphics),
-                    PictureInPictureRenderState.getBounds(x, y, x + width, y + height, GuiGraphicsHelper.getLastScissor(graphics))
+                    OlympusPictureInPictureRenderState.getRelativeBounds(graphics, x, y, x + width, y + height)
             );
         }
 
