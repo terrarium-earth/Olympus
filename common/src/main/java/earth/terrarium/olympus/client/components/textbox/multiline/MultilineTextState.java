@@ -102,7 +102,7 @@ class MultilineTextState {
 		}
 
 		this.cursor = Mth.clamp(this.cursor, 0, this.value.length());
-		if (!this.selecting && !Screen.hasShiftDown()) {
+		if (!this.selecting && !Minecraft.getInstance().hasShiftDown()) {
 			this.selectCursor = this.cursor;
 		}
 	}

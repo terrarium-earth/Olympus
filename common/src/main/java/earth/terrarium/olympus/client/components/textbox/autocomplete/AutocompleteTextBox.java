@@ -3,6 +3,7 @@ package earth.terrarium.olympus.client.components.textbox.autocomplete;
 import earth.terrarium.olympus.client.components.textbox.TextBox;
 import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.input.MouseButtonEvent;
 
 import java.util.List;
 import java.util.function.Function;
@@ -42,7 +43,7 @@ public class AutocompleteTextBox<T> extends TextBox {
     }
 
     @Override
-    public void onClick(double mouseX, double mouseY) {
+    public void onClick(MouseButtonEvent event, boolean bl) {
         Minecraft.getInstance().setScreen(new AutocompleteScreen<>(this));
     }
 }

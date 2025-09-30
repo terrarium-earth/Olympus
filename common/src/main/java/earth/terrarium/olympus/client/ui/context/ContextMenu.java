@@ -14,6 +14,7 @@ import net.minecraft.client.MouseHandler;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -151,9 +152,9 @@ public class ContextMenu extends Overlay {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        super.mouseClicked(mouseX, mouseY, button);
-        if (this.list.isMouseOver(mouseX, mouseY)) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean bl) {
+        super.mouseClicked(event, bl);
+        if (this.list.isMouseOver(event.x(), event.y())) {
             if (!this.list.isScrolling() && this.autoClose) {
                 this.onClose();
             }

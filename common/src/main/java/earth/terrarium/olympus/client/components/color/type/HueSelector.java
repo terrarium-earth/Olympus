@@ -2,6 +2,7 @@ package earth.terrarium.olympus.client.components.color.type;
 
 import earth.terrarium.olympus.client.components.base.BaseWidget;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.util.Mth;
 
 public class HueSelector extends BaseWidget {
@@ -24,20 +25,20 @@ public class HueSelector extends BaseWidget {
         }
 
         int posX = Mth.floor(this.state.get().hue() * this.getWidth());
-        graphics.renderOutline(getX() + posX - 1, getY(), 3, getHeight(), 0xFF000000);
+        graphics.submitOutline(getX() + posX - 1, getY(), 3, getHeight(), 0xFF000000);
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button != 0) return false;
-        if (!isMouseOver(mouseX, mouseY)) return false;
-        float hue = Mth.clamp((float) (mouseX - getX()) / (float) getWidth(), 0f, 1f);
+    public boolean mouseClicked(MouseButtonEvent event, boolean bl) {
+        if (event.input() != 0) return false;
+        if (!isMouseOver(event.x(), event.y())) return false;
+        float hue = Mth.clamp((float) (event.x() - getX()) / (float) getWidth(), 0f, 1f);
         this.state.set(this.state.get().withHue(hue));
         return true;
     }
 
     @Override
-    public boolean mouseDragged(double d, double e, int i, double f, double g) {
-        return mouseClicked(d, e, i);
+    public boolean mouseDragged(MouseButtonEvent event, double dragX, double e) {
+        return this.mouseClicked(event, false);
     }
 }

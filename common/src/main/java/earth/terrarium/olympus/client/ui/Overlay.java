@@ -54,7 +54,7 @@ public abstract class Overlay extends BaseCursorScreen {
 
     public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         if (this.background == null) return;
-        this.background.renderWithTooltip(graphics, -1, -1, partialTick);
+        this.background.renderWithTooltipAndSubtitles(graphics, -1, -1, partialTick);
         graphics.nextStratum();
     }
 

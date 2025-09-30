@@ -10,6 +10,8 @@ import net.minecraft.client.gui.render.GuiRenderer;
 import net.minecraft.client.gui.render.state.GuiRenderState;
 import net.minecraft.client.gui.render.state.pip.PictureInPictureRenderState;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.feature.FeatureRenderDispatcher;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -27,7 +29,7 @@ public class GuiRendererMixin {
     @Unique private PictureInPictureHandler pipHandler = null;
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void initPictureInPictureHandler(GuiRenderState state, MultiBufferSource.BufferSource source, List<?> list, CallbackInfo ci) {
+    private void initPictureInPictureHandler(GuiRenderState guiRenderState, MultiBufferSource.BufferSource source, SubmitNodeCollector submitNodeCollector, FeatureRenderDispatcher featureRenderDispatcher, List list, CallbackInfo ci) {
         this.pipHandler = new PictureInPictureHandler(source);
     }
 

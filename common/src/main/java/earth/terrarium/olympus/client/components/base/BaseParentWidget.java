@@ -11,6 +11,9 @@ import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.ContainerEventHandler;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.navigation.FocusNavigationEvent;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -143,13 +146,13 @@ public abstract class BaseParentWidget extends BaseWidget implements ContainerEv
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        Optional<GuiEventListener> optional = this.getChildAt(mouseX, mouseY);
+    public boolean mouseClicked(MouseButtonEvent event, boolean bl) {
+        Optional<GuiEventListener> optional = this.getChildAt(event.x(), event.y());
         if (optional.isPresent()) {
             GuiEventListener guiEventListener = optional.get();
-            if (guiEventListener.mouseClicked(mouseX, mouseY, button)) {
+            if (guiEventListener.mouseClicked(event, bl)) {
                 this.setFocused(guiEventListener);
-                if (button == 0) {
+                if (event.input() == 0) {
                     this.setDragging(true);
                 }
                 return true;
@@ -159,28 +162,28 @@ public abstract class BaseParentWidget extends BaseWidget implements ContainerEv
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        return ContainerEventHandler.super.mouseReleased(mouseX, mouseY, button);
+    public boolean mouseReleased(MouseButtonEvent event) {
+        return ContainerEventHandler.super.mouseReleased(event);
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-        return ContainerEventHandler.super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+    public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY) {
+        return ContainerEventHandler.super.mouseDragged(event, dragX, dragY);
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        return ContainerEventHandler.super.keyPressed(keyCode, scanCode, modifiers);
+    public boolean keyPressed(KeyEvent event) {
+        return ContainerEventHandler.super.keyPressed(event);
     }
 
     @Override
-    public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
-        return ContainerEventHandler.super.keyReleased(keyCode, scanCode, modifiers);
+    public boolean keyReleased(KeyEvent event) {
+        return ContainerEventHandler.super.keyReleased(event);
     }
 
     @Override
-    public boolean charTyped(char codePoint, int modifiers) {
-        return ContainerEventHandler.super.charTyped(codePoint, modifiers);
+    public boolean charTyped(CharacterEvent event) {
+        return ContainerEventHandler.super.charTyped(event);
     }
 
     @Override

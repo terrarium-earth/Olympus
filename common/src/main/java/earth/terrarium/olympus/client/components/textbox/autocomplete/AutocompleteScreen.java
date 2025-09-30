@@ -9,6 +9,8 @@ import earth.terrarium.olympus.client.utils.ListenableState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.ResourceLocation;
 
@@ -70,8 +72,8 @@ public class AutocompleteScreen<T> extends Overlay {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (super.mouseClicked(mouseX, mouseY, button)) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean bl) {
+        if (super.mouseClicked(event, bl)) {
             return true;
         }
         this.onClose();
@@ -93,7 +95,7 @@ public class AutocompleteScreen<T> extends Overlay {
                     .map(this.widget.mapper)
                     .map(it -> new AutocompleteEntry(this.width() - 3, ENTRY_HEIGHT, it, () -> {
                         this.text.set(it);
-                        this.textBox.keyPressed(InputConstants.KEY_RETURN, 0, 0);
+                        this.textBox.keyPressed(new KeyEvent(InputConstants.KEY_RETURN, 0, 0));
                         this.onClose();
                     }))
                     .forEach(this.filteredSuggestions::add);

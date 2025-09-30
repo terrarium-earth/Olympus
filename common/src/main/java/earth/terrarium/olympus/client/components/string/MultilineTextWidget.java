@@ -1,11 +1,11 @@
 package earth.terrarium.olympus.client.components.string;
 
-import com.teamresourceful.resourcefullib.client.components.CursorWidget;
-import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
+import com.mojang.blaze3d.platform.cursor.CursorTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractStringWidget;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class MultilineTextWidget extends AbstractStringWidget implements CursorWidget {
+public class MultilineTextWidget extends AbstractStringWidget {
 	protected float alignX = 0.5f;
 	protected float textAlign = 0f;
 	protected boolean shadow;
@@ -24,7 +24,6 @@ public class MultilineTextWidget extends AbstractStringWidget implements CursorW
 
 	protected List<FormattedCharSequence> lines;
 	protected int maxLineWidth;
-	protected CursorScreen.Cursor lastCursor = CursorScreen.Cursor.DEFAULT;
 
 	protected List<Consumer<Style>> styleActions = new ArrayList<>();
 
@@ -125,9 +124,7 @@ public class MultilineTextWidget extends AbstractStringWidget implements CursorW
 
 		Style style = getStyle(mouseX, mouseY);
 		if (style != null && style.getClickEvent() != null) {
-			lastCursor = CursorScreen.Cursor.POINTER;
-		} else {
-			lastCursor = CursorScreen.Cursor.DEFAULT;
+            graphics.requestCursor(CursorTypes.POINTING_HAND);
 		}
 	}
 
@@ -151,19 +148,14 @@ public class MultilineTextWidget extends AbstractStringWidget implements CursorW
 		return font.getSplitter().componentStyleAtWidth(lines.get(lineIndex), (int) ((mouseX - x) * (1f / scale)));
 	}
 
-	@Override
-	public CursorScreen.Cursor getCursor() {
-		return lastCursor;
-	}
-
-	@Override
-	public void onClick(double mouseX, double mouseY) {
-		var style = getStyle(mouseX, mouseY);
-		if (style == null) return;
-		if (style.getClickEvent() != null) {
-			for (Consumer<Style> styleAction : styleActions) {
-				styleAction.accept(style);
-			}
-		}
-	}
+    @Override
+    public void onClick(MouseButtonEvent event, boolean bl) {
+        var style = getStyle(event.x(), event.y());
+        if (style == null) return;
+        if (style.getClickEvent() != null) {
+            for (Consumer<Style> styleAction : styleActions) {
+                styleAction.accept(style);
+            }
+        }
+    }
 }

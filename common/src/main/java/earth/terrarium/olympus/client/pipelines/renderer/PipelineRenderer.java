@@ -10,6 +10,7 @@ import com.mojang.blaze3d.vertex.MeshData;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ARGB;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 import java.util.Objects;
@@ -47,7 +48,7 @@ public class PipelineRenderer {
                 .writeTransform(
                         RenderSystem.getModelViewMatrix(),
                         new Vector4f(ARGB.redFloat(color), ARGB.greenFloat(color), ARGB.blueFloat(color), ARGB.alphaFloat(color)),
-                        RenderSystem.getModelOffset(),
+                        new Vector3f(),
                         RenderSystem.getTextureMatrix(),
                         RenderSystem.getShaderLineWidth()
                 );

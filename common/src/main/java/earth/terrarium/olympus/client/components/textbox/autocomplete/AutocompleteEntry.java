@@ -5,6 +5,8 @@ import earth.terrarium.olympus.client.components.base.BaseWidget;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -34,8 +36,8 @@ public class AutocompleteEntry extends BaseWidget {
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (keyCode == InputConstants.KEY_RETURN && this.isFocused()) {
+    public boolean keyPressed(KeyEvent event) {
+        if (event.input() == InputConstants.KEY_RETURN && this.isFocused()) {
             this.action.run();
             return true;
         }
@@ -43,7 +45,7 @@ public class AutocompleteEntry extends BaseWidget {
     }
 
     @Override
-    public void onClick(double mouseX, double mouseY) {
+    public void onClick(MouseButtonEvent event, boolean bl) {
         this.action.run();
     }
 }

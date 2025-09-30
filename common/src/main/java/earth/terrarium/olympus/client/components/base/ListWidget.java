@@ -7,6 +7,7 @@ import earth.terrarium.olympus.client.ui.UIConstants;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -142,12 +143,12 @@ public class ListWidget extends BaseParentWidget {
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
+    public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY) {
         if (this.scrolling) {
-            this.moveTo(mouseY);
+            this.moveTo(event.y());
             return true;
         }
-        return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+        return super.mouseDragged(event, dragX, dragY);
     }
 
     @Override
@@ -157,21 +158,21 @@ public class ListWidget extends BaseParentWidget {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (isMouseOverScrollBar(mouseX, mouseY)) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean bl) {
+        if (isMouseOverScrollBar(event.x(), event.y())) {
             this.scrolling = true;
-            this.moveTo(mouseY);
+            this.moveTo(event.y());
             return true;
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(event, bl);
     }
 
     @Override
-    public boolean mouseReleased(double d, double e, int i) {
-        if (i == 0) {
+    public boolean mouseReleased(MouseButtonEvent event) {
+        if (event.input() == 0) {
             this.scrolling = false;
         }
-        return super.mouseReleased(d, e, i);
+        return super.mouseReleased(event);
     }
 
     private void moveTo(double mouseY) {

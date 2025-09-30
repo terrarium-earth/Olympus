@@ -3,6 +3,7 @@ package earth.terrarium.olympus.client.components.color.type;
 import earth.terrarium.olympus.client.components.base.BaseWidget;
 import earth.terrarium.olympus.client.elements.GradientGuiElement;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.util.Mth;
 
 public class SaturationBrightnessSelector extends BaseWidget {
@@ -45,15 +46,15 @@ public class SaturationBrightnessSelector extends BaseWidget {
             }
         }
 
-        graphics.renderOutline(getX() + posX - 1, getY() + posY - 1, 3, 3, 0xFF000000);
+        graphics.submitOutline(getX() + posX - 1, getY() + posY - 1, 3, 3, 0xFF000000);
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button != 0) return false;
-        if (!isMouseOver(mouseX, mouseY)) return false;
-        int x = (int) mouseX - this.getX();
-        int y = (int) mouseY - this.getY();
+    public boolean mouseClicked(MouseButtonEvent event, boolean bl) {
+        if (event.input() != 0) return false;
+        if (!isMouseOver(event.x(), event.y())) return false;
+        int x = (int) event.x() - this.getX();
+        int y = (int) event.y() - this.getY();
         if (x < 0 || x >= this.getWidth() || y < 0 || y >= this.getHeight()) return false;
         this.state.set(HsbColor.of(
                 this.state.get().hue(),
@@ -65,7 +66,7 @@ public class SaturationBrightnessSelector extends BaseWidget {
     }
 
     @Override
-    public boolean mouseDragged(double d, double e, int i, double f, double g) {
-        return mouseClicked(d, e, i);
+    public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY) {
+        return this.mouseClicked(event, false);
     }
 }

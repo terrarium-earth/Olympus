@@ -73,7 +73,8 @@ public class MapWidget extends BaseWidget {
 
     public void refreshMap() {
         var player = Minecraft.getInstance().player;
-        if (player == null) return;
+        var level = Minecraft.getInstance().level;
+        if (player == null || level == null) return;
 
         var chunkPos = player.chunkPosition();
         int minX = chunkPos.getMinBlockX() - scale;
@@ -83,10 +84,10 @@ public class MapWidget extends BaseWidget {
 
         if (scale / 8 > 12) {
             // If the render distance is greater than 12 chunks, run asynchronously to avoid stuttering.
-            CompletableFuture.supplyAsync(() -> MapTopologyAlgorithm.getColors(minX, minZ, maxX, maxZ, player.clientLevel, player)).thenAcceptAsync(colors ->
+            CompletableFuture.supplyAsync(() -> MapTopologyAlgorithm.getColors(minX, minZ, maxX, maxZ, level, player)).thenAcceptAsync(colors ->
                     this.mapRenderer.set(new MapRenderer(colors, scale * 2 + 16)), Minecraft.getInstance());
         } else {
-            int[][] colors = MapTopologyAlgorithm.getColors(minX, minZ, maxX, maxZ, player.clientLevel, player);
+            int[][] colors = MapTopologyAlgorithm.getColors(minX, minZ, maxX, maxZ, level, player);
             this.mapRenderer.set(new MapRenderer(colors, scale * 2 + 16));
         }
     }

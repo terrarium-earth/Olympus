@@ -14,7 +14,8 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.WidgetSprites;
-import net.minecraft.client.gui.navigation.CommonInputs;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.util.ARGB;
 import org.jetbrains.annotations.Nullable;
@@ -95,8 +96,8 @@ public class Button extends BaseWidget implements CursorWidget {
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (this.active && this.visible && CommonInputs.selected(keyCode)) {
+    public boolean keyPressed(KeyEvent event) {
+        if (this.active && this.visible && event.isSelection()) {
             var action = this.actions.get(InputConstants.MOUSE_BUTTON_LEFT);
             if (action != null) {
                 this.playDownSound(Minecraft.getInstance().getSoundManager());
@@ -108,9 +109,9 @@ public class Button extends BaseWidget implements CursorWidget {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (this.active && this.visible && this.isMouseOver(mouseX, mouseY)) {
-            var action = this.actions.get(button);
+    public boolean mouseClicked(MouseButtonEvent event, boolean bl) {
+        if (this.active && this.visible && this.isMouseOver(event.x(), event.y())) {
+            var action = this.actions.get(event.input());
             if (action != null) {
                 this.playDownSound(Minecraft.getInstance().getSoundManager());
                 action.run();

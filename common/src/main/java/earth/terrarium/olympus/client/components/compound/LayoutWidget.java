@@ -12,6 +12,7 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.layouts.Layout;
 import net.minecraft.client.gui.layouts.LayoutElement;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -178,7 +179,7 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
+    public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY) {
         var actualWidth = getViewWidth();
         var actualHeight = getViewHeight();
 
@@ -196,7 +197,7 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
             return true;
         }
 
-        return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+        return super.mouseDragged(event, dragX, dragY);
     }
 
     @Override
@@ -220,26 +221,26 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (!isMouseOver(mouseX, mouseY)) return false;
-        if (isOverScrollbarX((int) mouseX, (int) mouseY) && isXScrollbarVisible()) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean bl) {
+        if (!isMouseOver(event.x(), event.y())) return false;
+        if (isOverScrollbarX((int) event.x(), (int) event.y()) && isXScrollbarVisible()) {
             draggingScrollbarX = true;
             setDragging(true);
             return true;
-        } else if (isOverScrollbarY((int) mouseX, (int) mouseY) && isYScrollbarVisible()) {
+        } else if (isOverScrollbarY((int) event.x(), (int) event.y()) && isYScrollbarVisible()) {
             draggingScrollbarY = true;
             setDragging(true);
             return true;
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(event, bl);
     }
 
     @Override
-    public boolean mouseReleased(double d, double e, int i) {
+    public boolean mouseReleased(MouseButtonEvent event) {
         this.draggingScrollbarX = false;
         this.draggingScrollbarY = false;
         setDragging(false);
-        return super.mouseReleased(d, e, i);
+        return super.mouseReleased(event);
     }
 
     // region Builder methods

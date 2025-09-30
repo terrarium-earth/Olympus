@@ -20,12 +20,11 @@ public class GradientGuiElement extends BaseGuiElement {
     }
 
     @Override
-    public void buildVertices(VertexConsumer consumer, float z) {
+    public void buildVertices(VertexConsumer consumer) {
         var bounds = this.bounds();
-        consumer.addVertexWith2DPose(this.pose(), bounds.left(), bounds.top(), z).setColor(this.col1);
-        consumer.addVertexWith2DPose(this.pose(), bounds.left(), bounds.bottom(), z).setColor(this.col3);
-        consumer.addVertexWith2DPose(this.pose(), bounds.right(), bounds.bottom(), z).setColor(this.col4);
-        consumer.addVertexWith2DPose(this.pose(), bounds.right(), bounds.top(), z).setColor(this.col2);
+        consumer.addVertexWith2DPose(this.pose(), bounds.left(), bounds.top()).setColor(this.col1);
+        consumer.addVertexWith2DPose(this.pose(), bounds.left(), bounds.bottom()).setColor(this.col3);
+        consumer.addVertexWith2DPose(this.pose(), bounds.right(), bounds.bottom()).setColor(this.col4);
+        consumer.addVertexWith2DPose(this.pose(), bounds.right(), bounds.top()).setColor(this.col2);
     }
-
 }

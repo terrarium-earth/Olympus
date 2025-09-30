@@ -64,7 +64,7 @@ public abstract class BaseGuiElement implements GuiElementRenderState {
     }
 
     @Override
-    public abstract void buildVertices(VertexConsumer consumer, float z);
+    public abstract void buildVertices(VertexConsumer consumer);
 
     public void submit(@NotNull GuiGraphics graphics, int x, int y, int width, int height) {
         this.pose = new Matrix3x2f(graphics.pose());
