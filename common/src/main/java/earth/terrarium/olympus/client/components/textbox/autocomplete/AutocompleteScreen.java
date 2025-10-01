@@ -64,8 +64,8 @@ public class AutocompleteScreen<T> extends Overlay {
         this.textBox.withPosition(this.widget.getX(), this.widget.getY());
 
         ListWidget old = this.options;
-        this.options = addRenderableWidget(new ListWidget(this.width() - 3, this.height() - 3));
-        this.options.setPosition(this.x() + 1, this.y() + 2);
+        this.options = addRenderableWidget(new ListWidget(this.width() - 4, this.height() - 3));
+        this.options.setPosition(this.x() + 2, this.y() + 2);
         this.options.update(old);
 
         setFocused(textBox);
@@ -103,6 +103,6 @@ public class AutocompleteScreen<T> extends Overlay {
 
         this.options.set(this.filteredSuggestions);
         this.options.setHeight(this.height() - 3);
-        this.options.setPosition(this.x() + 1, this.y() + 2);
+        this.options.setPosition(this.x() + 2, this.y() + 2);
     }
 }

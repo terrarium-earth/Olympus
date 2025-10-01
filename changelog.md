@@ -1,1 +1,1 @@
-- Update to 1.21.6
+- Fix auto complete list entries not being rendered correctly

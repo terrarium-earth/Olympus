@@ -32,7 +32,7 @@ public class AutocompleteEntry extends BaseWidget {
         ResourceLocation texture = this.isHovered() ? ENTRY_HOVERED : ENTRY;
         graphics.blitSprite(RenderPipelines.GUI_TEXTURED, texture, this.getX(), this.getY(), this.getWidth(), this.getHeight());
         int textOffset = (this.height - 8) / 2;
-        graphics.drawString(Minecraft.getInstance().font, this.value, this.getX() + textOffset, this.getY() + textOffset, 0xFEFEFE);
+        graphics.drawString(Minecraft.getInstance().font, this.value, this.getX() + textOffset, this.getY() + textOffset, 0xFFFEFEFE);
     }
 
     @Override
