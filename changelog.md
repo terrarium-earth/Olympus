@@ -1,1 +1,2 @@
-- Fix auto complete list entries not being rendered correctly
+- Fix incorrect border on rounded rectangles.
+- Add czech translations - Mayaqq
