@@ -45,8 +45,8 @@ public class RoundedRectanglePIPRenderer extends PictureInPictureRenderer<Rounde
         var bounds = state.bounds;
 
         float scale = (float) Minecraft.getInstance().getWindow().getGuiScale();
-        float scaledWidth = bounds.width() * scale;
-        float scaledHeight = bounds.height() * scale;
+        float scaledWidth = (bounds.width() - state.borderWidth() * 2)  * scale;
+        float scaledHeight = (bounds.height() - state.borderWidth() * 2) * scale;
 
         var buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
         buffer.addVertex(0f, 0f, 0f).setColor(state.color());
@@ -64,7 +64,7 @@ public class RoundedRectanglePIPRenderer extends PictureInPictureRenderer<Rounde
                         ),
                         new Vector4f(state.borderRadius()),
                         state.borderWidth(),
-                        new Vector2f(scaledWidth, scaledHeight),
+                        new Vector2f(scaledWidth - state.borderWidth() * 2, scaledHeight - state.borderWidth() * 2),
                         new Vector2f(scaledWidth / 2f, scaledHeight / 2f),
                         scale
                 ))
@@ -94,7 +94,11 @@ public class RoundedRectanglePIPRenderer extends PictureInPictureRenderer<Rounde
                     x, y, x + width, y + height,
                     color, borderColor, borderRadius, borderWidth,
                     new Matrix3x2f(graphics.pose()), GuiGraphicsHelper.getLastScissor(graphics),
-                    OlympusPictureInPictureRenderState.getRelativeBounds(graphics, x, y, x + width, y + height)
+                    OlympusPictureInPictureRenderState.getRelativeBounds(
+                            graphics,
+                            x, y,
+                            x + width + borderWidth * 2, y + height + borderWidth * 2
+                    )
             );
         }
 

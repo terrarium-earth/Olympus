@@ -31,7 +31,7 @@ public class ShaderExample extends ExampleScreen {
                 this.width / 2 + 50, 50,
                 100, 100,
                 Color.RAINBOW.withAlpha(0x80).getValue(), 0xFF00FF00,
-                15f, 2
+                5f, 2
         );
 
 
