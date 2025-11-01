@@ -112,7 +112,7 @@ public class MapWidget extends BaseWidget {
 
         try (var pose = new CloseablePoseStack(graphics)) {
             pose.translate(this.getX() + left + x, this.getY() + top + y, 0.0);
-            pose.mulPose(Axis.ZP.rotationDegrees(player.getYRot()));
+            pose.mulPose(Axis.ZP.rotationDegrees(player.getYRot() + 180));
             pose.translate(-4f, -4f, 0f);
             graphics.blit(MAP_ICONS, 0, 0, 0f, 0f, 8, 8, 8, 8);
         }
