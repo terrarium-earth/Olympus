@@ -1,2 +1,1 @@
-- Fix incorrect border on rounded rectangles.
-- Add czech translations - Mayaqq
+- Update to 1.21.11

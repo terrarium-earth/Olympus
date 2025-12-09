@@ -9,7 +9,7 @@ import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class WidgetRenderers {
 
@@ -55,7 +55,7 @@ public class WidgetRenderers {
         };
     }
 
-    public static <T extends AbstractWidget> IconWidgetRenderer<T> icon(ResourceLocation icon) {
+    public static <T extends AbstractWidget> IconWidgetRenderer<T> icon(Identifier icon) {
         return new IconWidgetRenderer<>(icon);
     }
 
@@ -63,7 +63,7 @@ public class WidgetRenderers {
         return new TextWidgetRenderer<>(text);
     }
 
-    public static <T extends AbstractWidget> TextWithIconWidgetRenderer<T> textWithIcon(Component text, ResourceLocation icon) {
+    public static <T extends AbstractWidget> TextWithIconWidgetRenderer<T> textWithIcon(Component text, Identifier icon) {
         return new TextWithIconWidgetRenderer<>(text(text), icon(icon));
     }
 

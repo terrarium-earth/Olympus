@@ -21,7 +21,7 @@ import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.apache.commons.lang3.function.Consumers;
 
 import java.util.List;
@@ -44,8 +44,8 @@ public class ColorPickerOverlay extends Overlay {
     private int height;
     private Color[] presets = new Color[0];
 
-    private ResourceLocation background = UIConstants.MODAL;
-    private ResourceLocation inset = UIConstants.MODAL_INSET;
+    private Identifier background = UIConstants.MODAL;
+    private Identifier inset = UIConstants.MODAL_INSET;
 
     private Consumer<Button> eyedropperSettings = Consumers.nop();
     private BiConsumer<Button, DropdownState<ColorPresetType>> dropdownBtnSettings = (ignored1, ignored2) -> {};
@@ -64,12 +64,12 @@ public class ColorPickerOverlay extends Overlay {
         this.type = DropdownState.of(ColorPresetType.MC_COLORS);
     }
 
-    public ColorPickerOverlay withBackground(ResourceLocation background) {
+    public ColorPickerOverlay withBackground(Identifier background) {
         this.background = background;
         return this;
     }
 
-    public ColorPickerOverlay withInset(ResourceLocation inset) {
+    public ColorPickerOverlay withInset(Identifier inset) {
         this.inset = inset;
         return this;
     }

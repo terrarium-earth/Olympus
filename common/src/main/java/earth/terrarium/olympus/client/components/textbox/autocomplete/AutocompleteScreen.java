@@ -12,14 +12,14 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AutocompleteScreen<T> extends Overlay {
 
-    private static final ResourceLocation LIST = UIConstants.id("lists/background");
+    private static final Identifier LIST = UIConstants.id("lists/background");
     private static final int ENTRY_HEIGHT = 12;
 
     private final List<AbstractWidget> filteredSuggestions = new ArrayList<>();

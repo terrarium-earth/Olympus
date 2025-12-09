@@ -17,7 +17,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ public class ContextMenu extends Overlay {
 
     private final List<Supplier<AbstractWidget>> actions = new ArrayList<>();
 
-    private ResourceLocation texture = UIConstants.LIST_BG;
+    private Identifier texture = UIConstants.LIST_BG;
     private int x;
     private int y;
     private int contextHeight;
@@ -130,7 +130,7 @@ public class ContextMenu extends Overlay {
         return this;
     }
 
-    public ContextMenu withTexture(ResourceLocation texture) {
+    public ContextMenu withTexture(Identifier texture) {
         this.texture = texture;
         return this;
     }

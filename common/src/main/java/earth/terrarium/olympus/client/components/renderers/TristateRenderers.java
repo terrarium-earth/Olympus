@@ -9,7 +9,7 @@ import earth.terrarium.olympus.client.ui.UIIcons;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class TristateRenderers {
 
@@ -21,7 +21,7 @@ public class TristateRenderers {
         };
     }
 
-    public static ResourceLocation getIcon(TriState state) {
+    public static Identifier getIcon(TriState state) {
         return switch (state) {
             case TRUE -> UIIcons.CHECKMARK;
             case FALSE -> UIIcons.CROSS;

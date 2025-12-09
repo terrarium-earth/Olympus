@@ -1,6 +1,5 @@
 package earth.terrarium.olympus.client.pipelines.pips;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
@@ -12,10 +11,9 @@ import earth.terrarium.olympus.client.utils.GuiGraphicsHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
+import net.minecraft.client.gui.render.TextureSetup;
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
-import net.minecraft.client.gui.render.state.pip.PictureInPictureRenderState;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix3x2f;
 import org.joml.Vector2f;
@@ -23,7 +21,7 @@ import org.joml.Vector4f;
 
 import java.util.function.Function;
 
-public class RoundedTexturePIPRenderer extends PictureInPictureRenderer<RoundedTexturePIPRenderer.State> {
+public class RoundedTexturePIPRenderer extends PictureInPictureRenderer<RoundedTexturePIPRenderer.@NotNull State> {
 
     private State lastState;
 
@@ -42,7 +40,7 @@ public class RoundedTexturePIPRenderer extends PictureInPictureRenderer<RoundedT
     }
 
     @Override
-    protected void renderToTexture(State state, PoseStack stack) {
+    protected void renderToTexture(State state, @NotNull PoseStack stack) {
         var bounds = state.bounds;
 
         float scale = (float) Minecraft.getInstance().getWindow().getGuiScale();
@@ -55,8 +53,6 @@ public class RoundedTexturePIPRenderer extends PictureInPictureRenderer<RoundedT
         buffer.addVertex(scaledWidth, scaledHeight, 0f).setUv(state.u1(), state.v1()).setColor(-1);
         buffer.addVertex(scaledWidth, 0f, 0f).setUv(state.u1(), state.v0()).setColor(-1);
 
-        RenderSystem.setShaderTexture(0, Minecraft.getInstance().getTextureManager().getTexture(state.texture()).getTextureView());
-
         PipelineRenderer.builder(RoundedTexture.PIPELINE, buffer.buildOrThrow())
                 .uniform(RoundedTextureUniform.STORAGE, RoundedTextureUniform.of(
                         new Vector4f(state.borderRadius()),
@@ -64,6 +60,7 @@ public class RoundedTexturePIPRenderer extends PictureInPictureRenderer<RoundedT
                         new Vector2f(scaledWidth / 2f, scaledHeight / 2f),
                         scale
                 ))
+                .textures(state.texture())
                 .color(state.color())
                 .draw();
 
@@ -78,7 +75,7 @@ public class RoundedTexturePIPRenderer extends PictureInPictureRenderer<RoundedT
     public record State(
             int x0, int y0, int x1, int y1,
             float u0, float v0, float u1, float v1,
-            ResourceLocation texture, int color,
+            TextureSetup texture, int color,
             int borderRadius,
             Matrix3x2f pose, ScreenRectangle scissorArea, ScreenRectangle bounds
     ) implements OlympusPictureInPictureRenderState<State> {
@@ -87,7 +84,7 @@ public class RoundedTexturePIPRenderer extends PictureInPictureRenderer<RoundedT
                 GuiGraphics graphics,
                 int x, int y, int width, int height,
                 float u0, float v0, float u1, float v1,
-                ResourceLocation texture, int color, int borderRadius
+                TextureSetup texture, int color, int borderRadius
         ) {
             this(
                     x, y, x + width, y + height,

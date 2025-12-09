@@ -9,10 +9,10 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class EyedropperOverlay extends Overlay {
-    private static final ResourceLocation SCREEN_TEXTURE = ResourceLocation.fromNamespaceAndPath("olympus", "dynamic/screen");
+    private static final Identifier SCREEN_TEXTURE = Identifier.fromNamespaceAndPath("olympus", "dynamic/screen");
 
     private final NativeImage image;
     private final HsbState state;
@@ -49,7 +49,7 @@ public class EyedropperOverlay extends Overlay {
 
         graphics.blit(SCREEN_TEXTURE, x - 5, y - 5, x + 15, y + 15, u0, u1, v0, v1);
 
-        graphics.submitOutline(x - 5, y - 5, 20, 20, 0xFFFFFFFF);
+        graphics.renderOutline(x - 5, y - 5, 20, 20, 0xFFFFFFFF);
 
         int pixelX = (int) (mouseX * guiScale);
         int pixelY = (int) (mouseY * guiScale);

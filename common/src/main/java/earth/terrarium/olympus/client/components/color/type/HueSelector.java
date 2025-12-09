@@ -25,7 +25,7 @@ public class HueSelector extends BaseWidget {
         }
 
         int posX = Mth.floor(this.state.get().hue() * this.getWidth());
-        graphics.submitOutline(getX() + posX - 1, getY(), 3, getHeight(), 0xFF000000);
+        graphics.renderOutline(getX() + posX - 1, getY(), 3, getHeight(), 0xFF000000);
     }
 
     @Override

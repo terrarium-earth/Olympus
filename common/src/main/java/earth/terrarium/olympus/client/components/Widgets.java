@@ -28,7 +28,6 @@ import earth.terrarium.olympus.client.ui.UIConstants;
 import earth.terrarium.olympus.client.utils.State;
 import earth.terrarium.olympus.client.utils.StateUtils;
 import earth.terrarium.olympus.client.utils.Translatable;
-import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -36,8 +35,10 @@ import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.layouts.FrameLayout;
 import net.minecraft.client.gui.layouts.LayoutSettings;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Util;
 import org.apache.commons.lang3.function.Consumers;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.function.Consumer;
@@ -150,7 +151,8 @@ public final class Widgets {
             frame.withStretchToContentHeight();
             frame.withWidthCallback((frameWidget, frameLayout) -> frameLayout.setMinWidth(frameWidget.getViewWidth()));
             frame.withContents(contents -> {
-                contents.addChild(new StringWidget(label, font).setColor(color.getValue()), LayoutSettings::alignHorizontallyLeft);
+                var text = label.copy().withColor(color.getValue());
+                contents.addChild(new StringWidget(text, font), LayoutSettings::alignHorizontallyLeft);
                 contents.addChild(widget, LayoutSettings::alignHorizontallyRight);
             });
             factory.accept(frame);
@@ -187,7 +189,11 @@ public final class Widgets {
 
     public static TextBox doubleInput(State<Double> state, Consumer<TextBox> factory) {
         var textBox = new TextBox(new State<>() {
-            String temp = NumberFormat.getInstance().format(state.get());
+            final NumberFormat formatter = Util.make(new DecimalFormat("#"), it -> {
+                it.setGroupingUsed(false);
+                it.setMaximumFractionDigits(15);
+            });
+            String temp = formatter.format(state.get());
 
             @Override
             public void set(String value) {

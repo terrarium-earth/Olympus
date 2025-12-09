@@ -9,7 +9,7 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,8 +19,8 @@ import java.util.List;
 
 public class ListWidget extends BaseParentWidget {
 
-    private static final ResourceLocation SCROLLBAR = UIConstants.id("lists/scroll/bar");
-    private static final ResourceLocation SCROLLBAR_THUMB = UIConstants.id("lists/scroll/thumb");
+    private static final Identifier SCROLLBAR = UIConstants.id("lists/scroll/bar");
+    private static final Identifier SCROLLBAR_THUMB = UIConstants.id("lists/scroll/thumb");
 
     protected final List<AbstractWidget> items = new ArrayList<>();
 

@@ -4,22 +4,22 @@ import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.concurrent.CompletableFuture;
 
 public class ImageEntry {
 
     private final CompletableFuture<NativeImage> image;
-    private final ResourceLocation location;
+    private final Identifier location;
     private boolean loaded = false;
 
-    protected ImageEntry(CompletableFuture<NativeImage> image, ResourceLocation location) {
+    protected ImageEntry(CompletableFuture<NativeImage> image, Identifier location) {
         this.image = image;
         this.location = location;
     }
 
-    public ResourceLocation id() {
+    public Identifier id() {
         var manager = Minecraft.getInstance().getTextureManager();
         if (!this.loaded && this.image.state() == CompletableFuture.State.SUCCESS) {
             manager.register(this.location, new DynamicTexture(location::toString, this.image.resultNow()));

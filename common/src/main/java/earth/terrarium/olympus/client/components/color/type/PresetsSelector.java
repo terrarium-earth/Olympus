@@ -11,7 +11,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,12 +23,12 @@ public class PresetsSelector extends BaseWidget {
     private final State<ColorPresetType> type;
     private final State<Color> state;
     private final boolean withAlpha;
-    private final ResourceLocation background;
+    private final Identifier background;
 
     private Collection<Color> colors = new ArrayList<>();
     private ColorPresetType lastType;
 
-    public PresetsSelector(int width, Color[] presets, State<ColorPresetType> type, State<Color> state, boolean withAlpha, ResourceLocation background) {
+    public PresetsSelector(int width, Color[] presets, State<ColorPresetType> type, State<Color> state, boolean withAlpha, Identifier background) {
         super(width, (width / 8 * 2) + 6);
         this.presets = presets;
         this.type = type;
@@ -72,9 +72,9 @@ public class PresetsSelector extends BaseWidget {
             int rgba = color.getValue();
             if (!withAlpha) rgba |= 0xFF000000;
             graphics.fill(x, y, x + size, y + size, rgba);
-            graphics.submitOutline(x, y, size, size, 0xFFDDDDDD);
+            graphics.renderOutline(x, y, size, size, 0xFFDDDDDD);
             if (mouseX >= x && mouseX <= x + size && mouseY >= y && mouseY <= y + size) {
-                graphics.submitOutline(x, y, size, size, 0xFF000000);
+                graphics.renderOutline(x, y, size, size, 0xFF000000);
                 Screen screen = Minecraft.getInstance().screen;
                 if (screen != null) {
                     if (!withAlpha) rgba &= 0x00FFFFFF;

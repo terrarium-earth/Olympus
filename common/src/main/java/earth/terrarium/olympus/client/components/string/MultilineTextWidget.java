@@ -2,12 +2,14 @@ package earth.terrarium.olympus.client.components.string;
 
 import com.mojang.blaze3d.platform.cursor.CursorTypes;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ActiveTextCollector;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractStringWidget;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.util.ARGB;
 import net.minecraft.util.FormattedCharSequence;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,6 +26,7 @@ public class MultilineTextWidget extends AbstractStringWidget {
 
 	protected List<FormattedCharSequence> lines;
 	protected int maxLineWidth;
+    protected int color = -1;
 
 	protected List<Consumer<Style>> styleActions = new ArrayList<>();
 
@@ -44,7 +47,7 @@ public class MultilineTextWidget extends AbstractStringWidget {
 	}
 
 	public MultilineTextWidget setColor(int color) {
-		super.setColor(color);
+        this.color = color;
 		return this;
 	}
 
@@ -128,7 +131,11 @@ public class MultilineTextWidget extends AbstractStringWidget {
 		}
 	}
 
-	@Nullable
+    @Override
+    public void visitLines(@NotNull ActiveTextCollector collector) {
+    }
+
+    @Nullable
 	public Style getStyle(double mouseX, double mouseY) {
 		if (!isMouseOver(mouseX, mouseY)) return null;
 		Font font = this.getFont();
@@ -145,7 +152,7 @@ public class MultilineTextWidget extends AbstractStringWidget {
 		float lineWidth = font.width(this.lines.get(lineIndex)) * scale;
 		x += (maxLineWidth - lineWidth) * textAlign;
 		if (!(mouseX >= x && mouseX <= x + lineWidth)) return null;
-		return font.getSplitter().componentStyleAtWidth(lines.get(lineIndex), (int) ((mouseX - x) * (1f / scale)));
+        return StringUtils.getStyleAt(font, this.lines.get(lineIndex), (int) ((mouseX - x) * (1f / scale)));
 	}
 
     @Override
@@ -157,5 +164,9 @@ public class MultilineTextWidget extends AbstractStringWidget {
                 styleAction.accept(style);
             }
         }
+    }
+
+    public int getColor() {
+        return ARGB.color(this.alpha, this.color);
     }
 }

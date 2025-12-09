@@ -62,14 +62,11 @@ public class TextExample extends ExampleScreen {
         FrameLayout.centerInRectangle(entries, 0, 0, this.width, this.height);
     }
 
-    @Override
-    public boolean handleComponentClicked(@Nullable Style style) {
-        if (style == null) return false;
+    public void handleComponentClicked(@Nullable Style style) {
+        if (style == null) return;
         ClickEvent event = style.getClickEvent();
         if (event instanceof ClickEvent.ChangePage(int page)) {
             LOGGER.info("Page changed to {}", page);
-            return true;
         }
-        return super.handleComponentClicked(style);
     }
 }

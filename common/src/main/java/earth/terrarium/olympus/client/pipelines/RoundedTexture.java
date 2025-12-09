@@ -8,27 +8,28 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import earth.terrarium.olympus.client.pipelines.pips.RoundedTexturePIPRenderer;
 import earth.terrarium.olympus.client.pipelines.uniforms.RoundedTextureUniform;
 import earth.terrarium.olympus.client.utils.GuiGraphicsHelper;
+import earth.terrarium.olympus.client.utils.TextureUtils;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RoundedTexture {
 
     public static final RenderPipeline PIPELINE = RenderPipeline.builder()
-            .withLocation(ResourceLocation.fromNamespaceAndPath("olympus", "rounded_tex"))
+            .withLocation(Identifier.fromNamespaceAndPath("olympus", "rounded_tex"))
             .withSampler("Sampler0")
             .withUniform("DynamicTransforms", UniformType.UNIFORM_BUFFER)
             .withUniform("Projection", UniformType.UNIFORM_BUFFER)
             .withUniform(RoundedTextureUniform.NAME, UniformType.UNIFORM_BUFFER)
             .withBlend(BlendFunction.TRANSLUCENT)
-            .withFragmentShader(ResourceLocation.fromNamespaceAndPath("olympus", "core/rounded_tex"))
-            .withVertexShader(ResourceLocation.fromNamespaceAndPath("olympus", "core/rounded_tex"))
+            .withFragmentShader(Identifier.fromNamespaceAndPath("olympus", "core/rounded_tex"))
+            .withVertexShader(Identifier.fromNamespaceAndPath("olympus", "core/rounded_tex"))
             .withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
             .build();
 
     public static void draw(
             GuiGraphics graphics,
             int x, int y, int width, int height,
-            ResourceLocation texture,
+            Identifier texture,
             float u0, float v0, float u1, float v1,
             float radius
     ) {
@@ -38,7 +39,7 @@ public class RoundedTexture {
     public static void draw(
             GuiGraphics graphics,
             int x, int y, int width, int height,
-            ResourceLocation texture,
+            Identifier texture,
             float u0, float v0, float u1, float v1,
             float radius, int color
     ) {
@@ -46,7 +47,7 @@ public class RoundedTexture {
                 graphics,
                 x, y, width,height,
                 u0, v0, u1, v1,
-                texture, color, (int) radius
+                TextureUtils.single(texture), color, (int) radius
         ));
     }
 }

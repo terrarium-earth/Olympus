@@ -2,6 +2,7 @@ package earth.terrarium.olympus.client.elements;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.RenderPipelines;
+import org.jetbrains.annotations.NotNull;
 
 public class GradientGuiElement extends BaseGuiElement {
 
@@ -20,7 +21,7 @@ public class GradientGuiElement extends BaseGuiElement {
     }
 
     @Override
-    public void buildVertices(VertexConsumer consumer) {
+    public void buildVertices(@NotNull VertexConsumer consumer) {
         var bounds = this.bounds();
         consumer.addVertexWith2DPose(this.pose(), bounds.left(), bounds.top()).setColor(this.col1);
         consumer.addVertexWith2DPose(this.pose(), bounds.left(), bounds.bottom()).setColor(this.col3);

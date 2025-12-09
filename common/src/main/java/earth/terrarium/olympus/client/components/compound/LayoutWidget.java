@@ -15,7 +15,7 @@ import net.minecraft.client.gui.layouts.LayoutElement;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import org.apache.commons.lang3.function.Consumers;
 import org.jetbrains.annotations.Nullable;
@@ -50,8 +50,8 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
     private int scrollMargin = 2;
     private int contentMargin = 0;
 
-    private ResourceLocation scrollbarBackground = null;
-    private ResourceLocation background = null;
+    private Identifier scrollbarBackground = null;
+    private Identifier background = null;
 
     private WidgetRenderer<LayoutWidget<T>> scrollbarXRenderer = (graphics, context, partialTick) -> {
         var widget = context.getWidget();
@@ -383,12 +383,12 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
         return this;
     }
 
-    public LayoutWidget<T> withScrollbarBackground(ResourceLocation scrollbarBackground) {
+    public LayoutWidget<T> withScrollbarBackground(Identifier scrollbarBackground) {
         this.scrollbarBackground = scrollbarBackground;
         return this;
     }
 
-    public LayoutWidget<T> withTexture(ResourceLocation texture) {
+    public LayoutWidget<T> withTexture(Identifier texture) {
         this.background = texture;
         return this;
     }

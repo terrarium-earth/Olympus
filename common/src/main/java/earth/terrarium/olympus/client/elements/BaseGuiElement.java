@@ -3,13 +3,13 @@ package earth.terrarium.olympus.client.elements;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import earth.terrarium.olympus.client.utils.GuiGraphicsHelper;
+import earth.terrarium.olympus.client.utils.TextureUtils;
 import net.minecraft.Optionull;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.render.TextureSetup;
 import net.minecraft.client.gui.render.state.GuiElementRenderState;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix3x2f;
@@ -32,11 +32,8 @@ public abstract class BaseGuiElement implements GuiElementRenderState {
         this(pipeline, TextureSetup.noTexture());
     }
 
-    public BaseGuiElement(RenderPipeline pipeline, ResourceLocation texture) {
-        this(
-            pipeline,
-            TextureSetup.singleTexture(Minecraft.getInstance().getTextureManager().getTexture(texture).getTextureView())
-        );
+    public BaseGuiElement(RenderPipeline pipeline, Identifier texture) {
+        this(pipeline, TextureUtils.single(texture));
     }
 
     @Override
@@ -64,7 +61,7 @@ public abstract class BaseGuiElement implements GuiElementRenderState {
     }
 
     @Override
-    public abstract void buildVertices(VertexConsumer consumer);
+    public abstract void buildVertices(@NotNull VertexConsumer consumer);
 
     public void submit(@NotNull GuiGraphics graphics, int x, int y, int width, int height) {
         this.pose = new Matrix3x2f(graphics.pose());

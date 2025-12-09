@@ -8,18 +8,18 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.concurrent.CompletableFuture;
 
 public class MapWidget extends BaseWidget {
-    private static final ResourceLocation MAP_ICONS = ResourceLocation.withDefaultNamespace("textures/map/decorations/player.png");
+    private static final Identifier MAP_ICONS = Identifier.withDefaultNamespace("textures/map/decorations/player.png");
 
     private final State<MapRenderer> mapRenderer;
 
     private int scale;
     private boolean initialized = false;
-    private ResourceLocation texture = UIConstants.MODAL_INSET;
+    private Identifier texture = UIConstants.MODAL_INSET;
 
     public MapWidget(State<MapRenderer> state) {
         super();
@@ -31,7 +31,7 @@ public class MapWidget extends BaseWidget {
         graphics.drawCenteredString(font, UITexts.LOADING, (int) (getX() + getWidth() / 2f), (int) (getY() + getHeight() / 2f), 0xFFFFFF);
     }
 
-    public MapWidget withTexture(ResourceLocation texture) {
+    public MapWidget withTexture(Identifier texture) {
         this.texture = texture;
         return this;
     }

@@ -3,10 +3,10 @@ package earth.terrarium.olympus.client.components.map;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class MapRenderer {
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("olympus","dynamic_map");
+    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath("olympus","dynamic_map");
     private final int scale;
 
     public MapRenderer(int[][] colors, int scale) {

@@ -9,7 +9,7 @@ import earth.terrarium.olympus.client.ui.UIConstants;
 import earth.terrarium.olympus.client.ui.context.ContextMenu;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.CommonComponents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.apache.commons.lang3.function.Consumers;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class DropdownBuilder<T> {
     private final List<T> options = new ArrayList<>();
 
     private OverlayAlignment alignment = OverlayAlignment.BOTTOM_LEFT;
-    private ResourceLocation background = UIConstants.LIST_BG;
+    private Identifier background = UIConstants.LIST_BG;
     private WidgetSprites entrySprites = UIConstants.LIST_ENTRY;
     private Function<T, WidgetRenderer<? super Button>> entryRenderer = t -> WidgetRenderers.text(CommonComponents.ELLIPSIS);
     private Consumer<T> action = Consumers.nop();
@@ -45,7 +45,7 @@ public class DropdownBuilder<T> {
         return this;
     }
 
-    public DropdownBuilder<T> withTexture(ResourceLocation sprite) {
+    public DropdownBuilder<T> withTexture(Identifier sprite) {
         this.background = sprite;
         return this;
     }

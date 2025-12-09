@@ -7,16 +7,16 @@ import earth.terrarium.olympus.client.constants.MinecraftColors;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 
 public class IconWidgetRenderer<T extends AbstractWidget> implements WidgetRenderer<T>, ColorableWidget {
 
-    private final ResourceLocation icon;
+    private final Identifier icon;
     private Color color = MinecraftColors.DARK_GRAY;
     private boolean drawShadow = false;
 
-    IconWidgetRenderer(ResourceLocation icon) {
+    IconWidgetRenderer(Identifier icon) {
         this.icon = icon;
     }
 

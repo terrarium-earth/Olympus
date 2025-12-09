@@ -2,24 +2,24 @@ package earth.terrarium.olympus.client.ui;
 
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 @SuppressWarnings("unused")
 public class UIConstants {
     
     public static final String MOD_ID = "olympus";
 
-    public static final ResourceLocation MODAL = id("modal/modal");
-    public static final ResourceLocation MODAL_HEADER = id("modal/modal_header");
-    public static final ResourceLocation MODAL_FOOTER = id("modal/modal_footer");
-    public static final ResourceLocation MODAL_INSET = id("modal/modal_inset");
+    public static final Identifier MODAL = id("modal/modal");
+    public static final Identifier MODAL_HEADER = id("modal/modal_header");
+    public static final Identifier MODAL_FOOTER = id("modal/modal_footer");
+    public static final Identifier MODAL_INSET = id("modal/modal_inset");
 
-    public static final ResourceLocation SCROLLBAR = id("lists/scroll/bar");
-    public static final ResourceLocation SCROLLBAR_THUMB = id("lists/scroll/thumb");
+    public static final Identifier SCROLLBAR = id("lists/scroll/bar");
+    public static final Identifier SCROLLBAR_THUMB = id("lists/scroll/thumb");
 
-    public static final ResourceLocation LIST_BG = id("lists/background");
+    public static final Identifier LIST_BG = id("lists/background");
 
-    public static final ResourceLocation CONTEXT_DIVIDER = id("context/divider");
+    public static final Identifier CONTEXT_DIVIDER = id("context/divider");
 
     public static final WidgetSprites TEXTBOX = new WidgetSprites(
         id("textbox/normal"),
@@ -117,8 +117,8 @@ public class UIConstants {
     @Deprecated public static final Component REFRESH = UITexts.REFRESH;
     @Deprecated public static final Component LOADING = UITexts.LOADING;
 
-    public static ResourceLocation id(String path) {
-        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+    public static Identifier id(String path) {
+        return Identifier.fromNamespaceAndPath(MOD_ID, path);
     }
 
 }

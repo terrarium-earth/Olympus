@@ -7,7 +7,7 @@ import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 import net.minecraft.Optionull;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,9 +46,9 @@ public class ImageProvider<T> {
      * You must call this method periodically to get the current state of the cache.
      * Not calling this method may result in your image being cleaned up while you are still using it.
      * @param key the key to get the image for
-     * @return the ResourceLocation of the image, or a missing texture if the image is not available
+     * @return the Identifier of the image, or a missing texture if the image is not available
      */
-    public ResourceLocation get(T key) {
+    public Identifier get(T key) {
         this.cacheAccessTimes.put(key, System.currentTimeMillis());
 
         if (this.cache.containsKey(key)) {
@@ -60,7 +60,7 @@ public class ImageProvider<T> {
                 return MissingTextureAtlasSprite.getLocation();
             } else {
                 var hash = this.hasher.apply(key).toString();
-                ResourceLocation location = ResourceLocation.fromNamespaceAndPath(
+                Identifier location = Identifier.fromNamespaceAndPath(
                         UIConstants.MOD_ID,
                         "generated_images/" + this.name + "/" + hash
                 );

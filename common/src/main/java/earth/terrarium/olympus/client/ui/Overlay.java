@@ -36,13 +36,13 @@ public abstract class Overlay extends BaseCursorScreen {
     @Override
     protected void repositionElements() {
         if (this.background instanceof Overlay overlay) overlay.isInitialized = false;
-        if (this.background != null) this.background.resize(Minecraft.getInstance(), this.width, this.height);
+        if (this.background != null) this.background.resize(this.width, this.height);
         super.repositionElements();
     }
 
     @Override
-    public void resize(Minecraft minecraft, int width, int height) {
-        super.resize(minecraft, width, height);
+    public void resize(int width, int height) {
+        super.resize(width, height);
         // We want to close all overlays when the screen is resized
         Screen screenToGoTo = this.background;
         while (screenToGoTo instanceof Overlay overlay) {

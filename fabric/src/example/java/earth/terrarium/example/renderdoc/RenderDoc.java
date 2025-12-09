@@ -5,7 +5,7 @@ import com.sun.jna.Native;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import org.lwjgl.system.linux.DynamicLinkLoader;
 
 import java.util.Map;

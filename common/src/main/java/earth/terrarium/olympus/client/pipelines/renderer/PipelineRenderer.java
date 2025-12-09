@@ -9,7 +9,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.MeshData;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.render.TextureSetup;
 import net.minecraft.util.ARGB;
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
@@ -49,12 +51,17 @@ public class PipelineRenderer {
                         RenderSystem.getModelViewMatrix(),
                         new Vector4f(ARGB.redFloat(color), ARGB.greenFloat(color), ARGB.blueFloat(color), ARGB.alphaFloat(color)),
                         new Vector3f(),
-                        RenderSystem.getTextureMatrix(),
-                        RenderSystem.getShaderLineWidth()
+                        new Matrix4f()
                 );
     }
 
-    protected static void draw(RenderPipeline pipeline, MeshData mesh, int color, Consumer<RenderPass> options) {
+    protected static void draw(
+            RenderPipeline pipeline,
+            MeshData mesh,
+            int color,
+            TextureSetup textures,
+            Consumer<RenderPass> options
+    ) {
         GpuDevice device = RenderSystem.getDevice();
 
         var buffers = Buffers.of(mesh, pipeline);
@@ -76,11 +83,9 @@ public class PipelineRenderer {
                 pass.enableScissor(scissor.x(), scissor.y(), scissor.width(), scissor.height());
             }
 
-            for (int i = 0; i < 12; i++) {
-                var texture = RenderSystem.getShaderTexture(i);
-                if (texture == null) continue;
-                pass.bindSampler("Sampler" + i, texture);
-            }
+            if (textures.texure0() != null) pass.bindTexture("Sampler0", textures.texure0(), textures.sampler0());
+            if (textures.texure1() != null) pass.bindTexture("Sampler1", textures.texure1(), textures.sampler1());
+            if (textures.texure2() != null) pass.bindTexture("Sampler2", textures.texure2(), textures.sampler2());
 
             RenderSystem.bindDefaultUniforms(pass);
             pass.setUniform("DynamicTransforms", uniforms);

@@ -9,18 +9,18 @@ import earth.terrarium.olympus.client.pipelines.pips.RoundedRectanglePIPRenderer
 import earth.terrarium.olympus.client.pipelines.uniforms.RoundedRectangleUniform;
 import earth.terrarium.olympus.client.utils.GuiGraphicsHelper;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RoundedRectangle {
 
     public static final RenderPipeline PIPELINE = RenderPipeline.builder()
-            .withLocation(ResourceLocation.fromNamespaceAndPath("olympus", "rounded_rect"))
+            .withLocation(Identifier.fromNamespaceAndPath("olympus", "rounded_rect"))
             .withUniform("DynamicTransforms", UniformType.UNIFORM_BUFFER)
             .withUniform("Projection", UniformType.UNIFORM_BUFFER)
             .withUniform(RoundedRectangleUniform.NAME, UniformType.UNIFORM_BUFFER)
             .withBlend(BlendFunction.TRANSLUCENT)
-            .withFragmentShader(ResourceLocation.fromNamespaceAndPath("olympus", "core/rounded_rect"))
-            .withVertexShader(ResourceLocation.fromNamespaceAndPath("olympus", "core/rounded_rect"))
+            .withFragmentShader(Identifier.fromNamespaceAndPath("olympus", "core/rounded_rect"))
+            .withVertexShader(Identifier.fromNamespaceAndPath("olympus", "core/rounded_rect"))
             .withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS)
             .build();
 
