@@ -99,6 +99,8 @@ public class UIIcons {
     public static final Identifier MINIMIZE = create("minimize");
     public static final Identifier COLLAPSE = MINIMIZE;
 
+    public static final Identifier REFRESH = create("refresh");
+
     public static final Identifier MODRINTH = create("modrinth");
 
     public static final Identifier MONITOR = create("monitor");
