@@ -18,12 +18,15 @@ public class ShaderExample extends ExampleScreen {
         graphics.pose().pushMatrix();
         graphics.pose().translate(Mth.cos(((System.currentTimeMillis() % 60000) / 1000f)) * 30f, 0);
 
+        // ARGB
         RoundedRectangle.draw(
                 graphics,
                 this.width / 2 - 150, 50,
                 100, 100,
-                0x80000000, 0xFF0000FF,
-                15f, 2
+                0x80000000,
+                0xFF0000FF, 0xFFFF0000,
+                0xFF00FF00, 0xFF731f8f,
+                15, 2
         );
 
         RoundedRectangle.draw(
