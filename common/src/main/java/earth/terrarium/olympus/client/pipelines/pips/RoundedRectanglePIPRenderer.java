@@ -15,6 +15,7 @@ import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
 import net.minecraft.client.gui.render.state.pip.PictureInPictureRenderState;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.util.ARGB;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix3x2f;
 import org.joml.Vector2f;
@@ -45,7 +46,7 @@ public class RoundedRectanglePIPRenderer extends PictureInPictureRenderer<Rounde
         var bounds = state.bounds;
 
         float scale = (float) Minecraft.getInstance().getWindow().getGuiScale();
-        float scaledWidth = (bounds.width() - state.borderWidth() * 2)  * scale;
+        float scaledWidth = (bounds.width() - state.borderWidth() * 2) * scale;
         float scaledHeight = (bounds.height() - state.borderWidth() * 2) * scale;
 
         var buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
@@ -57,10 +58,28 @@ public class RoundedRectanglePIPRenderer extends PictureInPictureRenderer<Rounde
         PipelineRenderer.builder(RoundedRectangle.PIPELINE, buffer.buildOrThrow())
                 .uniform(RoundedRectangleUniform.STORAGE, RoundedRectangleUniform.of(
                         new Vector4f(
-                                ARGB.redFloat(state.borderColor()),
-                                ARGB.greenFloat(state.borderColor()),
-                                ARGB.blueFloat(state.borderColor()),
-                                ARGB.alphaFloat(state.borderColor())
+                                ARGB.redFloat(state.borderColorTopLeft()),
+                                ARGB.greenFloat(state.borderColorTopLeft()),
+                                ARGB.blueFloat(state.borderColorTopLeft()),
+                                ARGB.alphaFloat(state.borderColorTopLeft())
+                        ),
+                        new Vector4f(
+                                ARGB.redFloat(state.borderColorTopRight()),
+                                ARGB.greenFloat(state.borderColorTopRight()),
+                                ARGB.blueFloat(state.borderColorTopRight()),
+                                ARGB.alphaFloat(state.borderColorTopRight())
+                        ),
+                        new Vector4f(
+                                ARGB.redFloat(state.borderColorBottomLeft()),
+                                ARGB.greenFloat(state.borderColorBottomLeft()),
+                                ARGB.blueFloat(state.borderColorBottomLeft()),
+                                ARGB.alphaFloat(state.borderColorBottomLeft())
+                        ),
+                        new Vector4f(
+                                ARGB.redFloat(state.borderColorBottomRight()),
+                                ARGB.greenFloat(state.borderColorBottomRight()),
+                                ARGB.blueFloat(state.borderColorBottomRight()),
+                                ARGB.alphaFloat(state.borderColorBottomRight())
                         ),
                         new Vector4f(state.borderRadius()),
                         state.borderWidth(),
@@ -80,19 +99,41 @@ public class RoundedRectanglePIPRenderer extends PictureInPictureRenderer<Rounde
 
     public record State(
             int x0, int y0, int x1, int y1,
-            int color, int borderColor,
+            int color,
+            int borderColorTopLeft, int borderColorTopRight,
+            int borderColorBottomLeft, int borderColorBottomRight,
             int borderRadius, int borderWidth,
             Matrix3x2f pose, ScreenRectangle scissorArea, ScreenRectangle bounds
     ) implements OlympusPictureInPictureRenderState<State> {
 
+        /** @deprecated Specify all 4 corner colors instead. */
+        @Deprecated
+        @ApiStatus.ScheduledForRemoval(inVersion="26.1")
         public State(
                 GuiGraphics graphics,
-                 int x, int y, int width, int height,
-                 int color, int borderColor, int borderRadius, int borderWidth
+                int x, int y, int width, int height,
+                int color, int borderColor, int borderRadius, int borderWidth
+        ) {
+            this(
+                    graphics,
+                    x, y, width, height,
+                    color, borderColor, borderColor, borderColor, borderColor,
+                    borderRadius, borderWidth
+            );
+        }
+
+        public State(
+                GuiGraphics graphics,
+                int x, int y, int width, int height,
+                int color,
+                int borderColorTopLeft, int borderColorTopRight,
+                int borderColorBottomLeft, int borderColorBottomRight,
+                int borderRadius, int borderWidth
         ) {
             this(
                     x, y, x + width, y + height,
-                    color, borderColor, borderRadius, borderWidth,
+                    color, borderColorTopLeft, borderColorTopRight, borderColorBottomLeft, borderColorBottomRight,
+                    borderRadius, borderWidth,
                     new Matrix3x2f(graphics.pose()), GuiGraphicsHelper.getLastScissor(graphics),
                     OlympusPictureInPictureRenderState.getRelativeBounds(
                             graphics,
