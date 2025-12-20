@@ -34,14 +34,15 @@ void main() {
     vec2 halfSize = size / 2.0;
     float distance = sdRoundedBox(gl_FragCoord.xy - center, halfSize, borderRadius * scaleFactor);
     float smoothed = min(1.0 - distance, vertexColor.a);
-    float border = min(1.0 - smoothstep(borderWidth, borderWidth, abs(distance)), borderColorTopLeft.a);
+    vec4 borderColor = mix(
+        mix(borderColorTopLeft, borderColorTopRight, gl_FragCoord.x / size.x),
+        mix(borderColorBottomLeft, borderColorBottomRight, gl_FragCoord.x / size.x),
+        1 - gl_FragCoord.y / size.y
+    );
+    float border = min(1.0 - smoothstep(borderWidth, borderWidth, abs(distance)), borderColor.a);
 
     if (border > 0.0) {
-        fragColor = mix(
-            mix(borderColorTopLeft, borderColorTopRight, gl_FragCoord.x / size.x),
-            mix(borderColorBottomLeft, borderColorBottomRight, gl_FragCoord.x / size.x),
-            1 - gl_FragCoord.y / size.y
-        ) * vec4(1.0, 1.0, 1.0, border) * ColorModulator;
+        fragColor = borderColor * vec4(1.0, 1.0, 1.0, border) * ColorModulator;
     } else {
         fragColor = vertexColor * vec4(1.0, 1.0, 1.0, smoothed) * ColorModulator;
     }

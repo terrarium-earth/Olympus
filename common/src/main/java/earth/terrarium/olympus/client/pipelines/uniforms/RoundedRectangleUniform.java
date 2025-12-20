@@ -21,6 +21,27 @@ public record RoundedRectangleUniform(
         float scaleFactor
 ) implements RenderPipelineUniforms {
 
+    public RoundedRectangleUniform(
+        Vector4f borderColor,
+        Vector4f radius,
+        float borderWidth,
+        Vector2f size,
+        Vector2f center,
+        float scaleFactor
+    ) {
+        this(
+                borderColor,
+                borderColor,
+                borderColor,
+                borderColor,
+                radius,
+                borderWidth,
+                size,
+                center,
+                scaleFactor
+        );
+    }
+
     public static final String NAME = "RoundedRectangleUniform";
     public static final Supplier<DynamicUniformStorage<RoundedRectangleUniform>> STORAGE = RenderPipelineUniformsStorage.register(
             "Rounded Rectangle UBO",
