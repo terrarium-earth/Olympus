@@ -15,6 +15,7 @@ import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
 import net.minecraft.client.gui.render.state.pip.PictureInPictureRenderState;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.util.ARGB;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix3x2f;
 import org.joml.Vector2f;
@@ -105,6 +106,9 @@ public class RoundedRectanglePIPRenderer extends PictureInPictureRenderer<Rounde
             Matrix3x2f pose, ScreenRectangle scissorArea, ScreenRectangle bounds
     ) implements OlympusPictureInPictureRenderState<State> {
 
+        /** @deprecated Specify all 4 corner colors instead. */
+        @Deprecated
+        @ApiStatus.ScheduledForRemoval(inVersion="26.1")
         public State(
                 GuiGraphics graphics,
                 int x, int y, int width, int height,
