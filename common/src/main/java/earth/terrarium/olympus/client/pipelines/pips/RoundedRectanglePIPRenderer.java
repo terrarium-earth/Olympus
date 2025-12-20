@@ -112,7 +112,7 @@ public class RoundedRectanglePIPRenderer extends PictureInPictureRenderer<Rounde
         ) {
             this(
                     graphics,
-                    x, y, x + width, y + height,
+                    x, y, width, height,
                     color, borderColor, borderColor, borderColor, borderColor,
                     borderRadius, borderWidth
             );
