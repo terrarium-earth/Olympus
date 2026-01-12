@@ -36,4 +36,21 @@ public class RoundedRectangle {
                 backgroundColor, borderColor, (int) borderRadius, borderWidth
         ));
     }
+
+    public static void draw(
+            GuiGraphics graphics,
+            int x, int y, int width, int height,
+            int backgroundColor,
+            int borderColorTopLeft, int borderColorTopRight,
+            int borderColorBottomLeft, int borderColorBottomRight,
+            int borderRadius, int borderWidth
+    ) {
+        GuiGraphicsHelper.submitPip(graphics, new RoundedRectanglePIPRenderer.State(
+                graphics,
+                x, y, width, height,
+                backgroundColor,
+                borderColorTopLeft, borderColorTopRight, borderColorBottomLeft, borderColorBottomRight,
+                borderRadius, borderWidth
+        ));
+    }
 }

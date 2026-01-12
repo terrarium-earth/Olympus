@@ -1,2 +1,1 @@
-- Fix incorrect border on rounded rectangles.
-- Add czech translations - Mayaqq
+-  Add ability to set color of each corner in rounded rect - J10a1n15
