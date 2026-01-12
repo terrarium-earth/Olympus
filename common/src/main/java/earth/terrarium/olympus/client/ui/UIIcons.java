@@ -99,6 +99,8 @@ public class UIIcons {
     public static final ResourceLocation MINIMIZE = create("minimize");
     public static final ResourceLocation COLLAPSE = MINIMIZE;
 
+    public static final ResourceLocation REFRESH = create("refresh");
+
     public static final ResourceLocation MODRINTH = create("modrinth");
 
     public static final ResourceLocation MONITOR = create("monitor");
