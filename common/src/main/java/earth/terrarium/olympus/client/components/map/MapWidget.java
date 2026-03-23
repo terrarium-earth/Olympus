@@ -5,10 +5,11 @@ import earth.terrarium.olympus.client.ui.UIConstants;
 import earth.terrarium.olympus.client.ui.UITexts;
 import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -26,9 +27,9 @@ public class MapWidget extends BaseWidget {
         this.mapRenderer = state;
     }
 
-    private void renderLoading(GuiGraphics graphics) {
+    private void renderLoading(GuiGraphicsExtractor graphics) {
         var font = Minecraft.getInstance().font;
-        graphics.drawCenteredString(font, UITexts.LOADING, (int) (getX() + getWidth() / 2f), (int) (getY() + getHeight() / 2f), 0xFFFFFF);
+        graphics.centeredText(font, UITexts.LOADING, (int) (getX() + getWidth() / 2f), (int) (getY() + getHeight() / 2f), 0xFFFFFF);
     }
 
     public MapWidget withTexture(Identifier texture) {
@@ -48,7 +49,7 @@ public class MapWidget extends BaseWidget {
     }
 
     @Override
-    protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         graphics.blitSprite(RenderPipelines.GUI_OPAQUE_TEXTURED_BACKGROUND, this.texture, this.getX(), this.getY(), this.getWidth(), this.getHeight());
 
         if (!initialized) {
@@ -92,7 +93,7 @@ public class MapWidget extends BaseWidget {
         }
     }
 
-    private void renderPlayerAvatar(LocalPlayer player, GuiGraphics graphics) {
+    private void renderPlayerAvatar(LocalPlayer player, GuiGraphicsExtractor graphics) {
         float left = this.getWidth() / 2f;
         float top = this.getHeight() / 2f;
 

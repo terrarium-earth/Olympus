@@ -1,6 +1,5 @@
 package earth.terrarium.example.examples;
 
-import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.example.base.ExampleScreen;
 import earth.terrarium.example.base.OlympusExample;
 import earth.terrarium.olympus.client.components.Widgets;
@@ -8,6 +7,7 @@ import earth.terrarium.olympus.client.components.compound.LayoutWidget;
 import earth.terrarium.olympus.client.layouts.Layouts;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.util.TriState;
 
 @OlympusExample(id = "layouts", description = "A simple example of using layouts")
 public class LayoutsExample extends ExampleScreen {

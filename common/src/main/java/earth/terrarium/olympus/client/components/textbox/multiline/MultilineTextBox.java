@@ -1,6 +1,6 @@
 package earth.terrarium.olympus.client.components.textbox.multiline;
 
-import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
+import com.mojang.blaze3d.platform.cursor.CursorTypes;
 import earth.terrarium.olympus.client.components.base.BaseWidget;
 import earth.terrarium.olympus.client.components.textbox.utils.TextBoxStringUtils;
 import earth.terrarium.olympus.client.ui.UIConstants;
@@ -8,13 +8,14 @@ import earth.terrarium.olympus.client.utils.ListenableState;
 import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.NotNull;
 
 public class MultilineTextBox extends BaseWidget {
 
@@ -25,7 +26,6 @@ public class MultilineTextBox extends BaseWidget {
 
     private double scroll = - 1;
     private int lastHeight;
-    private boolean scrollbarHovered = false;
 
     public MultilineTextBox(State<String> state) {
         this.state = new MultilineTextInput(state instanceof ListenableState<String> it ? it : new ListenableState<>(state));
@@ -36,7 +36,7 @@ public class MultilineTextBox extends BaseWidget {
         return this;
     }
 
-    protected void renderText(GuiGraphics graphics, int x, int y, int width) {
+    protected void renderText(GuiGraphicsExtractor graphics, int x, int y, int width) {
         var cursor = this.state.cursor();
         var selection = this.state.selection();
         var lines = this.state.lines(this.width - 8);
@@ -44,7 +44,7 @@ public class MultilineTextBox extends BaseWidget {
         for (var line : lines) {
             var text = this.state.value().substring(line.start(), line.end());
 
-            graphics.drawString(this.font, TextBoxStringUtils.format(text), x, y, -1);
+            graphics.text(this.font, TextBoxStringUtils.format(text), x, y, -1);
 
             if (this.state.hasSelection()) {
                 if (line.contains(selection.end()) || line.contains(selection.start())) {
@@ -83,7 +83,7 @@ public class MultilineTextBox extends BaseWidget {
     }
 
     @Override
-    protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         if (!this.isVisible()) return;
 
         var texture = this.sprites.get(this.active, this.isHoveredOrFocused());
@@ -96,7 +96,6 @@ public class MultilineTextBox extends BaseWidget {
         this.renderText(graphics, getX() + 6 - (renderScrollbar ? 2 : 0), (int) (getY() + 4 - scroll), getWidth() - 12);
         graphics.disableScissor();
 
-        this.scrollbarHovered = false;
         if (renderScrollbar) {
             graphics.blitSprite(
                     RenderPipelines.GUI_TEXTURED,
@@ -118,7 +117,9 @@ public class MultilineTextBox extends BaseWidget {
                     scrollBarHeight
             );
 
-            this.scrollbarHovered = mouseX > getX() + getWidth() - 7 && mouseY > getY() + 4 && mouseY < getY() + this.height - 4;
+            if (mouseX > getX() + getWidth() - 7 && mouseY > getY() + 4 && mouseY < getY() + this.height - 4 && this.isHovered()) {
+                graphics.requestCursor(CursorTypes.RESIZE_NS);
+            }
         }
     }
 
@@ -173,10 +174,5 @@ public class MultilineTextBox extends BaseWidget {
 
     public boolean isVisible() {
         return this.visible;
-    }
-
-    @Override
-    public CursorScreen.Cursor getCursor() {
-        return this.scrollbarHovered ? CursorScreen.Cursor.POINTER : CursorScreen.Cursor.TEXT;
     }
 }

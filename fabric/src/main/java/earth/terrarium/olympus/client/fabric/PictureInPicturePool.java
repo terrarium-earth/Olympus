@@ -1,8 +1,8 @@
 package earth.terrarium.olympus.client.fabric;
 
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
-import net.minecraft.client.gui.render.state.GuiRenderState;
-import net.minecraft.client.gui.render.state.pip.PictureInPictureRenderState;
+import net.minecraft.client.renderer.state.gui.GuiRenderState;
+import net.minecraft.client.renderer.state.gui.pip.PictureInPictureRenderState;
 
 import java.io.Closeable;
 import java.util.HashMap;
@@ -19,7 +19,7 @@ public class PictureInPicturePool<T extends PictureInPictureRenderState> impleme
     }
 
     public void prepare(T state, GuiRenderState gui, int scale) {
-        pool.computeIfAbsent(state, $ -> new PoolEntry<>(this.factory.get())).prepare(state, gui, scale);
+        pool.computeIfAbsent(state, _ -> new PoolEntry<>(this.factory.get())).prepare(state, gui, scale);
     }
 
     public void end() {

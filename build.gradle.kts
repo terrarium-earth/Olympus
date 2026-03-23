@@ -1,33 +1,57 @@
 import com.teamresourceful.publishing.GitHubPom
 import com.teamresourceful.publishing.javaPublishing
+import com.teamresourceful.utils.Platform
 import com.teamresourceful.utils.getPlatform
 import groovy.json.StringEscapeUtils
-import net.fabricmc.loom.api.LoomGradleExtensionAPI
 
 plugins {
     java
     id("maven-publish")
-    alias(libs.plugins.resourceful.loom)
     alias(libs.plugins.resourceful.gradle)
+    alias(libs.plugins.resourceful.minecraft) apply false
 }
 
 subprojects {
     apply(plugin = "maven-publish")
 
     val platform = getPlatform()
-    val mcVersion = rootProject.libs.versions.minecraft.get()
-    val rlibversion = rootProject.libs.versions.rlib.get()
+
+    when (platform) {
+        Platform.COMMON -> apply(plugin = "com.teamresourceful.plugins.minecraft-platform-common")
+        Platform.FABRIC -> apply(plugin = "com.teamresourceful.plugins.minecraft-platform-fabric")
+        Platform.NEOFORGE -> apply(plugin = "com.teamresourceful.plugins.minecraft-platform-neoforge")
+    }
+
+    if (platform != Platform.COMMON) {
+        tasks.withType<JavaCompile> {
+            val serviceArgs = listOf(
+                "-Xplugin:ServicePlugin",
+                "--service-plugin-platform=$platform",
+            )
+
+            options.encoding = "UTF-8"
+            options.compilerArgs.add(serviceArgs.joinToString(separator = " "))
+        }
+    }
+
+    repositories {
+        maven("https://prmaven.neoforged.net/NeoForge/pr2879")
+    }
 
     dependencies {
-        if (platform == com.teamresourceful.utils.Platform.COMMON) {
-            "modCompileOnly"(group = "tech.thatgravyboat", name = "commonats", version = "4.0")
+        if (platform != Platform.COMMON) {
+            annotationProcessor(rootProject.libs.service.plugin)
         }
 
-        "modApi"(group = "com.teamresourceful.resourcefullib", name = "resourcefullib-${platform.id}-${mcVersion}", version = rlibversion)
+        implementation(
+            group = "com.teamresourceful.resourcefullib",
+            name = "resourcefullib-${platform.id}-${rootProject.libs.versions.minecraft.get()}",
+            version = rootProject.libs.versions.resourceful.lib.get()
+        )
     }
 
     javaPublishing {
-        artifactId = "${rootProject.name}-${platform.name}-${mcVersion}".lowercase()
+        artifactId = "${rootProject.name}-${platform.name}-${rootProject.libs.versions.minecraft.get()}".lowercase()
 
         pom = GitHubPom(
             "Olympus",

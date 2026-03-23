@@ -1,7 +1,7 @@
 package earth.terrarium.olympus.client.components.textbox;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
+import com.mojang.blaze3d.platform.cursor.CursorTypes;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import earth.terrarium.olympus.client.components.base.BaseWidget;
 import earth.terrarium.olympus.client.components.textbox.utils.TextBoxStringUtils;
@@ -12,7 +12,7 @@ import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.navigation.FocusNavigationEvent;
 import net.minecraft.client.input.CharacterEvent;
@@ -334,7 +334,7 @@ public class TextBox extends BaseWidget {
     }
 
     @Override
-    public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         if (this.isVisible()) {
             String value = this.state.get().isEmpty() && !this.placeholder.isEmpty() ? this.placeholder : this.state.get();
 
@@ -356,7 +356,7 @@ public class TextBox extends BaseWidget {
 
             if (!truncatedValue.isEmpty()) {
                 String string2 = cursorVisible ? truncatedValue.substring(0, displayCursorDiff) : truncatedValue;
-                graphics.drawString(this.font, TextBoxStringUtils.format(string2), l, m, getTextColor(), false);
+                graphics.text(this.font, TextBoxStringUtils.format(string2), l, m, getTextColor(), false);
                 n = l + this.font.width(string2) + 1;
             }
 
@@ -370,7 +370,7 @@ public class TextBox extends BaseWidget {
             }
 
             if (!truncatedValue.isEmpty() && cursorVisible && displayCursorDiff < truncatedValue.length()) {
-                graphics.drawString(this.font, TextBoxStringUtils.format(truncatedValue.substring(displayCursorDiff)), n, m, getTextColor(), false);
+                graphics.text(this.font, TextBoxStringUtils.format(truncatedValue.substring(displayCursorDiff)), n, m, getTextColor(), false);
             }
 
             if (showCursor) {
@@ -381,10 +381,14 @@ public class TextBox extends BaseWidget {
                 int p = l + TextBoxStringUtils.width(this.font, truncatedValue.substring(0, displayHighlightDiff));
                 this.renderHighlight(graphics, o, m - 1, p - 1, m + 1 + 9);
             }
+
+            if (this.isHovered()) {
+                graphics.requestCursor(CursorTypes.IBEAM);
+            }
         }
     }
 
-    private void renderHighlight(GuiGraphics graphics, int minX, int minY, int maxX, int maxY) {
+    private void renderHighlight(GuiGraphicsExtractor graphics, int minX, int minY, int maxX, int maxY) {
         int x1 = Mth.clamp(Math.min(minX, maxX), this.getX(), this.getX() + this.width - PADDING);
         int x2 = Mth.clamp(Math.max(minX, maxX), this.getX(), this.getX() + this.width - PADDING);
         int y1 = Math.min(minY, maxY);
@@ -436,10 +440,5 @@ public class TextBox extends BaseWidget {
 
     public void setVisible(boolean isVisible) {
         this.visible = isVisible;
-    }
-
-    @Override
-    public CursorScreen.Cursor getCursor() {
-        return CursorScreen.Cursor.TEXT;
     }
 }

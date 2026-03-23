@@ -1,7 +1,7 @@
 package earth.terrarium.olympus.client.components.map;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.Identifier;
 
@@ -34,7 +34,7 @@ public class MapRenderer {
         return scale;
     }
 
-    public void render(GuiGraphics graphics, int x, int y, int width, int height) {
+    public void render(GuiGraphicsExtractor graphics, int x, int y, int width, int height) {
         graphics.blit(TEXTURE, x, y, x + width, y + height, 0f, 1f, 0f, 1f);
     }
 }

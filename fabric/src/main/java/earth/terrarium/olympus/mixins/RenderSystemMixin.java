@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(RenderSystem.class)
 public class RenderSystemMixin {
 
-    @Inject(method = "flipFrame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;endFrame()V"))
+    @Inject(method = "flipFrame", at = @At(value = "TAIL"))
     private static void endFrame(CallbackInfo ci) {
         RenderPipelineUniformsStorage.endFrame();
     }

@@ -1,6 +1,5 @@
 package earth.terrarium.example.examples;
 
-import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.example.base.ExampleScreen;
 import earth.terrarium.example.base.OlympusExample;
 import earth.terrarium.olympus.client.components.Widgets;
@@ -13,6 +12,7 @@ import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.layouts.FrameLayout;
 import net.minecraft.client.gui.layouts.LayoutSettings;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.TriState;
 
 @OlympusExample(id = "layout_widget", description = "A simple list example")
 public class LayoutWidgetExample extends ExampleScreen {
@@ -25,7 +25,7 @@ public class LayoutWidgetExample extends ExampleScreen {
 
         var list = Widgets.list(widget -> {
             widget.withSize(200, 100);
-            widget.withScrollableY(TriState.UNDEFINED);
+            widget.withScrollableY(TriState.DEFAULT);
             widget.withContentFillWidth();
             widget.withContents(layout -> {
                 layout.withChild(Widgets.button(button -> {
@@ -51,7 +51,7 @@ public class LayoutWidgetExample extends ExampleScreen {
                     frameLayout.addChild(new StringWidget(Component.literal("WOAAHHH"), font), LayoutSettings::alignHorizontallyLeft);
                     frameLayout.addChild(Widgets.list(listWidget -> {
                         listWidget.withSize(60, 50);
-                        listWidget.withScrollableY(TriState.UNDEFINED);
+                        listWidget.withScrollableY(TriState.DEFAULT);
                         listWidget.withContentFillWidth();
                         listWidget.withContents(innerLayout -> {
                             innerLayout.withChild(Widgets.button(button -> {

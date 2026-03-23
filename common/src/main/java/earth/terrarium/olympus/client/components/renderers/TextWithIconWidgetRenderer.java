@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefullib.common.color.Color;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 
 public class TextWithIconWidgetRenderer<T extends AbstractWidget> implements WidgetRenderer<T>, ColorableWidget {
@@ -22,7 +22,7 @@ public class TextWithIconWidgetRenderer<T extends AbstractWidget> implements Wid
     }
 
     @Override
-    public void render(GuiGraphics graphics, WidgetRendererContext<T> widget, float partialTick) {
+    public void render(GuiGraphicsExtractor graphics, WidgetRendererContext<T> widget, float partialTick) {
         var iconSpace = iconSize + gap;
         textRenderer.withPadding(0, iconAlign * iconSpace, 0, (1 - iconAlign) * iconSpace).render(graphics, widget, partialTick);
         var textSpace = widget.getWidth() - iconSpace;

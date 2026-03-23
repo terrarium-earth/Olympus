@@ -1,28 +1,26 @@
 package earth.terrarium.olympus.client.utils;
 
-import com.teamresourceful.resourcefullib.common.exceptions.NotImplementedException;
-import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.minecraft.client.gui.GuiGraphics;
+import earth.terrarium.olympus.client.utils.platform.GuiGraphicsService;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
-import net.minecraft.client.gui.render.state.GuiElementRenderState;
-import net.minecraft.client.gui.render.state.pip.PictureInPictureRenderState;
+import net.minecraft.client.renderer.state.gui.GuiElementRenderState;
+import net.minecraft.client.renderer.state.gui.pip.PictureInPictureRenderState;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
 public class GuiGraphicsHelper {
 
-    @ExpectPlatform
-    public static void submitPip(GuiGraphics graphics, PictureInPictureRenderState state) {
-        throw new NotImplementedException();
+    private static final GuiGraphicsService SERVICE = GuiGraphicsService.create();
+
+    public static void submitPip(GuiGraphicsExtractor graphics, PictureInPictureRenderState state) {
+        SERVICE.submitPip(graphics, state);
     }
 
-    @ExpectPlatform
-    public static void submitElement(GuiGraphics graphics, GuiElementRenderState state) {
-        throw new NotImplementedException();
+    public static void submitElement(GuiGraphicsExtractor graphics, GuiElementRenderState state) {
+        SERVICE.submitElement(graphics, state);
     }
 
-    @ExpectPlatform
-    public static ScreenRectangle getLastScissor(GuiGraphics graphics) {
-        throw new NotImplementedException();
+    public static ScreenRectangle getLastScissor(GuiGraphicsExtractor graphics) {
+        return SERVICE.getLastScissor(graphics);
     }
 }

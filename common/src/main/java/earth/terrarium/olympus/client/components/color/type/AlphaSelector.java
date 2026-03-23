@@ -1,9 +1,10 @@
 package earth.terrarium.olympus.client.components.color.type;
 
 import earth.terrarium.olympus.client.components.base.BaseWidget;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.NotNull;
 
 public class AlphaSelector extends BaseWidget {
 
@@ -15,7 +16,7 @@ public class AlphaSelector extends BaseWidget {
     }
 
     @Override
-    protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+    protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         HsbColor color = state.get();
 
         int size = Math.min(getWidth(), getHeight()) / 2;
@@ -39,7 +40,7 @@ public class AlphaSelector extends BaseWidget {
         }
 
         int posX = Mth.floor((this.state.get().alpha() / 255f) * (this.getWidth() - 1));
-        graphics.renderOutline(getX() + posX - 1, getY(), 3, getHeight(), 0xFF000000);
+        graphics.outline(getX() + posX - 1, getY(), 3, getHeight(), 0xFF000000);
     }
 
     @Override

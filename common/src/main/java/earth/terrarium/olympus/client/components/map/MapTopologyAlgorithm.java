@@ -108,7 +108,7 @@ public class MapTopologyAlgorithm {
         return true;
     }
 
-    public static int getTintShade(MapColor color, BlockState state, Level level, BlockPos pos, MapColor.Brightness brightness) {
+    public static int getTintShade(MapColor color, BlockState state, ClientLevel level, BlockPos pos, MapColor.Brightness brightness) {
         if (color == MapColor.WATER || color == MapColor.GRASS || color == MapColor.PLANT) {
             int tintColor = BiomeColors.getAverageGrassColor(level, pos);
             if (color == MapColor.WATER) tintColor = BiomeColors.getAverageWaterColor(level, pos);
@@ -124,11 +124,11 @@ public class MapTopologyAlgorithm {
                 case HIGH -> darker(darker(darker(intColor)));
             };
         } else if (state != null) {
-            int tintColor = Minecraft.getInstance().getBlockColors().getColor(state, level, pos, 0);
-            if (tintColor == -1) {
+            var source = Minecraft.getInstance().getBlockColors().getTintSource(state, 0);
+            if (source == null) {
                 return MapPalette.getColor(color.id, brightness);
             }
-            int intColor = rgb2abgr(Minecraft.getInstance().getBlockColors().getColor(state, level, pos));
+            int intColor = rgb2abgr(source.colorInWorld(state, level, pos));
             return switch (brightness) {
                 case LOWEST -> intColor;
                 case LOW -> darker(intColor);

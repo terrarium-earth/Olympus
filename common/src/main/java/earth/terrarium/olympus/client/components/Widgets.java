@@ -1,7 +1,6 @@
 package earth.terrarium.olympus.client.components;
 
 import com.teamresourceful.resourcefullib.common.color.Color;
-import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.olympus.client.components.base.BaseWidget;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.buttons.Button;
@@ -35,6 +34,7 @@ import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.layouts.FrameLayout;
 import net.minecraft.client.gui.layouts.LayoutSettings;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.TriState;
 import net.minecraft.util.Util;
 import org.apache.commons.lang3.function.Consumers;
 
@@ -118,7 +118,7 @@ public final class Widgets {
                         WidgetRenderers.icon(TristateRenderers.getIcon(triState)).withColor(depressed ? MinecraftColors.WHITE : TristateRenderers.getColor(triState)).withCentered(12, 12).withPadding(0, 0, 2, 0)
                 ))
                 .withOption(TriState.TRUE)
-                .withOption(TriState.UNDEFINED)
+                .withOption(TriState.DEFAULT)
                 .withOption(TriState.FALSE)
                 .withSize(60, 20);
         builder.accept(radioBuilder);

@@ -9,7 +9,7 @@ import earth.terrarium.olympus.client.pipelines.renderer.PipelineRenderer;
 import earth.terrarium.olympus.client.pipelines.uniforms.RoundedTextureUniform;
 import earth.terrarium.olympus.client.utils.GuiGraphicsHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.render.TextureSetup;
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
@@ -81,7 +81,7 @@ public class RoundedTexturePIPRenderer extends PictureInPictureRenderer<RoundedT
     ) implements OlympusPictureInPictureRenderState<State> {
 
         public State(
-                GuiGraphics graphics,
+                GuiGraphicsExtractor graphics,
                 int x, int y, int width, int height,
                 float u0, float v0, float u1, float v1,
                 TextureSetup texture, int color, int borderRadius

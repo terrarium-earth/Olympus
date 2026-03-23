@@ -5,10 +5,10 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import earth.terrarium.olympus.client.utils.GuiGraphicsHelper;
 import earth.terrarium.olympus.client.utils.TextureUtils;
 import net.minecraft.Optionull;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.render.TextureSetup;
-import net.minecraft.client.gui.render.state.GuiElementRenderState;
+import net.minecraft.client.renderer.state.gui.GuiElementRenderState;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -63,7 +63,7 @@ public abstract class BaseGuiElement implements GuiElementRenderState {
     @Override
     public abstract void buildVertices(@NotNull VertexConsumer consumer);
 
-    public void submit(@NotNull GuiGraphics graphics, int x, int y, int width, int height) {
+    public void submit(@NotNull GuiGraphicsExtractor graphics, int x, int y, int width, int height) {
         this.pose = new Matrix3x2f(graphics.pose());
         this.scissor = GuiGraphicsHelper.getLastScissor(graphics);
         this.bounds = Optionull.mapOrElse(

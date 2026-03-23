@@ -1,8 +1,8 @@
 package earth.terrarium.olympus.client.fabric;
 
 import earth.terrarium.olympus.client.pipelines.pips.OlympusPictureInPictureRenderState;
-import net.minecraft.client.gui.render.state.pip.PictureInPictureRenderState;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.state.gui.pip.PictureInPictureRenderState;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.Closeable;

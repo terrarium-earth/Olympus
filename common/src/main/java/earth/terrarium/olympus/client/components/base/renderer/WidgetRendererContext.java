@@ -94,6 +94,10 @@ public final class WidgetRendererContext<T extends AbstractWidget> {
         return y + height / 2;
     }
 
+    public boolean isHovered() {
+        return mouseX > -1 && mouseY > -1 && mouseX >= getLeft() && mouseX < getRight() && mouseY >= getTop() && mouseY < getBottom();
+    }
+
     public WidgetRendererContext<T> copy() {
         return new WidgetRendererContext<>(widget, mouseX, mouseY)
                 .setWidth(width)

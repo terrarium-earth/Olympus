@@ -5,7 +5,7 @@ import earth.terrarium.example.base.ExampleScreen;
 import earth.terrarium.example.base.OlympusExample;
 import earth.terrarium.olympus.client.pipelines.RoundedRectangle;
 import earth.terrarium.olympus.client.pipelines.RoundedTexture;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
@@ -14,8 +14,8 @@ import org.jetbrains.annotations.NotNull;
 public class ShaderExample extends ExampleScreen {
 
     @Override
-    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float f) {
-        super.render(graphics, mouseX, mouseY, f);
+    public void extractRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
+        super.extractRenderState(graphics, mouseX, mouseY, partialTicks);
 
         graphics.pose().pushMatrix();
         graphics.pose().translate(Mth.cos(((System.currentTimeMillis() % 60000) / 1000f)) * 30f, 0);

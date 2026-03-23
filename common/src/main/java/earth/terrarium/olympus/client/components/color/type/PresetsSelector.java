@@ -6,12 +6,13 @@ import earth.terrarium.olympus.client.components.color.ColorPresetType;
 import earth.terrarium.olympus.client.constants.MinecraftColors;
 import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -58,7 +59,7 @@ public class PresetsSelector extends BaseWidget {
     }
 
     @Override
-    protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+    protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         graphics.blitSprite(RenderPipelines.GUI_TEXTURED, background, this.getX(), this.getY(), this.getWidth(), this.getHeight());
         int size = (this.getWidth() - 18) / 8;
 
@@ -72,9 +73,9 @@ public class PresetsSelector extends BaseWidget {
             int rgba = color.getValue();
             if (!withAlpha) rgba |= 0xFF000000;
             graphics.fill(x, y, x + size, y + size, rgba);
-            graphics.renderOutline(x, y, size, size, 0xFFDDDDDD);
+            graphics.outline(x, y, size, size, 0xFFDDDDDD);
             if (mouseX >= x && mouseX <= x + size && mouseY >= y && mouseY <= y + size) {
-                graphics.renderOutline(x, y, size, size, 0xFF000000);
+                graphics.outline(x, y, size, size, 0xFF000000);
                 Screen screen = Minecraft.getInstance().screen;
                 if (screen != null) {
                     if (!withAlpha) rgba &= 0x00FFFFFF;

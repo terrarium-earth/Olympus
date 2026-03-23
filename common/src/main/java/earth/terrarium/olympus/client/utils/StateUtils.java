@@ -1,7 +1,7 @@
 package earth.terrarium.olympus.client.utils;
 
-import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.olympus.client.components.compound.radio.RadioState;
+import net.minecraft.util.TriState;
 
 public class StateUtils {
 
@@ -12,7 +12,7 @@ public class StateUtils {
     public static RadioState<TriState> tristate(TriState state) {
         return new RadioState<>(state, switch (state) {
             case TRUE -> 0;
-            case UNDEFINED -> 1;
+            case DEFAULT -> 1;
             case FALSE -> 2;
         });
     }

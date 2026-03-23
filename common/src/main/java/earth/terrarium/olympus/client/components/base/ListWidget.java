@@ -1,10 +1,10 @@
 package earth.terrarium.olympus.client.components.base;
 
-import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
+import com.mojang.blaze3d.platform.cursor.CursorTypes;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;
 import earth.terrarium.olympus.client.ui.UIConstants;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -35,7 +35,7 @@ public class ListWidget extends BaseParentWidget {
 
     protected boolean autoFocus = true;
 
-    protected WidgetRenderer<ListWidget> scrollbarRenderer = (graphics, context, partialTick) -> {
+    protected WidgetRenderer<ListWidget> scrollbarRenderer = (graphics, context, _) -> {
         var widget = context.getWidget();
         int scrollBarHeight = (int) ((widget.getHeight() / (double) widget.getContentHeight()) * widget.getHeight());
         int scrollBarY = context.getY() + Math.round(((float) widget.getScroll() / (float) widget.getContentHeight()) * context.getHeight());
@@ -97,7 +97,7 @@ public class ListWidget extends BaseParentWidget {
     }
 
     @Override
-    public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+    protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
         boolean showsScrollBar = this.lastHeight > this.height;
         int actualWidth = getWidth() - (showsScrollBar ? getScrollbarThumbWidth() + getScrollbarPadding() * 2 : 0);
 
@@ -106,20 +106,16 @@ public class ListWidget extends BaseParentWidget {
         int y = this.getY() - (int) scroll;
         this.lastHeight = 0;
 
+        boolean canHoverItems = this.isHovered && graphics.containsPointInScissor(mouseX, mouseY);
+
         for (AbstractWidget item : items) {
             item.setWidth(actualWidth);
             item.setX(getX());
             item.setY(y);
 
-            item.render(graphics, this.isHovered ? mouseX : -1, this.isHovered ? mouseY : -1, partialTicks);
+            item.extractRenderState(graphics, canHoverItems ? mouseX : -1, canHoverItems ? mouseY : -1, partialTicks);
             y += item.getHeight() + gap;
             this.lastHeight += item.getHeight() + gap;
-        }
-
-        if (isMouseOverContent(mouseX, mouseY)) {
-            updateCursor(mouseX, mouseY);
-        } else {
-            this.cursor = CursorScreen.Cursor.DEFAULT;
         }
 
         graphics.disableScissor();
@@ -127,12 +123,11 @@ public class ListWidget extends BaseParentWidget {
         if (this.lastHeight > this.height) {
             this.scrollbarRenderer.render(graphics, new WidgetRendererContext<>(this, mouseX, mouseY).setWidth(scrollWidth).setHeight(getHeight() - scrollbarGap * 2).setY(getY() + scrollbarGap).setX(this.getX() + this.getWidth() - scrollWidth - scrollbarGap), partialTicks);
         }
-    }
 
-    public boolean isMouseOverContent(double mouseX, double mouseY) {
-        return mouseX >= this.getX() && mouseX <= this.getX() + this.getWidth() - scrollWidth - scrollbarGap * 2 && mouseY >= this.getY() && mouseY <= this.getY() + this.height;
+        if (this.isMouseOverScrollBar(mouseX, mouseY)) {
+            graphics.requestCursor(CursorTypes.RESIZE_NS);
+        }
     }
-
 
     public int getScrollbarThumbWidth() {
         return scrollWidth;
@@ -143,7 +138,7 @@ public class ListWidget extends BaseParentWidget {
     }
 
     @Override
-    public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY) {
+    public boolean mouseDragged(@NotNull MouseButtonEvent event, double dragX, double dragY) {
         if (this.scrolling) {
             this.moveTo(event.y());
             return true;
@@ -168,7 +163,7 @@ public class ListWidget extends BaseParentWidget {
     }
 
     @Override
-    public boolean mouseReleased(MouseButtonEvent event) {
+    public boolean mouseReleased(@NotNull MouseButtonEvent event) {
         if (event.input() == 0) {
             this.scrolling = false;
         }

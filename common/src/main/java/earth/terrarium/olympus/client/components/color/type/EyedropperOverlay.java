@@ -4,12 +4,13 @@ import com.mojang.blaze3d.platform.NativeImage;
 import earth.terrarium.olympus.client.ui.Overlay;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Screenshot;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 public class EyedropperOverlay extends Overlay {
     private static final Identifier SCREEN_TEXTURE = Identifier.fromNamespaceAndPath("olympus", "dynamic/screen");
@@ -32,9 +33,8 @@ public class EyedropperOverlay extends Overlay {
         });
     }
 
-
     @Override
-    public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+    public void extractBackground(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         double guiScale = Minecraft.getInstance().getWindow().getGuiScale();
 
         graphics.blit(SCREEN_TEXTURE, 0, 0, this.width, this.height, 0f, 1f, 0f, 1f);
@@ -49,7 +49,7 @@ public class EyedropperOverlay extends Overlay {
 
         graphics.blit(SCREEN_TEXTURE, x - 5, y - 5, x + 15, y + 15, u0, u1, v0, v1);
 
-        graphics.renderOutline(x - 5, y - 5, 20, 20, 0xFFFFFFFF);
+        graphics.outline(x - 5, y - 5, 20, 20, 0xFFFFFFFF);
 
         int pixelX = (int) (mouseX * guiScale);
         int pixelY = (int) (mouseY * guiScale);

@@ -4,7 +4,7 @@ import com.mojang.blaze3d.platform.cursor.CursorTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ActiveTextCollector;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractStringWidget;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
@@ -101,8 +101,8 @@ public class MultilineTextWidget extends AbstractStringWidget {
 		return this;
 	}
 
-	@Override
-	public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    @Override
+    public void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
 		Font font = this.getFont();
 
 		int x = this.getX() + Math.round(this.alignX * (float)(this.getWidth() - maxLineWidth));
@@ -120,7 +120,7 @@ public class MultilineTextWidget extends AbstractStringWidget {
 
 		for (FormattedCharSequence line : this.lines) {
 			var xOffset = (int) Math.ceil((adjustedMaxLineWidth - font.width(line)) * textAlign);
-			graphics.drawString(font, line, xOffset, y, this.getColor(), this.shadow);
+			graphics.text(font, line, xOffset, y, this.getColor(), this.shadow);
 			y += font.lineHeight;
 		}
 		pose.popMatrix();

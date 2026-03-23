@@ -1,13 +1,13 @@
 package earth.terrarium.olympus.client.ui;
 
-import com.teamresourceful.resourcefullib.client.screens.BaseCursorScreen;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class Overlay extends BaseCursorScreen {
+public abstract class Overlay extends Screen {
 
     @Nullable
     protected final Screen background;
@@ -35,9 +35,18 @@ public abstract class Overlay extends BaseCursorScreen {
 
     @Override
     protected void repositionElements() {
-        if (this.background instanceof Overlay overlay) overlay.isInitialized = false;
-        if (this.background != null) this.background.resize(this.width, this.height);
+        if (this.background instanceof Overlay overlay) {
+            overlay.isInitialized = false;
+            overlay.internalResize(this.width, this.height);
+        } else if (this.background != null) {
+            this.background.resize(this.width, this.height);
+        }
         super.repositionElements();
+    }
+
+    // Requires as below we our normal resize will close overlays.
+    private void internalResize(int width, int height) {
+        super.resize(width, height);
     }
 
     @Override
@@ -52,23 +61,16 @@ public abstract class Overlay extends BaseCursorScreen {
         Minecraft.getInstance().setScreen(screenToGoTo);
     }
 
-    public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    @Override
+    public void extractBackground(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         if (this.background == null) return;
-        this.background.renderWithTooltipAndSubtitles(graphics, -1, -1, partialTick);
+        this.background.extractRenderStateWithTooltipAndSubtitles(graphics, -1, -1, partialTick);
         graphics.nextStratum();
     }
 
     @Override
     public void onClose() {
         Minecraft.getInstance().setScreen(this.background);
-    }
-
-    /**
-     * @deprecated This seems really useless
-     */
-    @Deprecated(forRemoval = true)
-    public void renderWidgets(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        super.render(graphics, mouseX, mouseY, partialTick);
     }
 
     @Override

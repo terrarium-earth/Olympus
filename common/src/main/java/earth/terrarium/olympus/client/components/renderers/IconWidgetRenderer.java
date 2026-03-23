@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefullib.common.color.Color;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;
 import earth.terrarium.olympus.client.constants.MinecraftColors;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
@@ -21,7 +21,7 @@ public class IconWidgetRenderer<T extends AbstractWidget> implements WidgetRende
     }
 
     @Override
-    public void render(GuiGraphics graphics, WidgetRendererContext<T> context, float partialTick) {
+    public void render(GuiGraphicsExtractor graphics, WidgetRendererContext<T> context, float partialTick) {
         float red = color.getFloatRed();
         float green = color.getFloatGreen();
         float blue = color.getFloatBlue();

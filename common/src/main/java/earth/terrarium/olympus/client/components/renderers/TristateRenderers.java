@@ -1,7 +1,6 @@
 package earth.terrarium.olympus.client.components.renderers;
 
 import com.teamresourceful.resourcefullib.common.color.Color;
-import com.teamresourceful.resourcefullib.common.utils.TriState;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.constants.MinecraftColors;
 import earth.terrarium.olympus.client.ui.UIConstants;
@@ -10,6 +9,7 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.TriState;
 
 public class TristateRenderers {
 
@@ -17,7 +17,7 @@ public class TristateRenderers {
         return switch (state) {
             case TRUE -> Component.translatable("olympus.ui.tristate.true");
             case FALSE -> Component.translatable("olympus.ui.tristate.false");
-            case UNDEFINED -> Component.translatable("olympus.ui.tristate.undefined");
+            case DEFAULT -> Component.translatable("olympus.ui.tristate.undefined");
         };
     }
 
@@ -25,7 +25,7 @@ public class TristateRenderers {
         return switch (state) {
             case TRUE -> UIIcons.CHECKMARK;
             case FALSE -> UIIcons.CROSS;
-            case UNDEFINED -> UIIcons.DASH;
+            case DEFAULT -> UIIcons.DASH;
         };
     }
 
@@ -33,7 +33,7 @@ public class TristateRenderers {
         return switch (state) {
             case TRUE -> MinecraftColors.DARK_GREEN;
             case FALSE -> MinecraftColors.RED;
-            case UNDEFINED -> MinecraftColors.DARK_GRAY;
+            case DEFAULT -> MinecraftColors.DARK_GRAY;
         };
     }
 
@@ -41,7 +41,7 @@ public class TristateRenderers {
         return switch (state) {
             case TRUE -> UIConstants.PRIMARY_BUTTON;
             case FALSE -> UIConstants.DANGER_BUTTON;
-            case UNDEFINED -> UIConstants.DARK_BUTTON;
+            case DEFAULT -> UIConstants.DARK_BUTTON;
         };
     }
 

@@ -4,7 +4,7 @@ import com.teamresourceful.resourcefullib.common.color.Color;
 import com.teamresourceful.resourcefullib.common.color.ConstantColors;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 
 public class SolidColorWidgetRenderer<T extends AbstractWidget> implements WidgetRenderer<T>, ColorableWidget {
@@ -13,7 +13,7 @@ public class SolidColorWidgetRenderer<T extends AbstractWidget> implements Widge
     protected boolean ignoreAlpha = false;
 
     @Override
-    public void render(GuiGraphics graphics, WidgetRendererContext<T> widget, float partialTick) {
+    public void render(GuiGraphicsExtractor graphics, WidgetRendererContext<T> widget, float partialTick) {
         int color = this.ignoreAlpha ? this.color.getValue() | 0xFF000000 : this.color.getValue();
         graphics.fill(widget.getX(), widget.getY(), widget.getX() + widget.getWidth(), widget.getY() + widget.getHeight(), color);
 

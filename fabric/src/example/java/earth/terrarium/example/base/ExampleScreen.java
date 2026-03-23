@@ -1,9 +1,9 @@
 package earth.terrarium.example.base;
 
-import com.teamresourceful.resourcefullib.client.screens.BaseCursorScreen;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 
-public abstract class ExampleScreen extends BaseCursorScreen {
+public abstract class ExampleScreen extends Screen {
 
     public ExampleScreen() {
         super(CommonComponents.EMPTY);

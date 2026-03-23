@@ -7,7 +7,7 @@ import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import earth.terrarium.olympus.client.images.BuiltinImageProviders;
 import earth.terrarium.olympus.client.layouts.Layouts;
 import earth.terrarium.olympus.client.utils.State;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.layouts.FrameLayout;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
@@ -43,8 +43,8 @@ public class ImageExample extends ExampleScreen {
     }
 
     @Override
-    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float f) {
-        super.render(graphics, mouseX, mouseY, f);
+    public void extractRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
 
         var uri = image.get();
         if (uri == null) return;

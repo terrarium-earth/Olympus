@@ -3,7 +3,6 @@ package earth.terrarium.olympus.client.pipelines.uniforms;
 import com.mojang.blaze3d.buffers.Std140Builder;
 import com.mojang.blaze3d.buffers.Std140SizeCalculator;
 import net.minecraft.client.renderer.DynamicUniformStorage;
-import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
@@ -21,30 +20,6 @@ public record RoundedRectangleUniform(
         Vector2f center,
         float scaleFactor
 ) implements RenderPipelineUniforms {
-
-    /** @deprecated Use the static factory method 'of' instead. */
-    @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion="26.1")
-    public RoundedRectangleUniform(
-        Vector4f borderColor,
-        Vector4f radius,
-        float borderWidth,
-        Vector2f size,
-        Vector2f center,
-        float scaleFactor
-    ) {
-        this(
-                borderColor,
-                borderColor,
-                borderColor,
-                borderColor,
-                radius,
-                borderWidth,
-                size,
-                center,
-                scaleFactor
-        );
-    }
 
     public static final String NAME = "RoundedRectangleUniform";
     public static final Supplier<DynamicUniformStorage<RoundedRectangleUniform>> STORAGE = RenderPipelineUniformsStorage.register(

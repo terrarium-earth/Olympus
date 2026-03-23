@@ -9,9 +9,10 @@ import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.FocusNavigationEvent;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class TextWidget extends BaseWidget implements ColorableWidget {
@@ -29,7 +30,7 @@ public class TextWidget extends BaseWidget implements ColorableWidget {
     }
 
     @Override
-    protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         this.renderer.render(graphics, new WidgetRendererContext<>(this, mouseX, mouseY), partialTick);
     }
 

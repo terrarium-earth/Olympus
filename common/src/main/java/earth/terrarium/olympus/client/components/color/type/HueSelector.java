@@ -1,9 +1,10 @@
 package earth.terrarium.olympus.client.components.color.type;
 
 import earth.terrarium.olympus.client.components.base.BaseWidget;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.NotNull;
 
 public class HueSelector extends BaseWidget {
 
@@ -15,7 +16,7 @@ public class HueSelector extends BaseWidget {
     }
 
     @Override
-    protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+    protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         for (int i = 0; i < getWidth(); i++) {
             graphics.fill(
                     getX() + i, getY(),
@@ -25,7 +26,7 @@ public class HueSelector extends BaseWidget {
         }
 
         int posX = Mth.floor(this.state.get().hue() * this.getWidth());
-        graphics.renderOutline(getX() + posX - 1, getY(), 3, getHeight(), 0xFF000000);
+        graphics.outline(getX() + posX - 1, getY(), 3, getHeight(), 0xFF000000);
     }
 
     @Override

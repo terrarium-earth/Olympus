@@ -7,7 +7,7 @@ import earth.terrarium.olympus.client.constants.MinecraftColors;
 import earth.terrarium.olympus.client.utils.OlympusUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
@@ -27,7 +27,7 @@ public class TextWidgetRenderer<T extends AbstractWidget> implements WidgetRende
     }
 
     @Override
-    public void render(GuiGraphics graphics, WidgetRendererContext<T> context, float partialTick) {
+    public void render(GuiGraphicsExtractor graphics, WidgetRendererContext<T> context, float partialTick) {
         int textWidth = this.font.width(this.text);
         int centerY = context.getY() + context.getHeight() / 2 - font.lineHeight / 2;
         double seconds = (double) Util.getMillis() / 1000.0;
@@ -37,11 +37,11 @@ public class TextWidgetRenderer<T extends AbstractWidget> implements WidgetRende
             double f = Math.sin(Mth.HALF_PI * Math.cos(Mth.TWO_PI * seconds / e)) / 2.0 + 0.5;
             double g = Mth.lerp(f, 0.0, overhang);
             graphics.enableScissor(context.getLeft(), context.getTop(), context.getRight(), context.getBottom());
-            graphics.drawString(this.font, this.text, context.getX() - (int) g, centerY, OlympusUtils.getEnsureAlpha(color), this.drawShadow);
+            graphics.text(this.font, this.text, context.getX() - (int) g, centerY, OlympusUtils.getEnsureAlpha(color), this.drawShadow);
             graphics.disableScissor();
         } else {
             int centerX = context.getX() + Math.round(context.getWidth() * alignX);
-            graphics.drawString(this.font, this.text, centerX - Math.round(textWidth * alignX), centerY, OlympusUtils.getEnsureAlpha(color), this.drawShadow);
+            graphics.text(this.font, this.text, centerX - Math.round(textWidth * alignX), centerY, OlympusUtils.getEnsureAlpha(color), this.drawShadow);
         }
     }
 

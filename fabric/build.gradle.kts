@@ -15,3 +15,7 @@ loom {
         }
     }
 }
+
+dependencies {
+    "exampleAnnotationProcessor"(rootProject.libs.service.plugin)
+}

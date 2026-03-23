@@ -3,7 +3,7 @@ package earth.terrarium.olympus.client.ui.modals;
 import earth.terrarium.olympus.client.ui.Overlay;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import earth.terrarium.olympus.client.ui.UITexts;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.layouts.GridLayout;
@@ -66,22 +66,22 @@ public abstract class BaseModal extends Overlay {
     }
 
     @Override
-    public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(graphics, mouseX, mouseY, partialTick);
-        this.renderBlurredBackground(graphics);
-        this.renderMenuBackground(graphics);
+    public void extractBackground(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(graphics, mouseX, mouseY, partialTick);
+        this.extractBlurredBackground(graphics);
+        this.extractMenuBackground(graphics);
         graphics.blitSprite(RenderPipelines.GUI_TEXTURED, UIConstants.MODAL, this.left, this.top, this.modalWidth, this.modalHeight);
         graphics.blitSprite(RenderPipelines.GUI_TEXTURED, UIConstants.MODAL_HEADER, this.left + 1, this.top + 1, this.modalWidth - 2, TITLE_BAR_HEIGHT);
     }
 
     @Override
-    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        super.render(graphics, mouseX, mouseY, partialTick);
+    public void extractRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
         renderForeground(graphics, mouseX, mouseY, partialTick);
     }
 
-    public void renderForeground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        graphics.drawString(
+    public void renderForeground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        graphics.text(
             this.font,
             this.title, this.left + INNER_PADDING, (int) (this.top + (TITLE_BAR_HEIGHT - 9) / 2f) + 2,
             0xffffffff, false

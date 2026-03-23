@@ -1,7 +1,7 @@
 package earth.terrarium.olympus.client.components.base.renderer;
 
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 
 /**
@@ -9,7 +9,7 @@ import net.minecraft.client.gui.components.AbstractWidget;
  */
 public interface WidgetRenderer<T extends AbstractWidget> {
 
-    void render(GuiGraphics graphics, WidgetRendererContext<T> widget, float partialTick);
+    void render(GuiGraphicsExtractor graphics, WidgetRendererContext<T> widget, float partialTick);
 
     default WidgetRenderer<T> withPadding(int padding) {
         return WidgetRenderers.padded(padding, padding, padding, padding, this);

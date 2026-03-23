@@ -1,8 +1,7 @@
 package earth.terrarium.olympus.client.components.buttons;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import com.teamresourceful.resourcefullib.client.components.CursorWidget;
-import com.teamresourceful.resourcefullib.client.screens.CursorScreen;
+import com.mojang.blaze3d.platform.cursor.CursorTypes;
 import earth.terrarium.olympus.client.components.base.BaseWidget;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;
@@ -12,15 +11,16 @@ import earth.terrarium.olympus.client.ui.UIConstants;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.util.ARGB;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class Button extends BaseWidget implements CursorWidget {
+public class Button extends BaseWidget {
 
     private WidgetRenderer<? super Button> renderer = WidgetRenderer.empty();
     private final Int2ObjectMap<Runnable> actions = new Int2ObjectArrayMap<>();
@@ -32,7 +32,7 @@ public class Button extends BaseWidget implements CursorWidget {
     }
 
     @Override
-    protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         this.isHovered = graphics.containsPointInScissor(mouseX, mouseY) && isMouseOver(mouseX, mouseY);
 
         int color = ARGB.color(0xFF, 0xFF, 0xFF, (int) (this.alpha * 255f));
@@ -47,11 +47,10 @@ public class Button extends BaseWidget implements CursorWidget {
             );
         }
         this.renderer.render(graphics, new WidgetRendererContext<>(this, mouseX, mouseY), partialTick);
-    }
 
-    @Override
-    public CursorScreen.Cursor getCursor() {
-        return !this.isActive() ? CursorScreen.Cursor.DISABLED : CursorScreen.Cursor.POINTER;
+        if (this.isHovered) {
+            graphics.requestCursor(CursorTypes.POINTING_HAND);
+        }
     }
 
     public Button withRenderer(WidgetRenderer<? super Button> renderer) {

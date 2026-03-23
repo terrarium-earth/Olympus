@@ -1,6 +1,5 @@
 package earth.terrarium.olympus.client.pipelines;
 
-import com.mojang.blaze3d.pipeline.BlendFunction;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.shaders.UniformType;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -9,7 +8,7 @@ import earth.terrarium.olympus.client.pipelines.pips.RoundedTexturePIPRenderer;
 import earth.terrarium.olympus.client.pipelines.uniforms.RoundedTextureUniform;
 import earth.terrarium.olympus.client.utils.GuiGraphicsHelper;
 import earth.terrarium.olympus.client.utils.TextureUtils;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 
 public class RoundedTexture {
@@ -20,14 +19,13 @@ public class RoundedTexture {
             .withUniform("DynamicTransforms", UniformType.UNIFORM_BUFFER)
             .withUniform("Projection", UniformType.UNIFORM_BUFFER)
             .withUniform(RoundedTextureUniform.NAME, UniformType.UNIFORM_BUFFER)
-            .withBlend(BlendFunction.TRANSLUCENT)
             .withFragmentShader(Identifier.fromNamespaceAndPath("olympus", "core/rounded_tex"))
             .withVertexShader(Identifier.fromNamespaceAndPath("olympus", "core/rounded_tex"))
             .withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
             .build();
 
     public static void draw(
-            GuiGraphics graphics,
+            GuiGraphicsExtractor graphics,
             int x, int y, int width, int height,
             Identifier texture,
             float u0, float v0, float u1, float v1,
@@ -37,7 +35,7 @@ public class RoundedTexture {
     }
 
     public static void draw(
-            GuiGraphics graphics,
+            GuiGraphicsExtractor graphics,
             int x, int y, int width, int height,
             Identifier texture,
             float u0, float v0, float u1, float v1,

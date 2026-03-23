@@ -7,11 +7,11 @@ import earth.terrarium.olympus.client.fabric.PictureInPictureHandler;
 import earth.terrarium.olympus.client.fabric.PictureInPicturePool;
 import earth.terrarium.olympus.client.pipelines.pips.OlympusPictureInPictureRenderState;
 import net.minecraft.client.gui.render.GuiRenderer;
-import net.minecraft.client.gui.render.state.GuiRenderState;
-import net.minecraft.client.gui.render.state.pip.PictureInPictureRenderState;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.feature.FeatureRenderDispatcher;
+import net.minecraft.client.renderer.state.gui.GuiRenderState;
+import net.minecraft.client.renderer.state.gui.pip.PictureInPictureRenderState;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -25,7 +25,8 @@ import java.util.List;
 @Mixin(GuiRenderer.class)
 public class GuiRendererMixin {
 
-    @Shadow @Final GuiRenderState renderState;
+    @Shadow @Final
+    GuiRenderState renderState;
     @Unique private PictureInPictureHandler pipHandler = null;
 
     @Inject(method = "<init>", at = @At("RETURN"))
