@@ -1,1 +1,1 @@
--  Add ability to set color of each corner in rounded rect - J10a1n15
+- Add a suite of new icons and sprite textures
