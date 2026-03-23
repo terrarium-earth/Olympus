@@ -9,6 +9,11 @@ public class UIIcons {
 
     public static final List<Identifier> ICONS = new ArrayList<>();
 
+    public static final Identifier CODE = create("code");
+
+    public static final Identifier CODE_2 = create("code_2");
+    public static final Identifier CODE_SLASH = CODE_2;
+
     public static final Identifier BATTERY_EMPTY = create("battery_empty");
     public static final Identifier BATTERY = BATTERY_EMPTY;
 
@@ -87,6 +92,10 @@ public class UIIcons {
 
     public static final Identifier CLIPBOARD_TEXT = create("clipboard_text");
 
+    public static final Identifier CLIPBOARD_LIST = create("clipboard_list");
+
+    public static final Identifier CLIPBOARD_EDIT = create("clipboard_edit");
+
     public static final Identifier CONTROLLER = create("controller");
     public static final Identifier GAMEPAD = CONTROLLER;
 
@@ -117,8 +126,25 @@ public class UIIcons {
     public static final Identifier DROPPER = EYE_DROPPER;
 
     public static final Identifier FILE = create("file");
+    public static final Identifier DOCUMENT = FILE;
+
+    public static final Identifier FILE_PLUS = create("file_plus");
+    public static final Identifier FILE_ADD = FILE_PLUS;
+    public static final Identifier DOCUMENT_PLUS = FILE_PLUS;
+    public static final Identifier DOCUMENT_ADD = FILE_PLUS;
+
+    public static final Identifier FILE_MINUS = create("file_minus");
+    public static final Identifier FILE_REMOVE = FILE_MINUS;
+    public static final Identifier DOCUMENT_MINUS = FILE_MINUS;
+    public static final Identifier DOCUMENT_REMOVE = FILE_MINUS;
 
     public static final Identifier FOLDER = create("folder");
+
+    public static final Identifier FOLDER_PLUS = create("folder_plus");
+    public static final Identifier FOLDER_ADD = FOLDER_PLUS;
+
+    public static final Identifier FOLDER_MINUS = create("folder_minus");
+    public static final Identifier FOLDER_REMOVE = FOLDER_MINUS;
 
     public static final Identifier FOOD = create("food");
 
@@ -173,6 +199,9 @@ public class UIIcons {
     public static final Identifier REFRESH = create("refresh");
     public static final Identifier MOON = create("moon");
     public static final Identifier NIGHT = MOON;
+
+    public static final Identifier ANVIL = create("anvil");
+    public static final Identifier CURSEFORGE = ANVIL;
 
     public static final Identifier MODRINTH = create("modrinth");
 
@@ -247,6 +276,15 @@ public class UIIcons {
 
     public static final Identifier VOLUME_OFF = create("volume_off");
     public static final Identifier MUTE = VOLUME_OFF;
+
+    public static final Identifier STAR = create("star");
+
+    public static final Identifier LIGHTBULB = create("lightbulb");
+
+    public static final Identifier MAIL = create("mail");
+    public static final Identifier ENVELOPE = MAIL;
+
+    public static final Identifier CAMERA = create("camera");
 
     // These 2 icons are special and are size 10x10 instead of the normal 12x12
     public static final Identifier CHEVRON_DOWN = UIConstants.id("icons/chevron_down");
