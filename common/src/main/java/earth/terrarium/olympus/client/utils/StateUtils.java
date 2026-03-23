@@ -16,4 +16,13 @@ public class StateUtils {
             case FALSE -> 2;
         });
     }
+
+    @Deprecated
+    public static RadioState<com.teamresourceful.resourcefullib.common.utils.TriState> tristate(com.teamresourceful.resourcefullib.common.utils.TriState state) {
+        return new RadioState<>(state, switch (state) {
+            case TRUE -> 0;
+            case UNDEFINED -> 1;
+            case FALSE -> 2;
+        });
+    }
 }

@@ -309,13 +309,44 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
         return this;
     }
 
+    @Deprecated
+    public LayoutWidget<T> withScrollableX(com.teamresourceful.resourcefullib.common.utils.TriState scrollableX) {
+        return withScrollableX(switch (scrollableX) {
+            case TRUE -> TriState.TRUE;
+            case FALSE -> TriState.FALSE;
+            case UNDEFINED -> TriState.DEFAULT;
+        });
+    }
+
     public LayoutWidget<T> withScrollableY(TriState scrollableY) {
         this.scrollableY = scrollableY;
         return this;
     }
 
+    @Deprecated
+    public LayoutWidget<T> withScrollableY(com.teamresourceful.resourcefullib.common.utils.TriState scrollableY) {
+        return withScrollableY(switch (scrollableY) {
+            case TRUE -> TriState.TRUE;
+            case FALSE -> TriState.FALSE;
+            case UNDEFINED -> TriState.DEFAULT;
+        });
+    }
+
     public LayoutWidget<T> withScrollable(TriState scrollableX, TriState scrollableY) {
         return withScrollableX(scrollableX).withScrollableY(scrollableY);
+    }
+
+    @Deprecated
+    public LayoutWidget<T> withScrollable(com.teamresourceful.resourcefullib.common.utils.TriState scrollableX, com.teamresourceful.resourcefullib.common.utils.TriState scrollableY) {
+        return withScrollable(switch (scrollableX) {
+            case TRUE -> TriState.TRUE;
+            case FALSE -> TriState.FALSE;
+            case UNDEFINED -> TriState.DEFAULT;
+        }, switch (scrollableY) {
+            case TRUE -> TriState.TRUE;
+            case FALSE -> TriState.FALSE;
+            case UNDEFINED -> TriState.DEFAULT;
+        });
     }
 
     public LayoutWidget<T> withScroll(int x, int y) {
