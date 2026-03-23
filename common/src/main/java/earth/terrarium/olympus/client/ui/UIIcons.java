@@ -28,62 +28,62 @@ public class UIIcons {
 
     public static final Identifier CALENDAR = create("calendar");
 
-    public static final ResourceLocation CIRCLE = create("circle");
-    public static final ResourceLocation DISC = CIRCLE;
+    public static final Identifier CIRCLE = create("circle");
+    public static final Identifier DISC = CIRCLE;
 
-    public static final ResourceLocation CIRCLE_SLASH = create("circle_slash");
-    public static final ResourceLocation BANNED = CIRCLE_SLASH;
-    public static final ResourceLocation NO = CIRCLE_SLASH;
+    public static final Identifier CIRCLE_SLASH = create("circle_slash");
+    public static final Identifier BANNED = CIRCLE_SLASH;
+    public static final Identifier NO = CIRCLE_SLASH;
 
-    public static final ResourceLocation CLOCK = create("clock");
-    public static final ResourceLocation TIME = CLOCK;
+    public static final Identifier CLOCK = create("clock");
+    public static final Identifier TIME = CLOCK;
 
-    public static final ResourceLocation CLOCK_PLUS = create("clock_plus");
-    public static final ResourceLocation SCHEDULE = CLOCK_PLUS;
+    public static final Identifier CLOCK_PLUS = create("clock_plus");
+    public static final Identifier SCHEDULE = CLOCK_PLUS;
 
-    public static final ResourceLocation CHECKMARK = create("checkmark");
-    public static final ResourceLocation CHECK = CHECKMARK;
+    public static final Identifier CHECKMARK = create("checkmark");
+    public static final Identifier CHECK = CHECKMARK;
 
-    public static final ResourceLocation MESSAGE = create("message");
-    public static final ResourceLocation CHAT = MESSAGE;
+    public static final Identifier MESSAGE = create("message");
+    public static final Identifier CHAT = MESSAGE;
 
-    public static final ResourceLocation MESSAGE_CHECK = create("message_check");
-    public static final ResourceLocation MESSAGE_DONE = MESSAGE_CHECK;
+    public static final Identifier MESSAGE_CHECK = create("message_check");
+    public static final Identifier MESSAGE_DONE = MESSAGE_CHECK;
 
-    public static final ResourceLocation MESSAGE_CODE = create("message_code");
+    public static final Identifier MESSAGE_CODE = create("message_code");
 
-    public static final ResourceLocation MESSAGE_DASHED = create("message_dashed");
-    public static final ResourceLocation MESSAGE_DRAFT = MESSAGE_DASHED;
+    public static final Identifier MESSAGE_DASHED = create("message_dashed");
+    public static final Identifier MESSAGE_DRAFT = MESSAGE_DASHED;
 
-    public static final ResourceLocation MESSAGE_DIFF = create("message_diff");
+    public static final Identifier MESSAGE_DIFF = create("message_diff");
 
-    public static final ResourceLocation MESSAGE_DOT = create("message_dot");
-    public static final ResourceLocation MESSAGE_UNREAD = MESSAGE_DOT;
-    public static final ResourceLocation MESSAGE_NOTIFICATION = MESSAGE_DOT;
+    public static final Identifier MESSAGE_DOT = create("message_dot");
+    public static final Identifier MESSAGE_UNREAD = MESSAGE_DOT;
+    public static final Identifier MESSAGE_NOTIFICATION = MESSAGE_DOT;
 
-    public static final ResourceLocation MESSAGE_HEART = create("message_heart");
-    public static final ResourceLocation MESSAGE_LOVE = MESSAGE_HEART;
+    public static final Identifier MESSAGE_HEART = create("message_heart");
+    public static final Identifier MESSAGE_LOVE = MESSAGE_HEART;
 
-    public static final ResourceLocation MESSAGE_LOCKED = create("message_locked");
-    public static final ResourceLocation MESSAGE_SECURE = MESSAGE_LOCKED;
+    public static final Identifier MESSAGE_LOCKED = create("message_locked");
+    public static final Identifier MESSAGE_SECURE = MESSAGE_LOCKED;
 
-    public static final ResourceLocation MESSAGE_MORE = create("message_more");
-    public static final ResourceLocation MESSAGE_ELLIPSIS = MESSAGE_MORE;
+    public static final Identifier MESSAGE_MORE = create("message_more");
+    public static final Identifier MESSAGE_ELLIPSIS = MESSAGE_MORE;
 
-    public static final ResourceLocation MESSAGE_QUOTE = create("message_quote");
-    public static final ResourceLocation QUOTE = MESSAGE_QUOTE;
+    public static final Identifier MESSAGE_QUOTE = create("message_quote");
+    public static final Identifier QUOTE = MESSAGE_QUOTE;
 
-    public static final ResourceLocation MESSAGE_REPLY = create("message_reply");
-    public static final ResourceLocation REPLY = MESSAGE_REPLY;
+    public static final Identifier MESSAGE_REPLY = create("message_reply");
+    public static final Identifier REPLY = MESSAGE_REPLY;
 
-    public static final ResourceLocation MESSAGE_TEXT = create("message_text");
-    public static final ResourceLocation SMS = MESSAGE_TEXT;
+    public static final Identifier MESSAGE_TEXT = create("message_text");
+    public static final Identifier SMS = MESSAGE_TEXT;
 
-    public static final ResourceLocation MESSAGE_X = create("message_x");
-    public static final ResourceLocation MESSAGE_CLOSE = MESSAGE_X;
-    public static final ResourceLocation MESSAGE_DELETE = MESSAGE_X;
+    public static final Identifier MESSAGE_X = create("message_x");
+    public static final Identifier MESSAGE_CLOSE = MESSAGE_X;
+    public static final Identifier MESSAGE_DELETE = MESSAGE_X;
 
-    public static final ResourceLocation CLIPBOARD = create("clipboard");
+    public static final Identifier CLIPBOARD = create("clipboard");
 
     public static final Identifier CLIPBOARD_TEXT = create("clipboard_text");
 
@@ -92,11 +92,11 @@ public class UIIcons {
 
     public static final Identifier COPY = create("copy");
 
-    public static final ResourceLocation CROWN = create("crown");
-    public static final ResourceLocation KING = CROWN;
-    public static final ResourceLocation ADMIN = CROWN;
+    public static final Identifier CROWN = create("crown");
+    public static final Identifier KING = CROWN;
+    public static final Identifier ADMIN = CROWN;
 
-    public static final ResourceLocation CROP = create("crop");
+    public static final Identifier CROP = create("crop");
 
     public static final Identifier CROSS = create("cross");
     public static final Identifier X = CROSS;
@@ -120,19 +120,19 @@ public class UIIcons {
 
     public static final Identifier FOLDER = create("folder");
 
-    public static final ResourceLocation FOOD = create("food");
+    public static final Identifier FOOD = create("food");
 
-    public static final ResourceLocation CONICAL_FLASK = create("conical_flask");
-    public static final ResourceLocation FLASK = CONICAL_FLASK;
-    public static final ResourceLocation BEAKER = CONICAL_FLASK;
+    public static final Identifier CONICAL_FLASK = create("conical_flask");
+    public static final Identifier FLASK = CONICAL_FLASK;
+    public static final Identifier BEAKER = CONICAL_FLASK;
 
-    public static final ResourceLocation CONICAL_FLASK_FULL = create("conical_flask_full");
-    public static final ResourceLocation FLASK_FULL = CONICAL_FLASK_FULL;
+    public static final Identifier CONICAL_FLASK_FULL = create("conical_flask_full");
+    public static final Identifier FLASK_FULL = CONICAL_FLASK_FULL;
 
-    public static final ResourceLocation ROUND_FLASK = create("round_flask");
-    public static final ResourceLocation POTION = ROUND_FLASK;
+    public static final Identifier ROUND_FLASK = create("round_flask");
+    public static final Identifier POTION = ROUND_FLASK;
 
-    public static final ResourceLocation GRID = create("grid");
+    public static final Identifier GRID = create("grid");
 
     public static final Identifier HEART = create("heart");
     public static final Identifier FAVORITE = HEART;
@@ -143,11 +143,11 @@ public class UIIcons {
     public static final Identifier LINK = create("link");
     public static final Identifier CHAIN = LINK;
 
-    public static final ResourceLocation KEY = create("key");
-    public static final ResourceLocation PASSWORD = KEY;
+    public static final Identifier KEY = create("key");
+    public static final Identifier PASSWORD = KEY;
 
-    public static final ResourceLocation LIST = create("list");
-    public static final ResourceLocation MENU = LIST;
+    public static final Identifier LIST = create("list");
+    public static final Identifier MENU = LIST;
 
     public static final Identifier LOGIN = create("login");
     public static final Identifier SIGN_IN = LOGIN;
@@ -170,10 +170,9 @@ public class UIIcons {
     public static final Identifier MINIMIZE = create("minimize");
     public static final Identifier COLLAPSE = MINIMIZE;
 
-    public static final ResourceLocation MOON = create("moon");
-    public static final ResourceLocation NIGHT = MOON;
-
-    public static final ResourceLocation MODRINTH = create("modrinth");
+    public static final Identifier REFRESH = create("refresh");
+    public static final Identifier MOON = create("moon");
+    public static final Identifier NIGHT = MOON;
 
     public static final Identifier MODRINTH = create("modrinth");
 
@@ -206,34 +205,25 @@ public class UIIcons {
 
     public static final Identifier PLUS = create("plus");
     public static final Identifier ADD = PLUS;
-    public static final ResourceLocation RAIN = create("rain");
-
-    public static final ResourceLocation SAVE = create("save");
-    public static final ResourceLocation DISK = SAVE;
+    public static final Identifier RAIN = create("rain");
 
     public static final Identifier SAVE = create("save");
     public static final Identifier DISK = SAVE;
 
     public static final Identifier SPEAKER = create("speaker");
-    public static final ResourceLocation SUN = create("sun");
-    public static final ResourceLocation SUNSHINE = SUN;
+    public static final Identifier SUN = create("sun");
+    public static final Identifier SUNSHINE = SUN;
 
-    public static final ResourceLocation SUNRISE = create("sunrise");
-    public static final ResourceLocation DAWN = SUNRISE;
-
-    public static final ResourceLocation TAG = create("tag");
-    public static final ResourceLocation LABEL = TAG;
+    public static final Identifier SUNRISE = create("sunrise");
+    public static final Identifier DAWN = SUNRISE;
 
     public static final Identifier TAG = create("tag");
     public static final Identifier LABEL = TAG;
 
     public static final Identifier TEST_TUBE = create("test_tube");
-    public static final ResourceLocation THUNDER = create("thunder");
-    public static final ResourceLocation STORM = THUNDER;
-    public static final ResourceLocation LIGHTNING = THUNDER;
-
-    public static final ResourceLocation THUMBS_DOWN = create("thumbs_down");
-    public static final ResourceLocation DOWNVOTE = THUMBS_DOWN;
+    public static final Identifier THUNDER = create("thunder");
+    public static final Identifier STORM = THUNDER;
+    public static final Identifier LIGHTNING = THUNDER;
 
     public static final Identifier THUMBS_DOWN = create("thumbs_down");
     public static final Identifier DOWNVOTE = THUMBS_DOWN;
