@@ -18,20 +18,13 @@ config = "olympus.mixins.json"
 [[dependencies.olympus]]
 modId = "neoforge"
 type="required"
-versionRange = "[21.11.0-beta,)"
-ordering = "NONE"
-side = "BOTH"
-
-[[dependencies.olympus]]
-modId = "minecraft"
-type="required"
-versionRange = "[1.21.11,)"
+versionRange = "[26.1.0.1-beta,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.olympus]]
 modId = "resourcefullib"
 type="required"
-versionRange = "[3.3.0,)"
+versionRange = "[4.0.0,)"
 ordering = "NONE"
 side = "BOTH"
