@@ -1,1 +1,1 @@
-- Add a suite of new icons and sprite textures
+- Update to 26.1
