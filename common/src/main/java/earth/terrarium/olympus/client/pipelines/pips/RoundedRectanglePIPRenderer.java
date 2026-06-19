@@ -1,9 +1,10 @@
 package earth.terrarium.olympus.client.pipelines.pips;
 
+import com.mojang.blaze3d.PrimitiveTopology;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.ByteBufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import earth.terrarium.olympus.client.pipelines.RoundedRectangle;
 import earth.terrarium.olympus.client.pipelines.renderer.PipelineRenderer;
 import earth.terrarium.olympus.client.pipelines.uniforms.RoundedRectangleUniform;
@@ -12,22 +13,19 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.util.ARGB;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix3x2f;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
+import org.jspecify.annotations.NonNull;
 
-import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class RoundedRectanglePIPRenderer extends PictureInPictureRenderer<RoundedRectanglePIPRenderer.State> {
 
     private State lastState;
-
-    public RoundedRectanglePIPRenderer(MultiBufferSource.BufferSource bufferSource) {
-        super(bufferSource);
-    }
 
     @Override
     public @NotNull Class<State> getRenderStateClass() {
@@ -40,52 +38,54 @@ public class RoundedRectanglePIPRenderer extends PictureInPictureRenderer<Rounde
     }
 
     @Override
-    protected void renderToTexture(State state, PoseStack stack) {
+    protected void renderToTexture(State state, @NonNull PoseStack poseStack, @NonNull SubmitNodeCollector submitNodeCollector) {
         var bounds = state.bounds;
 
         float scale = (float) Minecraft.getInstance().getWindow().getGuiScale();
         float scaledWidth = (bounds.width() - state.borderWidth() * 2) * scale;
         float scaledHeight = (bounds.height() - state.borderWidth() * 2) * scale;
 
-        var buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-        buffer.addVertex(0f, 0f, 0f).setColor(state.color());
-        buffer.addVertex(0f, scaledHeight, 0f).setColor(state.color());
-        buffer.addVertex(scaledWidth, scaledHeight, 0f).setColor(state.color());
-        buffer.addVertex(scaledWidth, 0f, 0f).setColor(state.color());
+        try (var byteBufferBuilder = ByteBufferBuilder.exactlySized( DefaultVertexFormat.POSITION_COLOR.getVertexSize() * 4)) {
+            var bufferBuilder = new BufferBuilder(byteBufferBuilder, PrimitiveTopology.QUADS, DefaultVertexFormat.POSITION_COLOR);
+            bufferBuilder.addVertex(0f, 0f, 0f).setColor(state.color());
+            bufferBuilder.addVertex(0f, scaledHeight, 0f).setColor(state.color());
+            bufferBuilder.addVertex(scaledWidth, scaledHeight, 0f).setColor(state.color());
+            bufferBuilder.addVertex(scaledWidth, 0f, 0f).setColor(state.color());
 
-        PipelineRenderer.builder(RoundedRectangle.PIPELINE, buffer.buildOrThrow())
-                .uniform(RoundedRectangleUniform.STORAGE, RoundedRectangleUniform.of(
-                        new Vector4f(
-                                ARGB.redFloat(state.borderColorTopLeft()),
-                                ARGB.greenFloat(state.borderColorTopLeft()),
-                                ARGB.blueFloat(state.borderColorTopLeft()),
-                                ARGB.alphaFloat(state.borderColorTopLeft())
-                        ),
-                        new Vector4f(
-                                ARGB.redFloat(state.borderColorTopRight()),
-                                ARGB.greenFloat(state.borderColorTopRight()),
-                                ARGB.blueFloat(state.borderColorTopRight()),
-                                ARGB.alphaFloat(state.borderColorTopRight())
-                        ),
-                        new Vector4f(
-                                ARGB.redFloat(state.borderColorBottomLeft()),
-                                ARGB.greenFloat(state.borderColorBottomLeft()),
-                                ARGB.blueFloat(state.borderColorBottomLeft()),
-                                ARGB.alphaFloat(state.borderColorBottomLeft())
-                        ),
-                        new Vector4f(
-                                ARGB.redFloat(state.borderColorBottomRight()),
-                                ARGB.greenFloat(state.borderColorBottomRight()),
-                                ARGB.blueFloat(state.borderColorBottomRight()),
-                                ARGB.alphaFloat(state.borderColorBottomRight())
-                        ),
-                        new Vector4f(state.borderRadius()),
-                        state.borderWidth(),
-                        new Vector2f(scaledWidth - state.borderWidth() * 2, scaledHeight - state.borderWidth() * 2),
-                        new Vector2f(scaledWidth / 2f, scaledHeight / 2f),
-                        scale
-                ))
-                .draw();
+            PipelineRenderer.builder(RoundedRectangle.PIPELINE, bufferBuilder.buildOrThrow())
+                    .uniform(RoundedRectangleUniform.STORAGE, RoundedRectangleUniform.of(
+                            new Vector4f(
+                                    ARGB.redFloat(state.borderColorTopLeft()),
+                                    ARGB.greenFloat(state.borderColorTopLeft()),
+                                    ARGB.blueFloat(state.borderColorTopLeft()),
+                                    ARGB.alphaFloat(state.borderColorTopLeft())
+                            ),
+                            new Vector4f(
+                                    ARGB.redFloat(state.borderColorTopRight()),
+                                    ARGB.greenFloat(state.borderColorTopRight()),
+                                    ARGB.blueFloat(state.borderColorTopRight()),
+                                    ARGB.alphaFloat(state.borderColorTopRight())
+                            ),
+                            new Vector4f(
+                                    ARGB.redFloat(state.borderColorBottomLeft()),
+                                    ARGB.greenFloat(state.borderColorBottomLeft()),
+                                    ARGB.blueFloat(state.borderColorBottomLeft()),
+                                    ARGB.alphaFloat(state.borderColorBottomLeft())
+                            ),
+                            new Vector4f(
+                                    ARGB.redFloat(state.borderColorBottomRight()),
+                                    ARGB.greenFloat(state.borderColorBottomRight()),
+                                    ARGB.blueFloat(state.borderColorBottomRight()),
+                                    ARGB.alphaFloat(state.borderColorBottomRight())
+                            ),
+                            new Vector4f(state.borderRadius()),
+                            state.borderWidth(),
+                            new Vector2f(scaledWidth - state.borderWidth() * 2, scaledHeight - state.borderWidth() * 2),
+                            new Vector2f(scaledWidth / 2f, scaledHeight / 2f),
+                            scale
+                    ))
+                    .draw();
+        }
 
         this.lastState = state;
     }
@@ -131,7 +131,7 @@ public class RoundedRectanglePIPRenderer extends PictureInPictureRenderer<Rounde
         }
 
         @Override
-        public Function<MultiBufferSource.BufferSource, PictureInPictureRenderer<State>> getFactory() {
+        public Supplier<PictureInPictureRenderer<State>> getFactory() {
             return RoundedRectanglePIPRenderer::new;
         }
     }

@@ -15,7 +15,7 @@ import net.minecraft.util.Util;
 public class Modals {
 
     private static void closeScreen() {
-        Screen screen = Minecraft.getInstance().screen;
+        Screen screen = Minecraft.getInstance().gui.screen();
         if (screen == null) return;
         screen.onClose();
     }

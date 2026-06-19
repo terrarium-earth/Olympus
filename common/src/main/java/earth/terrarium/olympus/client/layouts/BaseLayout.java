@@ -5,6 +5,7 @@ import net.minecraft.client.gui.layouts.Layout;
 import net.minecraft.client.gui.layouts.LayoutElement;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.function.Consumer;
 
@@ -17,7 +18,7 @@ public abstract class BaseLayout<T extends Layout> implements Layout {
     }
 
     @Override
-    public void visitWidgets(Consumer<AbstractWidget> consumer) {
+    public void visitWidgets(@NonNull Consumer<AbstractWidget> consumer) {
         this.layout.visitWidgets(consumer);
     }
 
@@ -37,7 +38,7 @@ public abstract class BaseLayout<T extends Layout> implements Layout {
     }
 
     @Override
-    public void visitChildren(Consumer<LayoutElement> visitor) {
+    public void visitChildren(@NonNull Consumer<LayoutElement> visitor) {
         this.layout.visitChildren(visitor);
     }
 
@@ -69,6 +70,11 @@ public abstract class BaseLayout<T extends Layout> implements Layout {
     @Override
     public int getHeight() {
         return this.layout.getHeight();
+    }
+
+    @Override
+    public void removeChildren() {
+        this.layout.removeChildren();
     }
 
     public BaseLayout<T> withPosition(int x, int y) {

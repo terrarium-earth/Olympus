@@ -44,6 +44,6 @@ public class AutocompleteTextBox<T> extends TextBox {
 
     @Override
     public void onClick(MouseButtonEvent event, boolean bl) {
-        Minecraft.getInstance().setScreen(new AutocompleteScreen<>(this));
+        Minecraft.getInstance().gui.setScreen(new AutocompleteScreen<>(this));
     }
 }

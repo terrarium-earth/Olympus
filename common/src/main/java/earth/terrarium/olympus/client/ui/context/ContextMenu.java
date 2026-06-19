@@ -186,9 +186,9 @@ public class ContextMenu extends Overlay {
 
     public static void open(int x, int y, Consumer<ContextMenu> consumer) {
         Minecraft mc = Minecraft.getInstance();
-        Screen background = mc.screen;
+        Screen background = mc.gui.screen();
         ContextMenu menu = new ContextMenu(background, x, y);
         consumer.accept(menu);
-        mc.setScreen(menu);
+        mc.gui.setScreen(menu);
     }
 }

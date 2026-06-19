@@ -1,6 +1,7 @@
 package earth.terrarium.olympus.client.fabric;
 
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
+import net.minecraft.client.renderer.feature.FeatureRenderDispatcher;
 import net.minecraft.client.renderer.state.gui.GuiRenderState;
 import net.minecraft.client.renderer.state.gui.pip.PictureInPictureRenderState;
 
@@ -18,8 +19,8 @@ public class PictureInPicturePool<T extends PictureInPictureRenderState> impleme
         this.factory = factory;
     }
 
-    public void prepare(T state, GuiRenderState gui, int scale) {
-        pool.computeIfAbsent(state, _ -> new PoolEntry<>(this.factory.get())).prepare(state, gui, scale);
+    public void prepare(T state, GuiRenderState gui, FeatureRenderDispatcher featureRenderDispatcher, int scale) {
+        pool.computeIfAbsent(state, _ -> new PoolEntry<>(this.factory.get())).prepare(state, gui, featureRenderDispatcher, scale);
     }
 
     public void end() {
@@ -51,8 +52,8 @@ public class PictureInPicturePool<T extends PictureInPictureRenderState> impleme
             return false;
         }
 
-        public void prepare(T pictureInPictureRenderState, GuiRenderState guiRenderState, int scale) {
-            renderer.prepare(pictureInPictureRenderState, guiRenderState, scale);
+        public void prepare(T pictureInPictureRenderState, GuiRenderState guiRenderState, FeatureRenderDispatcher featureRenderDispatcher, int scale) {
+            renderer.prepare(pictureInPictureRenderState, guiRenderState, featureRenderDispatcher, scale);
             usedThisFrame = true;
         }
     }

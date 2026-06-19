@@ -87,10 +87,11 @@ public class ClearableGridLayout extends AbstractLayout {
 		this.height = ls[i] + js[i];
 	}
 
-	public void clear() {
-		this.children.clear();
-		this.cellInhabitants.clear();
-	}
+    @Override
+    public void removeChildren() {
+        this.children.clear();
+        this.cellInhabitants.clear();
+    }
 
 	public <T extends LayoutElement> T addChild(T child, int row, int column) {
 		return this.addChild(child, row, column, this.newCellSettings());

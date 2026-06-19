@@ -57,7 +57,7 @@ public class ColorPickerOverlay extends Overlay {
     private LinearLayout colorSelectLayout;
 
     public ColorPickerOverlay(AbstractWidget widget, State<Color> state, boolean hasAlpha) {
-        super(Minecraft.getInstance().screen);
+        super(Minecraft.getInstance().gui.screen());
         this.widget = widget;
         this.state = new HsbState(HsbColor.fromRgb(state.get().getValue()), color -> state.set(new Color(color.toRgba(hasAlpha))));
         this.hasAlpha = hasAlpha;

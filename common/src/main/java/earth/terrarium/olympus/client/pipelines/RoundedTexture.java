@@ -1,6 +1,6 @@
 package earth.terrarium.olympus.client.pipelines;
 
-import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.blaze3d.PrimitiveTopology;import com.mojang.blaze3d.pipeline.BindGroupLayout;import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.shaders.UniformType;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
@@ -9,19 +9,24 @@ import earth.terrarium.olympus.client.pipelines.uniforms.RoundedTextureUniform;
 import earth.terrarium.olympus.client.utils.GuiGraphicsHelper;
 import earth.terrarium.olympus.client.utils.TextureUtils;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.Identifier;import javax.naming.Binding;
 
 public class RoundedTexture {
 
-    public static final RenderPipeline PIPELINE = RenderPipeline.builder()
-            .withLocation(Identifier.fromNamespaceAndPath("olympus", "rounded_tex"))
-            .withSampler("Sampler0")
+    public static final BindGroupLayout LAYOUT =  BindGroupLayout.builder()
+            .withSampler("Sample0")
             .withUniform("DynamicTransforms", UniformType.UNIFORM_BUFFER)
             .withUniform("Projection", UniformType.UNIFORM_BUFFER)
             .withUniform(RoundedTextureUniform.NAME, UniformType.UNIFORM_BUFFER)
+            .build();
+
+    public static final RenderPipeline PIPELINE = RenderPipeline.builder()
+            .withLocation(Identifier.fromNamespaceAndPath("olympus", "rounded_tex"))
+            .withBindGroupLayout(LAYOUT)
             .withFragmentShader(Identifier.fromNamespaceAndPath("olympus", "core/rounded_tex"))
             .withVertexShader(Identifier.fromNamespaceAndPath("olympus", "core/rounded_tex"))
-            .withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
+            .withPrimitiveTopology(PrimitiveTopology.QUADS)
+            .withVertexBinding(0, DefaultVertexFormat.POSITION_TEX_COLOR)
             .build();
 
     public static void draw(

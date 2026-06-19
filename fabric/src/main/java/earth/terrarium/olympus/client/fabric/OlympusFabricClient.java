@@ -12,7 +12,7 @@ public class OlympusFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ClientTickEvents.END_CLIENT_TICK.register(ignored -> ImageProviders.tick());
-        PictureInPictureRendererRegistry.register(ctx -> new RoundedTexturePIPRenderer(ctx.bufferSource()));
-        PictureInPictureRendererRegistry.register(ctx -> new RoundedRectanglePIPRenderer(ctx.bufferSource()));
+        PictureInPictureRendererRegistry.register(_ -> new RoundedTexturePIPRenderer());
+        PictureInPictureRendererRegistry.register(_ -> new RoundedRectanglePIPRenderer());
     }
 }

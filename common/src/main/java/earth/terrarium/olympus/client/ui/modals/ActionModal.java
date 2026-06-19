@@ -166,7 +166,7 @@ public class ActionModal extends Overlay {
         }
 
         public void open() {
-            Minecraft.getInstance().setScreen(new ActionModal(this, Minecraft.getInstance().screen));
+            Minecraft.getInstance().gui.setScreen(new ActionModal(this, Minecraft.getInstance().gui.screen()));
         }
     }
 }

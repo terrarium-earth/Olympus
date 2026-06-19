@@ -1,5 +1,6 @@
 package earth.terrarium.olympus.client.pipelines.renderer;
 
+import com.mojang.blaze3d.IndexType;
 import com.mojang.blaze3d.buffers.GpuBuffer;
 import com.mojang.blaze3d.buffers.GpuBufferSlice;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
@@ -7,7 +8,6 @@ import com.mojang.blaze3d.systems.GpuDevice;
 import com.mojang.blaze3d.systems.RenderPass;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.MeshData;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.render.TextureSetup;
 import net.minecraft.util.ARGB;
@@ -16,8 +16,8 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.OptionalDouble;
-import java.util.OptionalInt;
 import java.util.function.Consumer;
 
 public class PipelineRenderer {
@@ -25,12 +25,13 @@ public class PipelineRenderer {
     private record Buffers(
             GpuBuffer vertex,
             GpuBuffer index,
-            VertexFormat.IndexType type
+            IndexType type
     ){
-        private static Buffers of(MeshData mesh, RenderPipeline pipeline) {
-            GpuBuffer vertex = pipeline.getVertexFormat().uploadImmediateVertexBuffer(mesh.vertexBuffer());
-            if (mesh.indexBuffer() == null) {
-                var storage = RenderSystem.getSequentialBuffer(mesh.drawState().mode());
+        private static Buffers of(MeshData mesh, RenderPipeline pipeline, GpuDevice device) {
+            GpuBuffer vertex = device.createBuffer(() -> "Vertex data for: " + pipeline.getLocation(), GpuBuffer.USAGE_VERTEX, mesh.vertexBuffer());
+            var indexBuffer = mesh.indexBuffer();
+            if (indexBuffer == null) {
+                var storage = RenderSystem.getSequentialBuffer(mesh.drawState().primitiveTopology());
                 return new Buffers(
                         vertex,
                         storage.getBuffer(mesh.drawState().indexCount()),
@@ -39,7 +40,7 @@ public class PipelineRenderer {
             }
             return new Buffers(
                     vertex,
-                    pipeline.getVertexFormat().uploadImmediateIndexBuffer(mesh.indexBuffer()),
+                    device.createBuffer(() -> "Vertex Index for: " + pipeline.getLocation(), GpuBuffer.USAGE_INDEX, indexBuffer),
                     mesh.drawState().indexType()
             );
         }
@@ -48,7 +49,7 @@ public class PipelineRenderer {
     private static GpuBufferSlice getDynamicUniforms(int color) {
         return RenderSystem.getDynamicUniforms()
                 .writeTransform(
-                        RenderSystem.getModelViewMatrix(),
+                        RenderSystem.getModelViewMatrixCopy(),
                         new Vector4f(ARGB.redFloat(color), ARGB.greenFloat(color), ARGB.blueFloat(color), ARGB.alphaFloat(color)),
                         new Vector3f(),
                         new Matrix4f()
@@ -64,15 +65,15 @@ public class PipelineRenderer {
     ) {
         GpuDevice device = RenderSystem.getDevice();
 
-        var buffers = Buffers.of(mesh, pipeline);
+        var buffers = Buffers.of(mesh, pipeline, device);
 
-        var target = Minecraft.getInstance().getMainRenderTarget();
+        var target = Minecraft.getInstance().gameRenderer.mainRenderTarget();
         var uniforms = getDynamicUniforms(color);
 
         try (mesh; var pass = device.createCommandEncoder().createRenderPass(
                 () -> "Olympus Pipeline Render Pass for: " + pipeline.getLocation(),
                 Objects.requireNonNullElse(RenderSystem.outputColorTextureOverride, target.getColorTextureView()),
-                OptionalInt.empty(),
+                Optional.empty(),
                 target.useDepth ? Objects.requireNonNullElse(RenderSystem.outputDepthTextureOverride, target.getDepthTextureView()) : null,
                 OptionalDouble.empty()
         )) {
@@ -92,10 +93,10 @@ public class PipelineRenderer {
 
             options.accept(pass);
 
-            pass.setVertexBuffer(0, buffers.vertex());
+            pass.setVertexBuffer(0, buffers.vertex().slice());
             pass.setIndexBuffer(buffers.index(), buffers.type());
 
-            pass.drawIndexed(0, 0, mesh.drawState().indexCount(), 1);
+            pass.drawIndexed(mesh.drawState().indexCount(), 1, 0, 0, 0);
         }
     }
 
