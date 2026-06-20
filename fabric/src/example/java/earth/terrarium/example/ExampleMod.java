@@ -16,7 +16,7 @@ public class ExampleMod implements ClientModInitializer {
         RenderDoc.init();
 
         var examples = ExampleGatherer.getExamples();
-        ClientCommandRegistrationCallback.EVENT.register((dispatcher, access) -> {
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, _) -> {
             var command = ClientCommands.literal("example");
             for (var example : examples) {
                 command.then(ClientCommands.literal(example.getFirst().id())
@@ -26,7 +26,7 @@ public class ExampleMod implements ClientModInitializer {
                             ));
                             return 1;
                         }))
-                        .executes(context -> {
+                        .executes(_ -> {
                             showScreen(example.getSecond().get());
                             return 1;
                         })
@@ -37,6 +37,6 @@ public class ExampleMod implements ClientModInitializer {
     }
 
     public static void showScreen(Screen screen) {
-        Minecraft.getInstance().schedule(() -> Minecraft.getInstance().setScreen(screen));
+        Minecraft.getInstance().schedule(() -> Minecraft.getInstance().gui.setScreen(screen));
     }
 }

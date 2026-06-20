@@ -14,6 +14,7 @@ import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ public class AutocompleteScreen<T> extends Overlay {
     protected TextBox textBox;
 
     protected AutocompleteScreen(AutocompleteTextBox<T> widget) {
-        super(Minecraft.getInstance().screen);
+        super(Minecraft.getInstance().gui.screen());
         this.widget = widget;
         this.text = ListenableState.of(widget.state());
         this.text.registerListener(this::filter);
@@ -73,7 +74,7 @@ public class AutocompleteScreen<T> extends Overlay {
     }
 
     @Override
-    public boolean mouseClicked(MouseButtonEvent event, boolean bl) {
+    public boolean mouseClicked(@NonNull MouseButtonEvent event, boolean bl) {
         if (super.mouseClicked(event, bl)) {
             return true;
         }

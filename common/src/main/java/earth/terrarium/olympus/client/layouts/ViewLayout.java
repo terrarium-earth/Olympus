@@ -50,4 +50,9 @@ public class ViewLayout extends BaseLayout<LinearLayout> {
     public int rows() {
         return this.rows.size();
     }
+
+    @Override
+    public void removeChildren() {
+        rows.forEach(LinearLayout::removeChildren);
+    }
 }

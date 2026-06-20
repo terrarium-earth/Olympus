@@ -26,10 +26,10 @@ public class EyedropperOverlay extends Overlay {
 
     public static void open(HsbState state) {
         Minecraft minecraft = Minecraft.getInstance();
-        Screenshot.takeScreenshot(minecraft.getMainRenderTarget(), image -> {
+        Screenshot.takeScreenshot(minecraft.gameRenderer.mainRenderTarget(), image -> {
             DynamicTexture texture = new DynamicTexture(() -> "Olympus Eyedropper Screenshot", image);
             minecraft.getTextureManager().register(SCREEN_TEXTURE, texture);
-            minecraft.setScreen(new EyedropperOverlay(minecraft.screen, texture.getPixels(), state));
+            minecraft.gui.setScreen(new EyedropperOverlay(minecraft.gui.screen(), texture.getPixels(), state));
         });
     }
 

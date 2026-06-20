@@ -5,6 +5,7 @@ import net.minecraft.resources.Identifier;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class UIIcons {
 
     public static final List<Identifier> ICONS = new ArrayList<>();

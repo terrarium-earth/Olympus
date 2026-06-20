@@ -1,9 +1,10 @@
 package earth.terrarium.olympus.client.pipelines;
 
+import com.mojang.blaze3d.PrimitiveTopology;
+import com.mojang.blaze3d.pipeline.BindGroupLayout;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.shaders.UniformType;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import earth.terrarium.olympus.client.pipelines.pips.RoundedRectanglePIPRenderer;
 import earth.terrarium.olympus.client.pipelines.uniforms.RoundedRectangleUniform;
 import earth.terrarium.olympus.client.utils.GuiGraphicsHelper;
@@ -12,14 +13,19 @@ import net.minecraft.resources.Identifier;
 
 public class RoundedRectangle {
 
-    public static final RenderPipeline PIPELINE = RenderPipeline.builder()
-            .withLocation(Identifier.fromNamespaceAndPath("olympus", "rounded_rect"))
+    public static final BindGroupLayout LAYOUT = BindGroupLayout.builder()
             .withUniform("DynamicTransforms", UniformType.UNIFORM_BUFFER)
             .withUniform("Projection", UniformType.UNIFORM_BUFFER)
             .withUniform(RoundedRectangleUniform.NAME, UniformType.UNIFORM_BUFFER)
+            .build();
+
+    public static final RenderPipeline PIPELINE = RenderPipeline.builder()
+            .withLocation(Identifier.fromNamespaceAndPath("olympus", "rounded_rect"))
+            .withBindGroupLayout(LAYOUT)
             .withFragmentShader(Identifier.fromNamespaceAndPath("olympus", "core/rounded_rect"))
             .withVertexShader(Identifier.fromNamespaceAndPath("olympus", "core/rounded_rect"))
-            .withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS)
+            .withPrimitiveTopology(PrimitiveTopology.QUADS)
+            .withVertexBinding(0, DefaultVertexFormat.POSITION_COLOR)
             .build();
 
     public static void draw(

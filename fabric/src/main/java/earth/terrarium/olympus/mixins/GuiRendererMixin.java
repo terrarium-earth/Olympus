@@ -2,13 +2,10 @@ package earth.terrarium.olympus.mixins;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.mojang.blaze3d.buffers.GpuBufferSlice;
 import earth.terrarium.olympus.client.fabric.PictureInPictureHandler;
 import earth.terrarium.olympus.client.fabric.PictureInPicturePool;
 import earth.terrarium.olympus.client.pipelines.pips.OlympusPictureInPictureRenderState;
 import net.minecraft.client.gui.render.GuiRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.feature.FeatureRenderDispatcher;
 import net.minecraft.client.renderer.state.gui.GuiRenderState;
 import net.minecraft.client.renderer.state.gui.pip.PictureInPictureRenderState;
@@ -20,18 +17,17 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.List;
-
 @Mixin(GuiRenderer.class)
 public class GuiRendererMixin {
 
     @Shadow @Final
-    GuiRenderState renderState;
+    private GuiRenderState renderState;
+    @Shadow @Final private FeatureRenderDispatcher featureRenderDispatcher;
     @Unique private PictureInPictureHandler pipHandler = null;
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void initPictureInPictureHandler(GuiRenderState guiRenderState, MultiBufferSource.BufferSource source, SubmitNodeCollector submitNodeCollector, FeatureRenderDispatcher featureRenderDispatcher, List list, CallbackInfo ci) {
-        this.pipHandler = new PictureInPictureHandler(source);
+    private void initPictureInPictureHandler(CallbackInfo ci) {
+        this.pipHandler = new PictureInPictureHandler();
     }
 
     @WrapMethod(method = "preparePictureInPictureState")
@@ -39,7 +35,7 @@ public class GuiRendererMixin {
         if (this.pipHandler != null && state instanceof OlympusPictureInPictureRenderState<?> olympusState) {
             PictureInPicturePool<PictureInPictureRenderState> pool = this.pipHandler.getPool(olympusState);
             if (pool != null) {
-                pool.prepare(state, this.renderState, scale);
+                pool.prepare(state, this.renderState, this.featureRenderDispatcher, scale);
                 return;
             }
         }
@@ -48,7 +44,7 @@ public class GuiRendererMixin {
     }
 
     @Inject(method = "render", at = @At("TAIL"))
-    private void endPictureInPictureStates(GpuBufferSlice gpuBufferSlice, CallbackInfo ci) {
+    private void endPictureInPictureStates(CallbackInfo ci) {
         if (this.pipHandler == null) return;
         this.pipHandler.end();
     }

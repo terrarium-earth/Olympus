@@ -35,7 +35,8 @@ subprojects {
     }
 
     repositories {
-        maven("https://prmaven.neoforged.net/NeoForge/pr2879")
+        maven("https://prmaven.neoforged.net/NeoForge/pr3198")
+        mavenLocal()
     }
 
     dependencies {

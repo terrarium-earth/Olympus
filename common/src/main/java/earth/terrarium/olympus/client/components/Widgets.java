@@ -280,7 +280,7 @@ public final class Widgets {
         button.withCallback(() -> {
             ColorPickerOverlay overlay = new ColorPickerOverlay(button, state, hasAlpha);
             overlayFactory.accept(overlay);
-            Minecraft.getInstance().setScreen(overlay);
+            Minecraft.getInstance().gui.setScreen(overlay);
         });
         factory.accept(button);
         return button;

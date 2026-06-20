@@ -58,7 +58,7 @@ public abstract class Overlay extends Screen {
             overlay.onClose();
             screenToGoTo = overlay.background;
         }
-        Minecraft.getInstance().setScreen(screenToGoTo);
+        Minecraft.getInstance().gui.setScreen(screenToGoTo);
     }
 
     @Override
@@ -70,7 +70,7 @@ public abstract class Overlay extends Screen {
 
     @Override
     public void onClose() {
-        Minecraft.getInstance().setScreen(this.background);
+        Minecraft.getInstance().gui.setScreen(this.background);
     }
 
     @Override

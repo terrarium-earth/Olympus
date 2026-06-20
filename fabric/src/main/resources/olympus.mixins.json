@@ -5,7 +5,7 @@
     "compatibilityLevel": "JAVA_21",
     "client": [
         "GuiRendererMixin",
-        "RenderSystemMixin"
+        "RenderBuffersMixin"
     ],
     "injectors": {
         "defaultRequire": 1
