@@ -14,7 +14,7 @@ import net.minecraft.resources.Identifier;import javax.naming.Binding;
 public class RoundedTexture {
 
     public static final BindGroupLayout LAYOUT =  BindGroupLayout.builder()
-            .withSampler("Sample0")
+            .withSampler("Sampler0")
             .withUniform("DynamicTransforms", UniformType.UNIFORM_BUFFER)
             .withUniform("Projection", UniformType.UNIFORM_BUFFER)
             .withUniform(RoundedTextureUniform.NAME, UniformType.UNIFORM_BUFFER)

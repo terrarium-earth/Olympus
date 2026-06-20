@@ -113,7 +113,7 @@ public class MapTopologyAlgorithm {
             int tintColor = BiomeColors.getAverageGrassColor(level, pos);
             if (color == MapColor.WATER) tintColor = BiomeColors.getAverageWaterColor(level, pos);
             if (color == MapColor.PLANT) tintColor = BiomeColors.getAverageFoliageColor(level, pos);
-            int intColor = rgb2abgr(tintColor);
+            int intColor = tintColor;
             if (color == MapColor.WATER) {
                 intColor = brighter(intColor);
             }
@@ -128,7 +128,7 @@ public class MapTopologyAlgorithm {
             if (source == null) {
                 return MapPalette.getColor(color.id, brightness);
             }
-            int intColor = rgb2abgr(source.colorInWorld(state, level, pos));
+            int intColor = source.colorInWorld(state, level, pos);
             return switch (brightness) {
                 case LOWEST -> intColor;
                 case LOW -> darker(intColor);

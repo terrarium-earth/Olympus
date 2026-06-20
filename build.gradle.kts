@@ -34,11 +34,6 @@ subprojects {
         }
     }
 
-    repositories {
-        maven("https://prmaven.neoforged.net/NeoForge/pr3198")
-        mavenLocal()
-    }
-
     dependencies {
         if (platform != Platform.COMMON) {
             annotationProcessor(rootProject.libs.service.plugin)
