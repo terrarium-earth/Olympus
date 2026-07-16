@@ -39,7 +39,7 @@ public class Button extends BaseWidget {
 
         if (this.sprites != null) {
             graphics.blitSprite(
-                    RenderPipelines.GUI_OPAQUE_TEXTURED_BACKGROUND,
+                    RenderPipelines.GUI_TEXTURED,
                     this.sprites.get(this.active, this.isHoveredOrFocused()),
                     this.getX(), this.getY(),
                     this.getWidth(), this.getHeight(),

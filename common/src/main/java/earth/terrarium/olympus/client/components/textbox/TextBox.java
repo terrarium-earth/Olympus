@@ -340,7 +340,7 @@ public class TextBox extends BaseWidget {
 
             Identifier texture = sprites.get(this.active, this.isHoveredOrFocused());
 
-            graphics.blitSprite(RenderPipelines.GUI_OPAQUE_TEXTURED_BACKGROUND, texture, this.getX(), this.getY(), this.width, this.height);
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, texture, this.getX(), this.getY(), this.width, this.height);
 
             int displayCursorDiff = this.cursorPos - this.displayPos;
             int displayHighlightDiff = this.highlightPos - this.displayPos;

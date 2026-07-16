@@ -50,7 +50,7 @@ public class MapWidget extends BaseWidget {
 
     @Override
     protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
-        graphics.blitSprite(RenderPipelines.GUI_OPAQUE_TEXTURED_BACKGROUND, this.texture, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, this.texture, this.getX(), this.getY(), this.getWidth(), this.getHeight());
 
         if (!initialized) {
             this.refreshMap();
