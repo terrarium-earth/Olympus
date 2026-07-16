@@ -88,7 +88,7 @@ public class MultilineTextBox extends BaseWidget {
 
         var texture = this.sprites.get(this.active, this.isHoveredOrFocused());
 
-        graphics.blitSprite(RenderPipelines.GUI_OPAQUE_TEXTURED_BACKGROUND, texture, getX(), getY(), getWidth(), getHeight());
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, texture, getX(), getY(), getWidth(), getHeight());
 
         boolean renderScrollbar = this.lastHeight > this.height - 8;
 
