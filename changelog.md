@@ -1,1 +1,1 @@
-- Update to 26.2
+- Switch to GUI Textured so transparent textures work

@@ -132,7 +132,7 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
         layout.setPosition(getX() - xScroll + contentMargin, getY() - yScroll + contentMargin);
 
         if (background != null) {
-            graphics.blitSprite(RenderPipelines.GUI_OPAQUE_TEXTURED_BACKGROUND, background, getX(), getY(), getViewWidth() + contentMargin * 2, getViewHeight() + contentMargin * 2);
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, background, getX(), getY(), getViewWidth() + contentMargin * 2, getViewHeight() + contentMargin * 2);
         }
 
         graphics.enableScissor(getX() + contentMargin, getY() + contentMargin, getX() + getViewWidth() + contentMargin, getY() + getViewHeight() + contentMargin);
@@ -141,7 +141,7 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
 
         if (isXScrollbarVisible()) {
             if (scrollbarBackground != null) {
-                graphics.blitSprite(RenderPipelines.GUI_OPAQUE_TEXTURED_BACKGROUND, scrollbarBackground, getX(), getY() + getViewHeight() + contentMargin * 2, getViewWidth() + contentMargin * 2, getHeight() - getViewHeight() - contentMargin * 2);
+                graphics.blitSprite(RenderPipelines.GUI_TEXTURED, scrollbarBackground, getX(), getY() + getViewHeight() + contentMargin * 2, getViewWidth() + contentMargin * 2, getHeight() - getViewHeight() - contentMargin * 2);
             }
             scrollbarXRenderer.render(graphics, new WidgetRendererContext<>(this, mouseX, mouseY).setHeight(scrollWidth).setWidth(getViewWidth() - scrollMargin * 2).setX(getX() + scrollMargin).setY(this.getY() + this.getViewHeight() + scrollMargin + contentMargin * 2), partialTick);
             if (isOverScrollbarX(mouseX, mouseY)) {
@@ -151,7 +151,7 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
 
         if (isYScrollbarVisible()) {
             if (scrollbarBackground != null) {
-                graphics.blitSprite(RenderPipelines.GUI_OPAQUE_TEXTURED_BACKGROUND, scrollbarBackground, getX() + getViewWidth() + contentMargin * 2, getY(), getWidth() - getViewWidth() - contentMargin * 2, getViewHeight() + contentMargin * 2);
+                graphics.blitSprite(RenderPipelines.GUI_TEXTURED, scrollbarBackground, getX() + getViewWidth() + contentMargin * 2, getY(), getWidth() - getViewWidth() - contentMargin * 2, getViewHeight() + contentMargin * 2);
             }
             scrollbarYRenderer.render(graphics, new WidgetRendererContext<>(this, mouseX, mouseY).setWidth(scrollWidth).setHeight(getViewHeight() - scrollMargin * 2).setX(this.getX() + this.getViewWidth() + scrollMargin + contentMargin * 2).setY(getY() + scrollMargin), partialTick);
             if (isOverScrollbarY(mouseX, mouseY)) {
@@ -160,7 +160,7 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
         }
 
         if (isYScrollbarVisible() && isXScrollbarVisible() && scrollbarBackground != null) {
-            graphics.blitSprite(RenderPipelines.GUI_OPAQUE_TEXTURED_BACKGROUND, scrollbarBackground, getX() + getViewWidth() + contentMargin * 2, getY() + getViewHeight() + contentMargin * 2, getWidth() - getViewWidth() - contentMargin * 2, getHeight() - getViewHeight() - contentMargin * 2);
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, scrollbarBackground, getX() + getViewWidth() + contentMargin * 2, getY() + getViewHeight() + contentMargin * 2, getWidth() - getViewWidth() - contentMargin * 2, getHeight() - getViewHeight() - contentMargin * 2);
         }
     }
 

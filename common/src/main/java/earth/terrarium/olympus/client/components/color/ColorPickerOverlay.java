@@ -156,8 +156,8 @@ public class ColorPickerOverlay extends Overlay {
     @Override
     public void extractBackground(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         super.extractBackground(graphics, mouseX, mouseY, partialTick);
-        graphics.blitSprite(RenderPipelines.GUI_OPAQUE_TEXTURED_BACKGROUND, background, this.x, this.y, this.width, this.height);
-        graphics.blitSprite(RenderPipelines.GUI_OPAQUE_TEXTURED_BACKGROUND, inset, this.colorSelectLayout.getX() - 1, this.colorSelectLayout.getY() - 1, this.colorSelectLayout.getWidth() + 2, this.colorSelectLayout.getHeight() + 2);
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, background, this.x, this.y, this.width, this.height);
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, inset, this.colorSelectLayout.getX() - 1, this.colorSelectLayout.getY() - 1, this.colorSelectLayout.getWidth() + 2, this.colorSelectLayout.getHeight() + 2);
     }
 
     @Override
