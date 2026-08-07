@@ -1,1 +1,1 @@
-- Switch to GUI Textured so transparent textures work
+- fix crash when widget with scissor rendered fully outside widget with scissor
