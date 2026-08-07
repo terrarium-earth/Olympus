@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.cursor.CursorTypes;
 import earth.terrarium.olympus.client.components.base.BaseWidget;
 import earth.terrarium.olympus.client.components.textbox.utils.TextBoxStringUtils;
 import earth.terrarium.olympus.client.ui.UIConstants;
+import earth.terrarium.olympus.client.utils.GuiGraphicsHelper;
 import earth.terrarium.olympus.client.utils.ListenableState;
 import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.Minecraft;
@@ -92,9 +93,10 @@ public class MultilineTextBox extends BaseWidget {
 
         boolean renderScrollbar = this.lastHeight > this.height - 8;
 
-        graphics.enableScissor(getX() + 2, getY() + 3, getX() + getWidth() - 4, getY() + getHeight() - 2);
-        this.renderText(graphics, getX() + 6 - (renderScrollbar ? 2 : 0), (int) (getY() + 4 - scroll), getWidth() - 12);
-        graphics.disableScissor();
+        if (GuiGraphicsHelper.enableScissor(graphics, getX() + 2, getY() + 3, getX() + getWidth() - 4, getY() + getHeight() - 2)) {
+            this.renderText(graphics, getX() + 6 - (renderScrollbar ? 2 : 0), (int) (getY() + 4 - scroll), getWidth() - 12);
+            graphics.disableScissor();
+        }
 
         if (renderScrollbar) {
             graphics.blitSprite(

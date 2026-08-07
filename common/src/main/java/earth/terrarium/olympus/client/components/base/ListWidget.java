@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.cursor.CursorTypes;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;
 import earth.terrarium.olympus.client.ui.UIConstants;
+import earth.terrarium.olympus.client.utils.GuiGraphicsHelper;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -101,24 +102,24 @@ public class ListWidget extends BaseParentWidget {
         boolean showsScrollBar = this.lastHeight > this.height;
         int actualWidth = getWidth() - (showsScrollBar ? getScrollbarThumbWidth() + getScrollbarPadding() * 2 : 0);
 
-        graphics.enableScissor(getX(), getY(), getX() + actualWidth, getY() + this.height);
+        if (GuiGraphicsHelper.enableScissor(graphics, getX(), getY(), getX() + actualWidth, getY() + this.height)) {
+            int y = this.getY() - (int) scroll;
+            this.lastHeight = 0;
 
-        int y = this.getY() - (int) scroll;
-        this.lastHeight = 0;
+            boolean canHoverItems = this.isHovered && graphics.containsPointInScissor(mouseX, mouseY);
 
-        boolean canHoverItems = this.isHovered && graphics.containsPointInScissor(mouseX, mouseY);
+            for (AbstractWidget item : items) {
+                item.setWidth(actualWidth);
+                item.setX(getX());
+                item.setY(y);
 
-        for (AbstractWidget item : items) {
-            item.setWidth(actualWidth);
-            item.setX(getX());
-            item.setY(y);
+                item.extractRenderState(graphics, canHoverItems ? mouseX : -1, canHoverItems ? mouseY : -1, partialTicks);
+                y += item.getHeight() + gap;
+                this.lastHeight += item.getHeight() + gap;
+            }
 
-            item.extractRenderState(graphics, canHoverItems ? mouseX : -1, canHoverItems ? mouseY : -1, partialTicks);
-            y += item.getHeight() + gap;
-            this.lastHeight += item.getHeight() + gap;
+            graphics.disableScissor();
         }
-
-        graphics.disableScissor();
 
         if (this.lastHeight > this.height) {
             this.scrollbarRenderer.render(graphics, new WidgetRendererContext<>(this, mouseX, mouseY).setWidth(scrollWidth).setHeight(getHeight() - scrollbarGap * 2).setY(getY() + scrollbarGap).setX(this.getX() + this.getWidth() - scrollWidth - scrollbarGap), partialTicks);

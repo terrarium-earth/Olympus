@@ -5,13 +5,14 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.renderer.state.gui.GuiElementRenderState;
 import net.minecraft.client.renderer.state.gui.pip.PictureInPictureRenderState;
+import org.jetbrains.annotations.Nullable;
 
 @PlatformService
 public interface GuiGraphicsService {
 
     void submitPip(GuiGraphicsExtractor graphics, PictureInPictureRenderState state);
     void submitElement(GuiGraphicsExtractor graphics, GuiElementRenderState state);
-    ScreenRectangle getLastScissor(GuiGraphicsExtractor graphics);
+    @Nullable ScreenRectangle getLastScissor(GuiGraphicsExtractor graphics);
 
     static GuiGraphicsService create() {
         throw new NotImplementedException();
