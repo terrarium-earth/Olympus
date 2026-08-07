@@ -23,4 +23,21 @@ public class GuiGraphicsHelper {
     public static ScreenRectangle getLastScissor(GuiGraphicsExtractor graphics) {
         return SERVICE.getLastScissor(graphics);
     }
+
+    public static boolean enableScissor(GuiGraphicsExtractor graphicsExtractor, int x0, int y0, int x1, int y1) {
+        var currentScissorArea = getLastScissor(graphicsExtractor);
+
+        // same logic as ScreenRectangle#intersection
+        int left = Math.max(currentScissorArea.left(), x0);
+        int top = Math.max(currentScissorArea.top(), y0);
+        int right = Math.min(currentScissorArea.right(), x1);
+        int bottom = Math.min(currentScissorArea.bottom(), y1);
+
+        if (left < right && top < bottom) {
+            graphicsExtractor.enableScissor(left, top, right, bottom);
+            return true;
+        }
+
+        return false;
+    }
 }

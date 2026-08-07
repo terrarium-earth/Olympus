@@ -4,6 +4,7 @@ import com.teamresourceful.resourcefullib.common.color.Color;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;
 import earth.terrarium.olympus.client.constants.MinecraftColors;
+import earth.terrarium.olympus.client.utils.GuiGraphicsHelper;
 import earth.terrarium.olympus.client.utils.OlympusUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -36,9 +37,10 @@ public class TextWidgetRenderer<T extends AbstractWidget> implements WidgetRende
             double e = Math.max((double) overhang * 0.5, 3.0);
             double f = Math.sin(Mth.HALF_PI * Math.cos(Mth.TWO_PI * seconds / e)) / 2.0 + 0.5;
             double g = Mth.lerp(f, 0.0, overhang);
-            graphics.enableScissor(context.getLeft(), context.getTop(), context.getRight(), context.getBottom());
-            graphics.text(this.font, this.text, context.getX() - (int) g, centerY, OlympusUtils.getEnsureAlpha(color), this.drawShadow);
-            graphics.disableScissor();
+            if (GuiGraphicsHelper.enableScissor(graphics, context.getLeft(), context.getTop(), context.getRight(), context.getBottom())) {
+                graphics.text(this.font, this.text, context.getX() - (int) g, centerY, OlympusUtils.getEnsureAlpha(color), this.drawShadow);
+                graphics.disableScissor();
+            }
         } else {
             int centerX = context.getX() + Math.round(context.getWidth() * alignX);
             graphics.text(this.font, this.text, centerX - Math.round(textWidth * alignX), centerY, OlympusUtils.getEnsureAlpha(color), this.drawShadow);

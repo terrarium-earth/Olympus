@@ -5,6 +5,7 @@ import earth.terrarium.olympus.client.components.base.BaseParentWidget;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;
 import earth.terrarium.olympus.client.ui.UIConstants;
+import earth.terrarium.olympus.client.utils.GuiGraphicsHelper;
 import earth.terrarium.olympus.client.utils.Orientation;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -135,9 +136,10 @@ public class LayoutWidget<T extends Layout> extends BaseParentWidget {
             graphics.blitSprite(RenderPipelines.GUI_TEXTURED, background, getX(), getY(), getViewWidth() + contentMargin * 2, getViewHeight() + contentMargin * 2);
         }
 
-        graphics.enableScissor(getX() + contentMargin, getY() + contentMargin, getX() + getViewWidth() + contentMargin, getY() + getViewHeight() + contentMargin);
-        super.extractWidgetRenderState(graphics, mouseX, mouseY, partialTick);
-        graphics.disableScissor();
+        if (GuiGraphicsHelper.enableScissor(graphics, getX() + contentMargin, getY() + contentMargin, getX() + getViewWidth() + contentMargin, getY() + getViewHeight() + contentMargin)) {
+            super.extractWidgetRenderState(graphics, mouseX, mouseY, partialTick);
+            graphics.disableScissor();
+        }
 
         if (isXScrollbarVisible()) {
             if (scrollbarBackground != null) {
