@@ -6,6 +6,7 @@ import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.renderer.state.gui.GuiElementRenderState;
 import net.minecraft.client.renderer.state.gui.pip.PictureInPictureRenderState;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 
 @ApiStatus.Internal
 public class GuiGraphicsHelper {
@@ -20,12 +21,17 @@ public class GuiGraphicsHelper {
         SERVICE.submitElement(graphics, state);
     }
 
-    public static ScreenRectangle getLastScissor(GuiGraphicsExtractor graphics) {
+    public static @Nullable ScreenRectangle getLastScissor(GuiGraphicsExtractor graphics) {
         return SERVICE.getLastScissor(graphics);
     }
 
     public static boolean enableScissor(GuiGraphicsExtractor graphicsExtractor, int x0, int y0, int x1, int y1) {
         var currentScissorArea = getLastScissor(graphicsExtractor);
+
+        if (currentScissorArea == null) {
+            graphicsExtractor.enableScissor(x0, y0, x1, y1);
+            return true;
+        }
 
         // same logic as ScreenRectangle#intersection
         int left = Math.max(currentScissorArea.left(), x0);
@@ -34,7 +40,7 @@ public class GuiGraphicsHelper {
         int bottom = Math.min(currentScissorArea.bottom(), y1);
 
         if (left < right && top < bottom) {
-            graphicsExtractor.enableScissor(left, top, right, bottom);
+            graphicsExtractor.enableScissor(x0, y0, x1, y1);
             return true;
         }
 
