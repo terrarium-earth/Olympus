@@ -1,6 +1,7 @@
 package earth.terrarium.olympus.client.utils;
 
 import earth.terrarium.olympus.client.utils.platform.GuiGraphicsService;
+import java.util.Objects;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.renderer.state.gui.GuiElementRenderState;
@@ -26,12 +27,7 @@ public class GuiGraphicsHelper {
     }
 
     public static boolean enableScissor(GuiGraphicsExtractor graphicsExtractor, int x0, int y0, int x1, int y1) {
-        var currentScissorArea = getLastScissor(graphicsExtractor);
-
-        if (currentScissorArea == null) {
-            graphicsExtractor.enableScissor(x0, y0, x1, y1);
-            return true;
-        }
+        var currentScissorArea = Objects.requireNonNullElseGet(getLastScissor(graphicsExtractor), () -> new ScreenRectangle(0, 0, graphicsExtractor.guiWidth(), graphicsExtractor.guiHeight()));
 
         // same logic as ScreenRectangle#intersection
         int left = Math.max(currentScissorArea.left(), x0);
