@@ -33,7 +33,7 @@ void main() {
 
     vec2 halfSize = size / 2.0;
     float distance = sdRoundedBox(gl_FragCoord.xy - center, halfSize, borderRadius * scaleFactor);
-    float smoothed = min(1.0 - distance, vertexColor.a);
+    float smoothed = clamp(1.0 - distance, 0.0, 1.0);
     vec4 borderColor = mix(
         mix(borderColorTopLeft, borderColorTopRight, gl_FragCoord.x / size.x),
         mix(borderColorBottomLeft, borderColorBottomRight, gl_FragCoord.x / size.x),
