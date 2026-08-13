@@ -1,1 +1,1 @@
-- fix crash when widget with scissor rendered fully outside widget with scissor
+- fixed RoundedRectangles rendering with their alpha squarred.
