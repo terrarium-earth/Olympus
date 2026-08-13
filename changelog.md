@@ -1,1 +1,1 @@
-- Switch to GUI Textured so transparent textures work
+- fixed RoundedRectangles rendering with their alpha squarred.
