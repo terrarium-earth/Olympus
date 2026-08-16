@@ -12,6 +12,7 @@ layout(std140) uniform RoundedTextureUniform {
 
 uniform sampler2D Sampler0;
 in vec2 texCoord0;
+in vec4 vertexColor;
 out vec4 fragColor;
 
 // From: https://iquilezles.org/articles/distfunctions2d/

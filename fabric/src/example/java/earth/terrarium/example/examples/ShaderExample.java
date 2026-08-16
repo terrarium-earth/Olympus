@@ -46,7 +46,7 @@ public class ShaderExample extends ExampleScreen {
                 100, 100,
                 Identifier.fromNamespaceAndPath("olympus", "textures/gui/sprites/modal/modal.png"),
                 0f, 0f, 1f, 1f,
-                15f
+                15f, Color.RAINBOW.withAlpha(0x80).getValue()
         );
 
         graphics.pose().popMatrix();
