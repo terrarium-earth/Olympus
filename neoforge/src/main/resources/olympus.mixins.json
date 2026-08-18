@@ -4,7 +4,7 @@
   "package": "earth.terrarium.olympus.mixins",
   "compatibilityLevel": "JAVA_21",
   "client": [
-    "RenderBuffersMixin",
+    "RenderSystemMixin",
     "PipRendererAccessor"
   ],
   "injectors": {
