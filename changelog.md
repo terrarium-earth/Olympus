@@ -1,1 +1,1 @@
-- fixed RoundedRectangles rendering with their alpha squarred.
+- fixed RoundedTexture having incorrect transparency for colored textures

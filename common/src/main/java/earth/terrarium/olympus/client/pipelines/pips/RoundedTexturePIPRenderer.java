@@ -1,5 +1,7 @@
 package earth.terrarium.olympus.client.pipelines.pips;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.textures.FilterMode;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
@@ -8,12 +10,16 @@ import earth.terrarium.olympus.client.pipelines.RoundedTexture;
 import earth.terrarium.olympus.client.pipelines.renderer.PipelineRenderer;
 import earth.terrarium.olympus.client.pipelines.uniforms.RoundedTextureUniform;
 import earth.terrarium.olympus.client.utils.GuiGraphicsHelper;
+import earth.terrarium.olympus.client.utils.PipRendererHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.render.TextureSetup;
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.state.gui.BlitRenderState;
+import net.minecraft.client.renderer.state.gui.GuiRenderState;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix3x2f;
 import org.joml.Vector2f;
@@ -38,6 +44,26 @@ public class RoundedTexturePIPRenderer extends PictureInPictureRenderer<RoundedT
     protected boolean textureIsReadyToBlit(State state) {
         return this.lastState != null && this.lastState.equals(state);
     }
+
+    protected void blitTexture(State renderState, GuiRenderState guiRenderState) {
+        guiRenderState.addBlitToCurrentLayer(new BlitRenderState(
+            RenderPipelines.GUI_TEXTURED,
+            TextureSetup.singleTexture(PipRendererHelper.getTextureView(this), RenderSystem.getSamplerCache().getRepeat(FilterMode.NEAREST)),
+            renderState.pose(),
+            renderState.x0(),
+            renderState.y0(),
+            renderState.x1(),
+            renderState.y1(),
+            0.0F,
+            1.0F,
+            1.0F,
+            0.0F,
+            -1,
+            renderState.scissorArea(),
+            null)
+        );
+    }
+
 
     @Override
     protected void renderToTexture(State state, @NotNull PoseStack stack) {
