@@ -1,1 +1,1 @@
-- fixed RoundedTexture having incorrect transparency for colored textures
+- fixed invalid mixin names
