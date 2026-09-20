@@ -2,7 +2,7 @@ package earth.terrarium.olympus.client.pipelines.uniforms;
 
 import com.mojang.blaze3d.buffers.Std140Builder;
 import com.mojang.blaze3d.buffers.Std140SizeCalculator;
-import net.minecraft.client.renderer.DynamicUniformStorage;
+import net.minecraft.client.renderer.DynamicGpuDataStorage;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
@@ -17,7 +17,7 @@ public record RoundedTextureUniform(
 ) implements RenderPipelineUniforms {
 
     public static final String NAME = "RoundedTextureUniform";
-    public static final Supplier<DynamicUniformStorage<RoundedTextureUniform>> STORAGE = RenderPipelineUniformsStorage.register(
+    public static final Supplier<DynamicGpuDataStorage<RoundedTextureUniform>> STORAGE = RenderPipelineUniformsStorage.register(
             "Rounded Texture UBO",
             2,
             new Std140SizeCalculator().putVec4().putVec2().putVec2().putFloat()

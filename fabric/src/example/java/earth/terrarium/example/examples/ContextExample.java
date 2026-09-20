@@ -1,5 +1,6 @@
 package earth.terrarium.example.examples;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import earth.terrarium.example.base.ExampleScreen;
 import earth.terrarium.example.base.OlympusExample;
 import earth.terrarium.olympus.client.ui.context.ContextMenu;
@@ -11,7 +12,7 @@ public class ContextExample extends ExampleScreen {
 
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean bl) {
-        if (event.button() == 1) {
+        if ( event.button() == InputConstants.MOUSE_BUTTON_RIGHT) {
             ContextMenu.open(menu -> menu
                     .button(Component.literal("Action 1"), () -> System.out.println("Action 1 clicked!"))
                     .dangerButton(Component.literal("Action 2"), () -> System.out.println("Action 2 clicked!"))

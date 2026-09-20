@@ -1,10 +1,10 @@
 package earth.terrarium.olympus.client.pipelines.uniforms;
 
-import net.minecraft.client.renderer.DynamicUniformStorage;
+import net.minecraft.client.renderer.DynamicGpuDataStorage;
 
 import java.nio.ByteBuffer;
 
-public interface RenderPipelineUniforms extends DynamicUniformStorage.DynamicUniform {
+public interface RenderPipelineUniforms extends DynamicGpuDataStorage.DynamicGpuData {
 
     String name();
 

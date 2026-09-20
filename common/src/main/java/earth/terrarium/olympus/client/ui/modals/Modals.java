@@ -1,5 +1,6 @@
 package earth.terrarium.olympus.client.ui.modals;
 
+import com.mojang.blaze3d.Blaze3D;
 import earth.terrarium.olympus.client.components.Widgets;
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import earth.terrarium.olympus.client.constants.MinecraftColors;
@@ -11,6 +12,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Util;
+
+import java.net.URI;
 
 public class Modals {
 
@@ -64,7 +67,7 @@ public class Modals {
                         .withSize(80, 24)
                         .withTexture(UIConstants.PRIMARY_BUTTON)
                         .withCallback(() -> {
-                            Util.getPlatform().openUri(link);
+                            Blaze3D.openUri(URI.create(link));
                             closeScreen();
                         })
                 );

@@ -5,8 +5,8 @@
   "compatibilityLevel": "JAVA_21",
   "client": [
     "GuiRendererMixin",
-    "RenderBuffersMixin",
-    "PipRendererAccessor"
+    "GameRendererMixin",
+    "PipRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

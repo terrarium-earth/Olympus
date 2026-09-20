@@ -2,6 +2,7 @@ package earth.terrarium.example;
 
 import earth.terrarium.example.base.ExampleGatherer;
 import earth.terrarium.example.renderdoc.RenderDoc;
+import earth.terrarium.olympus.client.dialog.OlympusDialogs;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
@@ -9,7 +10,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
+import java.nio.file.Path;
+import java.util.Collections;
+
 public class ExampleMod implements ClientModInitializer {
+
+    public static void showScreen(Screen screen) {
+        Minecraft.getInstance().schedule(() -> Minecraft.getInstance().gui.setScreen(screen));
+    }
 
     @Override
     public void onInitializeClient() {
@@ -34,9 +42,5 @@ public class ExampleMod implements ClientModInitializer {
             }
             dispatcher.register(ClientCommands.literal("olympus").then(command));
         });
-    }
-
-    public static void showScreen(Screen screen) {
-        Minecraft.getInstance().schedule(() -> Minecraft.getInstance().gui.setScreen(screen));
     }
 }

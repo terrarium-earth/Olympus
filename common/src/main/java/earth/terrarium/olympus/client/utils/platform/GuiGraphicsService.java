@@ -5,9 +5,11 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.renderer.state.gui.GuiElementRenderState;
 import net.minecraft.client.renderer.state.gui.pip.PictureInPictureRenderState;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 @PlatformService
+@ApiStatus.Internal
 public interface GuiGraphicsService {
 
     void submitPip(GuiGraphicsExtractor graphics, PictureInPictureRenderState state);

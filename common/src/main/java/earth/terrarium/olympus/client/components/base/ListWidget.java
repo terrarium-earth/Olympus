@@ -1,5 +1,6 @@
 package earth.terrarium.olympus.client.components.base;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.cursor.CursorTypes;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;
@@ -165,7 +166,7 @@ public class ListWidget extends BaseParentWidget {
 
     @Override
     public boolean mouseReleased(@NotNull MouseButtonEvent event) {
-        if (event.input() == 0) {
+        if (event.input() == InputConstants.MOUSE_BUTTON_LEFT) {
             this.scrolling = false;
         }
         return super.mouseReleased(event);

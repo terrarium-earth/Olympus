@@ -10,23 +10,29 @@ import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.IMEPreeditOverlay;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.PreeditEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.joml.Vector2i;
 
 public class MultilineTextBox extends BaseWidget {
 
     private final MultilineTextInput state;
 
+    private @Nullable IMEPreeditOverlay preeditOverlay;
     private final Font font = Minecraft.getInstance().font;
     protected WidgetSprites sprites = UIConstants.TEXTBOX;
 
     private double scroll = - 1;
     private int lastHeight;
+    private final Vector2i cursor = new Vector2i();
 
     public MultilineTextBox(State<String> state) {
         this.state = new MultilineTextInput(state instanceof ListenableState<String> it ? it : new ListenableState<>(state));
@@ -62,6 +68,8 @@ public class MultilineTextBox extends BaseWidget {
             if (line.contains(cursor)) {
                 var first = text.substring(0, cursor - line.start());
                 var cursorX = TextBoxStringUtils.width(this.font, first) + x;
+                this.cursor.x = cursorX;
+                this.cursor.y = y;
                 graphics.fill(cursorX, y, cursorX + 1, y + this.font.lineHeight, System.currentTimeMillis() % 1000 < 500 ? 0xFFFFFFFF : 0x00000000);
             }
 
@@ -81,6 +89,12 @@ public class MultilineTextBox extends BaseWidget {
 
     protected void changeScroll(double delta) {
         this.setScroll(this.scroll + delta);
+    }
+
+    @Override
+    public boolean preeditUpdated(@Nullable PreeditEvent event) {
+        this.preeditOverlay = event != null ? new IMEPreeditOverlay(event, this.font, 9 + 1) : null;
+        return true;
     }
 
     @Override
@@ -122,6 +136,15 @@ public class MultilineTextBox extends BaseWidget {
             if (mouseX > getX() + getWidth() - 7 && mouseY > getY() + 4 && mouseY < getY() + this.height - 4 && this.isHovered()) {
                 graphics.requestCursor(CursorTypes.RESIZE_NS);
             }
+        }
+
+        if (this.preeditOverlay == null) {
+            if (this.active && this.visible && this.isFocused()) {
+                Minecraft.getInstance().textInputManager().setTextInputArea(this.cursor.x, this.cursor.y, this.cursor.x + 1, this.cursor.y + 10);
+            }
+        } else {
+            this.preeditOverlay.updateInputPosition(this.cursor.x, this.cursor.y);
+            graphics.setPreeditOverlay(this.preeditOverlay);
         }
     }
 
@@ -176,5 +199,19 @@ public class MultilineTextBox extends BaseWidget {
 
     public boolean isVisible() {
         return this.visible;
+    }
+
+    @Override
+    public void setFocused(boolean focused) {
+        Minecraft.getInstance().onTextInputFocusChange(this, focused);
+        super.setFocused(focused);
+    }
+
+    @Override
+    public BaseWidget asDisabled() {
+        if (this.active) {
+            Minecraft.getInstance().onTextInputFocusChange(this, false);
+        }
+        return super.asDisabled();
     }
 }

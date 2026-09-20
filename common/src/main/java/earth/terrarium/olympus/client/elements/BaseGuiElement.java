@@ -1,6 +1,6 @@
 package earth.terrarium.olympus.client.elements;
 
-import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.renderpearl.api.pipeline.RenderPipeline;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import earth.terrarium.olympus.client.utils.GuiGraphicsHelper;
 import earth.terrarium.olympus.client.utils.TextureUtils;

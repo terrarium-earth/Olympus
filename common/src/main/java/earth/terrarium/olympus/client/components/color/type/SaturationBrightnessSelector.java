@@ -1,5 +1,6 @@
 package earth.terrarium.olympus.client.components.color.type;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import earth.terrarium.olympus.client.components.base.BaseWidget;
 import earth.terrarium.olympus.client.elements.GradientGuiElement;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -52,7 +53,7 @@ public class SaturationBrightnessSelector extends BaseWidget {
 
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean bl) {
-        if (event.input() != 0) return false;
+        if (event.input() != InputConstants.MOUSE_BUTTON_LEFT) return false;
         if (!isMouseOver(event.x(), event.y())) return false;
         int x = (int) event.x() - this.getX();
         int y = (int) event.y() - this.getY();

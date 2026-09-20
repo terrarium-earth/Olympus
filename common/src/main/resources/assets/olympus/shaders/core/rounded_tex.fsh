@@ -1,7 +1,8 @@
-#version 150
+#version 330
+#extension GL_ARB_separate_shader_objects : require
 
-#moj_import <minecraft:dynamictransforms.glsl>
-#moj_import <minecraft:projection.glsl>
+#include <minecraft:dynamictransforms.glsl>
+#include <minecraft:projection.glsl>
 
 layout(std140) uniform RoundedTextureUniform {
     vec4 radius;
@@ -11,9 +12,11 @@ layout(std140) uniform RoundedTextureUniform {
 };
 
 uniform sampler2D Sampler0;
-in vec2 texCoord0;
-in vec4 vertexColor;
-out vec4 fragColor;
+
+layout(location = 0) in vec2 texCoord0;
+layout(location = 1) in vec4 vertexColor;
+
+layout(location = 0) out vec4 fragColor;
 
 // From: https://iquilezles.org/articles/distfunctions2d/
 float sdRoundedBox(vec2 p, vec2 b, vec4 r){

@@ -1,5 +1,6 @@
 package earth.terrarium.olympus.client.components.color.type;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.NativeImage;
 import earth.terrarium.olympus.client.ui.Overlay;
 import net.minecraft.client.Minecraft;
@@ -63,7 +64,7 @@ public class EyedropperOverlay extends Overlay {
 
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean bl) {
-        if (event.button() != 0) return false;
+        if (event.button() != InputConstants.MOUSE_BUTTON_LEFT) return false;
         double guiScale = Minecraft.getInstance().getWindow().getGuiScale();
         int pixelX = (int) (event.x() * guiScale);
         int pixelY = (int) (event.y() * guiScale);

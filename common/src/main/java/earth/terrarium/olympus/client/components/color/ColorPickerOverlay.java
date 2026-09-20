@@ -1,5 +1,6 @@
 package earth.terrarium.olympus.client.components.color;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import earth.terrarium.olympus.client.components.Widgets;
 import earth.terrarium.olympus.client.components.buttons.Button;
@@ -13,6 +14,7 @@ import earth.terrarium.olympus.client.ui.OverlayAlignment;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import earth.terrarium.olympus.client.ui.UIIcons;
 import earth.terrarium.olympus.client.utils.State;
+import java.awt.im.InputContext;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -174,7 +176,7 @@ public class ColorPickerOverlay extends Overlay {
 
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean bl) {
-        if (event.input() != 0 || this.isMouseOver(event.x(), event.y())) {
+        if (event.input() != InputConstants.MOUSE_BUTTON_LEFT || this.isMouseOver(event.x(), event.y())) {
             return super.mouseClicked(event, bl);
         }
         this.onClose();

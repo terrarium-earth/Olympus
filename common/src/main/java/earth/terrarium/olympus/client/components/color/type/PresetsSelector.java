@@ -1,5 +1,6 @@
 package earth.terrarium.olympus.client.components.color.type;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.teamresourceful.resourcefullib.common.color.Color;
 import earth.terrarium.olympus.client.components.base.BaseWidget;
 import earth.terrarium.olympus.client.components.color.ColorPresetType;
@@ -92,7 +93,7 @@ public class PresetsSelector extends BaseWidget {
 
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean bl) {
-        if (event.input() != 0) return false;
+        if (event.input() != InputConstants.MOUSE_BUTTON_LEFT) return false;
         int size = (this.getWidth() - 18) / 8;
         int i = 0;
         for (Color color : getColors()) {

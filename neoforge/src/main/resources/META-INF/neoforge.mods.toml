@@ -8,7 +8,6 @@ modId = "olympus"
 version = "${version}"
 displayName = "Olympus"
 displayURL = "https://github.com/terrarium-earth/olympus"
-logoFile = "icon.png"
 authors = "ThatGravyBoat"
 description = "Common Components library for Project Odyssey."
 

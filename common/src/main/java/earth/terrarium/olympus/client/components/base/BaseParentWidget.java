@@ -1,5 +1,6 @@
 package earth.terrarium.olympus.client.components.base;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Renderable;
@@ -122,7 +123,7 @@ public abstract class BaseParentWidget extends BaseWidget implements ContainerEv
             GuiEventListener guiEventListener = optional.get();
             if (guiEventListener.mouseClicked(event, bl)) {
                 this.setFocused(guiEventListener);
-                if (event.input() == 0) {
+                if (event.input() == InputConstants.MOUSE_BUTTON_LEFT) {
                     this.setDragging(true);
                 }
                 return true;

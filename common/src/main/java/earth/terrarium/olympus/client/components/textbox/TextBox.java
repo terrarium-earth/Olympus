@@ -13,11 +13,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.IMEPreeditOverlay;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.navigation.FocusNavigationEvent;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.PreeditEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -51,6 +53,7 @@ public class TextBox extends BaseWidget {
     private int displayPos;
     private int cursorPos;
     private int highlightPos;
+    private @Nullable IMEPreeditOverlay preeditOverlay;
 
 
     public TextBox(State<@NotNull String> state) {
@@ -385,8 +388,25 @@ public class TextBox extends BaseWidget {
             if (this.isHovered()) {
                 graphics.requestCursor(CursorTypes.IBEAM);
             }
+
+            if (this.preeditOverlay == null) {
+                if (this.active && this.visible && this.isFocused()) {
+                    Minecraft.getInstance().textInputManager().setTextInputArea(o - 1, m - 1, o, m + 11);
+                }
+            } else {
+                this.preeditOverlay.updateInputPosition(o - 1, m - 1);
+                graphics.setPreeditOverlay(this.preeditOverlay);
+            }
         }
     }
+
+
+    @Override
+    public boolean preeditUpdated(@Nullable PreeditEvent event) {
+        this.preeditOverlay = event != null ? new IMEPreeditOverlay(event, this.font, 9 + 1) : null;
+        return true;
+    }
+
 
     private void renderHighlight(GuiGraphicsExtractor graphics, int minX, int minY, int maxX, int maxY) {
         int x1 = Mth.clamp(Math.min(minX, maxX), this.getX(), this.getX() + this.width - PADDING);
@@ -440,5 +460,19 @@ public class TextBox extends BaseWidget {
 
     public void setVisible(boolean isVisible) {
         this.visible = isVisible;
+    }
+
+    @Override
+    public void setFocused(boolean focused) {
+        Minecraft.getInstance().onTextInputFocusChange(this, focused);
+        super.setFocused(focused);
+    }
+
+    @Override
+    public BaseWidget asDisabled() {
+        if (this.active) {
+            Minecraft.getInstance().onTextInputFocusChange(this, false);
+        }
+        return super.asDisabled();
     }
 }
