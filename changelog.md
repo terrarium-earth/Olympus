@@ -1,1 +1,1 @@
-- fixed RoundedTexture having incorrect transparency for colored textures
+- Update to 26.3
