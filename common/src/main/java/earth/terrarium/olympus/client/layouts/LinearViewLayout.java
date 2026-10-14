@@ -31,7 +31,7 @@ public class LinearViewLayout extends BaseLayout<LinearLayout> {
         return this;
     }
 
-    public LinearViewLayout withChildren(Collection<LayoutElement> elements) {
+    public LinearViewLayout withChildren(Collection<? extends LayoutElement> elements) {
         for (LayoutElement element : elements) {
             withChild(element);
         }

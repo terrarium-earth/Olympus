@@ -52,7 +52,7 @@ public class GridViewLayout extends BaseLayout<ViewLayout> {
         return this;
     }
 
-    public GridViewLayout withChildren(Collection<LayoutElement> elements) {
+    public GridViewLayout withChildren(Collection<? extends LayoutElement> elements) {
         for (LayoutElement element : elements) {
             withChild(element);
         }
