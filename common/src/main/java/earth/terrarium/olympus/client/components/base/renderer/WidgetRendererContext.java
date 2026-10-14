@@ -32,12 +32,24 @@ public final class WidgetRendererContext<T extends AbstractWidget> {
         return this;
     }
 
+    public WidgetRendererContext<T> setSize(int width, int height) {
+        this.width = width;
+        this.height = height;
+        return this;
+    }
+
     public WidgetRendererContext<T> setX(int x) {
         this.x = x;
         return this;
     }
 
     public WidgetRendererContext<T> setY(int y) {
+        this.y = y;
+        return this;
+    }
+
+    public WidgetRendererContext<T> setPosition(int x, int y) {
+        this.x = x;
         this.y = y;
         return this;
     }

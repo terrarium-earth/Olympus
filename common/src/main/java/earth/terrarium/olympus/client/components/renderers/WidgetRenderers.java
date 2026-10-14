@@ -49,6 +49,16 @@ public class WidgetRenderers {
         );
     }
 
+    public static <T extends AbstractWidget> WidgetRenderer<T> sprite(Identifier sprite) {
+        return (graphics, context, _) -> graphics.blitSprite(
+                RenderPipelines.GUI_TEXTURED,
+                sprite,
+                context.getX(), context.getY(),
+                context.getWidth(), context.getHeight(),
+                ARGB.white(context.getWidget().getAlpha())
+        );
+    }
+
     @SafeVarargs
     public static <T extends AbstractWidget> WidgetRenderer<T> layered(WidgetRenderer<T>... renderers) {
         return (graphics, context, partialTick) -> {
