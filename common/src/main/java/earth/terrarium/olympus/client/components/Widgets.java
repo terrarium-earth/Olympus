@@ -55,14 +55,13 @@ public final class Widgets {
     }
 
     public static Button toggle(State<Boolean> state, Consumer<Button> factory) {
-        WidgetRenderer<Button> onRenderer = WidgetRenderers.sprite(UIConstants.SWITCH_ON);
-        WidgetRenderer<Button> offRenderer = WidgetRenderers.sprite(UIConstants.SWITCH);
         Consumer<Button> switchFactory = button -> button
                 .withCallback(StateUtils.booleanToggle(state))
-                .withTexture(null)
-                .withRenderer((graphics, context, partialTick) ->
-                        (state.get() ? onRenderer : offRenderer).render(graphics, context, partialTick)
-                );
+                .withBackground(WidgetRenderers.conditional(
+                        state,
+                        WidgetRenderers.sprite(UIConstants.SWITCH_ON),
+                        WidgetRenderers.sprite(UIConstants.SWITCH)
+                ));
         return button(switchFactory.andThen(factory));
     }
 

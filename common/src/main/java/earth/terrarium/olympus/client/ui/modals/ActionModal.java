@@ -60,8 +60,7 @@ public class ActionModal extends Overlay {
         int modalWidth = Math.max(contentWidth, actionsWidth) + PADDING * 2;
 
         var closeButton = Widgets.button()
-                .withTexture(null)
-                .withRenderer(WidgetRenderers.sprite(UIConstants.MODAL_CLOSE))
+                .withBackground(WidgetRenderers.sprite(UIConstants.MODAL_CLOSE))
                 .withCallback(this::onClose)
                 .withTooltip(UITexts.BACK)
                 .withSize(11, 11);

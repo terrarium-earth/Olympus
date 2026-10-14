@@ -7,6 +7,7 @@ import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;
 import earth.terrarium.olympus.client.components.dropdown.DropdownBuilder;
 import earth.terrarium.olympus.client.components.dropdown.DropdownState;
+import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
 import earth.terrarium.olympus.client.ui.UIConstants;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -15,17 +16,19 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
-import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.util.ARGB;
+import net.minecraft.client.sounds.SoundManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 public class Button extends BaseWidget {
 
-    private WidgetRenderer<? super Button> renderer = WidgetRenderer.empty();
     private final Int2ObjectMap<Runnable> actions = new Int2ObjectArrayMap<>();
-    private WidgetSprites sprites = UIConstants.BUTTON;
+
+    private WidgetRenderer<? super Button> foreground = WidgetRenderer.empty();
+    private WidgetRenderer<? super Button> background = WidgetRenderers.sprite(UIConstants.BUTTON);
     private ButtonShape shape = ButtonShapes.RECTANGLE;
+    private boolean playSounds = false;
 
     public Button() {
         super();
@@ -35,26 +38,36 @@ public class Button extends BaseWidget {
     protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         this.isHovered = graphics.containsPointInScissor(mouseX, mouseY) && isMouseOver(mouseX, mouseY);
 
-        int color = ARGB.color(0xFF, 0xFF, 0xFF, (int) (this.alpha * 255f));
-
-        if (this.sprites != null) {
-            graphics.blitSprite(
-                    RenderPipelines.GUI_TEXTURED,
-                    this.sprites.get(this.active, this.isHoveredOrFocused()),
-                    this.getX(), this.getY(),
-                    this.getWidth(), this.getHeight(),
-                    color
-            );
-        }
-        this.renderer.render(graphics, new WidgetRendererContext<>(this, mouseX, mouseY), partialTick);
+        this.background.render(graphics, new WidgetRendererContext<>(this, mouseX, mouseY), partialTick);
+        this.foreground.render(graphics, new WidgetRendererContext<>(this, mouseX, mouseY), partialTick);
 
         if (this.isHovered) {
             graphics.requestCursor(CursorTypes.POINTING_HAND);
         }
     }
 
+    /**
+     * @see #withForeground(WidgetRenderer)
+     */
     public Button withRenderer(WidgetRenderer<? super Button> renderer) {
-        this.renderer = renderer;
+        return this.withForeground(renderer);
+    }
+
+    public Button withForeground(WidgetRenderer<? super Button> renderer) {
+        this.foreground = renderer;
+        return this;
+    }
+
+    /**
+     * @see #withBackground(WidgetRenderer)
+     */
+    public Button withTexture(@Nullable WidgetSprites sprites) {
+        this.background = sprites == null ? WidgetRenderer.empty() : WidgetRenderers.sprite(sprites);
+        return this;
+    }
+
+    public Button withBackground(WidgetRenderer<? super Button> renderer) {
+        this.background = renderer;
         return this;
     }
 
@@ -68,8 +81,8 @@ public class Button extends BaseWidget {
         return this;
     }
 
-    public Button withTexture(@Nullable WidgetSprites sprites) {
-        this.sprites = sprites;
+    public Button withSounds(boolean playSounds) {
+        this.playSounds = playSounds;
         return this;
     }
 
@@ -95,7 +108,7 @@ public class Button extends BaseWidget {
     }
 
     @Override
-    public boolean keyPressed(KeyEvent event) {
+    public boolean keyPressed(@NonNull KeyEvent event) {
         if (this.active && this.visible && event.isSelection()) {
             var action = this.actions.get(InputConstants.MOUSE_BUTTON_LEFT);
             if (action != null) {
@@ -108,7 +121,7 @@ public class Button extends BaseWidget {
     }
 
     @Override
-    public boolean mouseClicked(MouseButtonEvent event, boolean bl) {
+    public boolean mouseClicked(@NonNull MouseButtonEvent event, boolean bl) {
         if (this.active && this.visible && this.isMouseOver(event.x(), event.y())) {
             var action = this.actions.get(event.input());
             if (action != null) {
@@ -118,5 +131,11 @@ public class Button extends BaseWidget {
             }
         }
         return false;
+    }
+
+    @Override
+    public void playDownSound(@NotNull SoundManager handler) {
+        if (!this.playSounds) return;
+        playButtonClickSound(handler);
     }
 }

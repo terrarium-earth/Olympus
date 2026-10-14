@@ -4,12 +4,14 @@ import com.teamresourceful.resourcefullib.common.color.Color;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRenderer;
 import earth.terrarium.olympus.client.components.base.renderer.WidgetRendererContext;
 import earth.terrarium.olympus.client.ui.UIIcons;
+import earth.terrarium.olympus.client.utils.State;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.ARGB;
 
 public class WidgetRenderers {
 
@@ -38,11 +40,12 @@ public class WidgetRenderers {
     }
 
     public static <T extends AbstractWidget> WidgetRenderer<T> sprite(WidgetSprites sprites) {
-        return (graphics, context, partialTick) -> graphics.blitSprite(
+        return (graphics, context, _) -> graphics.blitSprite(
                 RenderPipelines.GUI_TEXTURED,
                 sprites.get(context.getWidget().isActive(), context.getWidget().isHoveredOrFocused()),
                 context.getX(), context.getY(),
-                context.getWidth(), context.getHeight()
+                context.getWidth(), context.getHeight(),
+                ARGB.white(context.getWidget().getAlpha())
         );
     }
 
@@ -78,6 +81,11 @@ public class WidgetRenderers {
 
     public static <T extends AbstractWidget> SolidColorWidgetRenderer<T> solid() {
         return new SolidColorWidgetRenderer<>();
+    }
+
+    public static <T extends AbstractWidget> WidgetRenderer<T> conditional(State<Boolean> state, WidgetRenderer<T> enabled, WidgetRenderer<T> disabled) {
+        return (graphics, context, partialTick) ->
+                (state.get() ? enabled : disabled).render(graphics, context, partialTick);
     }
 
     public static <T extends AbstractWidget, W extends WidgetRenderer<T> & ColorableWidget> WidgetRenderer<T> withColors(W renderer, Color disabled, Color normal, Color hover) {

@@ -1,1 +1,2 @@
-- Update to 26.3
+- Allow for indepndent background rendering of buttons
+- Allow for buttons to play sounds on click
