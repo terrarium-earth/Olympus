@@ -1,1 +1,4 @@
-- Add withChildren method that takes a collection to layouts
+- Add sliders
+- Fix issue where withChildren layout methods used explicit generic for LayoutElement
+- Added helper in widget renderer context for setting position and size
+- Added widget renderer for single texture sprites
