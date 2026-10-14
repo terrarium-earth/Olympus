@@ -7,12 +7,14 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractStringWidget;
 import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.FormattedCharSequence;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -166,7 +168,12 @@ public class MultilineTextWidget extends AbstractStringWidget {
         }
     }
 
-    public int getColor() {
+	@Override
+	public void playDownSound(@NonNull SoundManager manager) {
+
+	}
+
+	public int getColor() {
         return ARGB.color(this.alpha, this.color);
     }
 }
