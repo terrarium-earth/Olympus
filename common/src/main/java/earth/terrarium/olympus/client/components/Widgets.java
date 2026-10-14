@@ -15,6 +15,7 @@ import earth.terrarium.olympus.client.components.map.MapWidget;
 import earth.terrarium.olympus.client.components.renderers.Renderable;
 import earth.terrarium.olympus.client.components.renderers.TristateRenderers;
 import earth.terrarium.olympus.client.components.renderers.WidgetRenderers;
+import earth.terrarium.olympus.client.components.slider.Slider;
 import earth.terrarium.olympus.client.components.string.MultilineTextWidget;
 import earth.terrarium.olympus.client.components.string.TextWidget;
 import earth.terrarium.olympus.client.components.textbox.TextBox;
@@ -34,6 +35,7 @@ import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.layouts.FrameLayout;
 import net.minecraft.client.gui.layouts.LayoutSettings;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.minecraft.util.TriState;
 import net.minecraft.util.Util;
 import org.apache.commons.lang3.function.Consumers;
@@ -323,5 +325,24 @@ public final class Widgets {
         Renderable renderable = new Renderable(renderer);
         factory.accept(renderable);
         return renderable;
+    }
+
+    public static Slider slider(State<Float> state, Consumer<Slider> factory) {
+        return Util.make(new Slider(state), factory);
+    }
+
+    public static Slider slider(State<Float> state) {
+        return slider(state, Consumers.nop());
+    }
+
+    public static Slider slider(State<Integer> state, int min, int max, Consumer<Slider> factory) {
+        return slider(state.map(
+                value -> Mth.inverseLerp(value, min, max),
+                value -> Mth.lerpInt(value, min, max)
+        ), factory);
+    }
+
+    public static Slider slider(State<Integer> state, int min, int max) {
+        return slider(state, min, max, Consumers.nop());
     }
 }

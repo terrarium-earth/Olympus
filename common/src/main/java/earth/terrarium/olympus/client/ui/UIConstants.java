@@ -122,6 +122,18 @@ public class UIConstants {
             id("lists/buttons/down/hovered")
     );
 
+    public static final WidgetSprites SLIDER_EMPTY = new WidgetSprites(
+            id("sliders/empty"),
+            id("sliders/disabled"),
+            id("sliders/empty")
+    );
+
+    public static final WidgetSprites SLIDER_FILLED = new WidgetSprites(
+            id("sliders/filled"),
+            id("sliders/disabled"),
+            id("sliders/filled")
+    );
+
     // Use UITexts.<the component>
     @Deprecated public static final Component BACK = UITexts.BACK;
     @Deprecated public static final Component CANCEL = UITexts.CANCEL;
