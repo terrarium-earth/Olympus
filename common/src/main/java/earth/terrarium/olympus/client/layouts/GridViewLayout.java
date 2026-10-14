@@ -4,6 +4,7 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.layouts.LayoutElement;
 import net.minecraft.client.gui.layouts.LinearLayout;
 
+import java.util.Collection;
 import java.util.function.Consumer;
 
 public class GridViewLayout extends BaseLayout<ViewLayout> {
@@ -45,6 +46,13 @@ public class GridViewLayout extends BaseLayout<ViewLayout> {
     }
 
     public GridViewLayout withChildren(LayoutElement... elements) {
+        for (LayoutElement element : elements) {
+            withChild(element);
+        }
+        return this;
+    }
+
+    public GridViewLayout withChildren(Collection<LayoutElement> elements) {
         for (LayoutElement element : elements) {
             withChild(element);
         }

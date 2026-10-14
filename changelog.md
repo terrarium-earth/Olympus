@@ -1,2 +1,1 @@
-- Allow for indepndent background rendering of buttons
-- Allow for buttons to play sounds on click
+- Add withChildren method that takes a collection to layouts

@@ -5,6 +5,7 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.layouts.LayoutElement;
 import net.minecraft.client.gui.layouts.LinearLayout;
 
+import java.util.Collection;
 import java.util.function.Consumer;
 
 public class LinearViewLayout extends BaseLayout<LinearLayout> {
@@ -24,6 +25,13 @@ public class LinearViewLayout extends BaseLayout<LinearLayout> {
     }
 
     public LinearViewLayout withChildren(LayoutElement... elements) {
+        for (LayoutElement element : elements) {
+            withChild(element);
+        }
+        return this;
+    }
+
+    public LinearViewLayout withChildren(Collection<LayoutElement> elements) {
         for (LayoutElement element : elements) {
             withChild(element);
         }
