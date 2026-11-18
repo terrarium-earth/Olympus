@@ -1,1 +1,1 @@
-- fixed RoundedTexture having incorrect transparency for colored textures
+- Fix performance issue with iris creating multiple render buffers, singletons, and lunar client inefficient mixin
